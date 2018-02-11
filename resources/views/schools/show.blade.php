@@ -1,0 +1,1 @@
+D:\lamp\scoreboard\app/views/schools/show.blade.php

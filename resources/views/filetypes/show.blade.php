@@ -1,0 +1,1 @@
+D:\lamp\scoreboard\app/views/myFileTypes/show.blade.php

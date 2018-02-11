@@ -1,0 +1,1 @@
+D:\wamp\scoreboard\app/views/randoms/index.blade.php
