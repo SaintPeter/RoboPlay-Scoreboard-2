@@ -1,9 +1,9 @@
-#RoboPlay Scoreboard 2
+# RoboPlay Scoreboard 2
 Web Based Score Keeping System for the [UC Davis C-STEM Center](http://c-stem.ucdavis.edu)'s [RoboPlay Challenge Competition](http://c-stem.ucdavis.edu/roboplay/challenge/) and [RoboPlay Video Competition](http://c-stem.ucdavis.edu/roboplay/video/).
 
 Updated to Laravel Framework 5.5
 
-##Server Side Dependencies
+## Server Side Dependencies
 * [Composer](https://getcomposer.org/)
 * MySQL
 * PHP >= 7.0.0
@@ -16,13 +16,13 @@ Updated to Laravel Framework 5.5
    * mod_rewrite
 * Redis (Forthcoming)
 
-##Client Side Dependencies
+## Client Side Dependencies
 * Bootstrap 4 Support
 
-##Environment Dependencies
+## Environment Dependencies
 Invoices are synced from a Formidable Install in a joined Wordpress Database.
 
-##Install
+## Install
 1. Clone Repo Locally
 1. Run `composer install` in top level folder 
 1. Install Apache/MySQL/PHP
