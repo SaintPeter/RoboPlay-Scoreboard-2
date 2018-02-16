@@ -34,9 +34,11 @@
 			if(slick.paused) {
 			    slick.slickPlay();
 			    $(this).children('i').removeClass('fa-play').addClass('fa-pause');
+                slick.slickSetOption('speed',5000);
 			} else {
 			    $(this).children('i').removeClass('fa-pause').addClass('fa-play');
 			    slick.slickPause();
+                slick.slickSetOption('speed',500);
 			}
 		});
 
