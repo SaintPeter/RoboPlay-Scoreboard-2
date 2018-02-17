@@ -6,7 +6,7 @@ use BenSampo\Enum\Enum;
 
 final class UserTypes extends Enum
 {
-    const Nobody = 0;
+    const NoRoles = 0;
     const Guest = 1;
     const Teacher = 2;
     const Judge = 4;
@@ -22,8 +22,8 @@ final class UserTypes extends Enum
     public static function getDescription(int $value): string
     {
         switch ($value) {
-            case self::Nobody:
-                return 'Nobody';
+            case self::NoRoles:
+                return 'No Roles';
                 break;
             case self::Guest:
                 return 'Guest';
@@ -54,7 +54,7 @@ final class UserTypes extends Enum
     public static function getAllDescriptions(int $value): array
     {
         $result = [];
-        if(!$value) return ['Nobody'];
+        if(!$value) return ['No Roles'];
         if($value & self::Guest) $result[] = 'Guest';
         if($value & self::Teacher) $result[] = 'Teacher';
         if($value & self::Judge) $result[] = 'Judge';
