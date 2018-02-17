@@ -68,7 +68,7 @@
 				</td>
 				<td>
 					@if($video->teacher)
-						{{ $video->teacher->getName() }}<br />
+						{{ $video->teacher->name }}<br />
 					@else
 						No Teacher Set<br />
 					@endif
