@@ -12,6 +12,8 @@
 </script>
 @endsection
 
+@inject('userTypes',"App\Enums\UserTypes")
+
 @section('main')
 <table class="table table-striped table-bordered" id="user_table">
 	<thead>
@@ -29,7 +31,7 @@
 			<td>{{ $user->name }}</td>
 			<td>{{ $user->email }}</td>
 			<td>{{ $user->id }}</td>
-			<td>{{ $user->roles }}</td>
+			<td>{{ join(',',$userTypes::getAllDescriptions($user->roles)) }}</td>
 			<td>{{ link_to_route('switch_user', 'Switch To', [ $user->id ], [ 'class' => 'btn btn-primary' ]) }}</td>
 		</tr>
 		@endforeach
