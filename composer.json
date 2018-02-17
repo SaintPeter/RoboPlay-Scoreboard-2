@@ -16,11 +16,12 @@
         "bensampo/laravel-enum": "^1.4",
         "davejamesmiller/laravel-breadcrumbs": "^4.2",
         "fideloper/proxy": "~3.3",
+        "jpgraph/jpgraph": "4.2.0",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4.0",
         "parsecsv/php-parsecsv": "0.4.5",
-        "jpgraph/jpgraph": "4.2.0"
+        "predis/predis": "^1.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.1",

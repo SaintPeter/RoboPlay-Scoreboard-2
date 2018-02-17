@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use View;
 use Auth;
+use Cache;
 use Session;
 use App\Helpers\Roles;
 use App\Enums\VideoFlag;
@@ -120,8 +121,6 @@ class DisplayController extends Controller {
 
 	public function compscore_actual(Request $req, $competition_id, $csv = null, $top = null)
 	{
-		//Breadcrumbs::addCrumb('Competition Score', 'compscore');
-
 		$comp = Competition::with('divisions', 'divisions.teams', 'divisions.challenges')->find($competition_id);
 		$divisions = $comp->divisions;
 
@@ -430,10 +429,14 @@ class DisplayController extends Controller {
 
 	public function all_scores(Request $req, $compyear_id)
 	{
-		//Breadcrumbs::addCrumb('Statewide Scores', 'compyearscore');
+		// TODO: Synchronize Cache across multiple clients
+		// TODO: Display "Last Generated" or "Last Fetched" Time for Scores
 
-		$compyear = CompYear::with('competitions', 'divisions', 'divisions.teams', 'divisions.teams.school', 'divisions.challenges')
-		                    ->find($compyear_id);
+		$compyear = Cache::remember("all_scores_compyear_$compyear_id", 5 * 60, function() use ($compyear_id) {
+			return CompYear::with('competitions', 'divisions', 'divisions.teams', 'divisions.teams.school', 'divisions.challenges')
+							->find($compyear_id);
+		});
+
 		$divisions = $compyear->divisions;
 
 		// Frozen Calculation
@@ -446,71 +449,74 @@ class DisplayController extends Controller {
 		}
 
 		// Get score list and calculate totals
-		$score_list = [];
-		$teams = NULL;
-		foreach($divisions as $division)
-		{
-			if($teams) {
-				$teams = $teams->merge($division->teams);
-			} else {
-				$teams = $division->teams;
-			}
-
-			$challenge_list = $division->challenges->pluck('id')->all();
-
-			// Calculate the max score for each team and challenge
-			$scores = DB::table('score_runs')
-					->select('team_id', 'challenge_id', DB::raw('max(total) as chal_score'), DB::raw('count(total) as chal_runs'))
-					->groupBy('team_id', 'challenge_id')
-					->orderBy('team_id', 'challenge_id')
-					->where('division_id', $division->id)
-					->whereNull('deleted_at')
-					->whereIn('challenge_id', $challenge_list);  // Limit to currently attached challenges
-
-			// If we're frozen, limit scores we count by the freeze time
-			if($frozen) {
-				$scores = $scores->where('run_time', '<=', $freeze_time->toTimeString())->get();
-			} else {
-				$scores = $scores->get();
-			}
-
-			// Sum up all of the scores by team
-			foreach($scores as $score)
+		$score_list = Cache::remember("all_scores_score_list_$compyear_id", 5 * 60, function() use ($divisions, $frozen, $freeze_time){
+			$score_list = [];
+			$teams = NULL;
+			foreach($divisions as $division)
 			{
-			    $team = $teams->find($score->team_id);
+				if($teams) {
+					$teams = $teams->merge($division->teams);
+				} else {
+					$teams = $division->teams;
+				}
 
-				// Initalize the storage location for each team
-				if(!array_key_exists($team->id, $score_list)) {
+				$challenge_list = $division->challenges->pluck('id')->all();
+
+				// Calculate the max score for each team and challenge
+				$scores = DB::table('score_runs')
+						->select('team_id', 'challenge_id', DB::raw('max(total) as chal_score'), DB::raw('count(total) as chal_runs'))
+						->groupBy('team_id', 'challenge_id')
+						->orderBy('team_id', 'challenge_id')
+						->where('division_id', $division->id)
+						->whereNull('deleted_at')
+						->whereIn('challenge_id', $challenge_list);  // Limit to currently attached challenges
+
+				// If we're frozen, limit scores we count by the freeze time
+				if($frozen) {
+					$scores = $scores->where('run_time', '<=', $freeze_time->toTimeString())->get();
+				} else {
+					$scores = $scores->get();
+				}
+
+				// Sum up all of the scores by team
+				foreach($scores as $score)
+				{
+				    $team = $teams->find($score->team_id);
+
+					// Initalize the storage location for each team
+					if(!array_key_exists($team->id, $score_list)) {
+						$score_list[$team->id]['school'] = $team->school->name;
+						$score_list[$team->id]['name'] = $team->name;
+						$score_list[$team->id]['total'] = 0;
+						$score_list[$team->id]['runs'] = 0;
+					}
+					$score_list[$team->id]['total'] += $score->chal_score;
+					$score_list[$team->id]['runs'] += $score->chal_runs;
+				}
+
+
+				// Find all of the teams with no scores yet and add them to the end of the list
+				$team_list = $division->teams->pluck('id')->all();
+				$missing_list = array_diff($team_list, array_keys($score_list));
+				foreach($missing_list as $missing_team) {
+				    $team = $teams->find($missing_team);
 					$score_list[$team->id]['school'] = $team->school->name;
 					$score_list[$team->id]['name'] = $team->name;
 					$score_list[$team->id]['total'] = 0;
 					$score_list[$team->id]['runs'] = 0;
+			    }
+			}
+
+			// Sort by school name, then by team name
+			uasort($score_list, function($a, $b) {
+				// Sort by score first:
+				if(strcmp($a['school'], $b['school']) == 0) {
+					return strcmp($a['name'], $b['name']);
+				} else {
+					return strcmp($a['school'], $b['school']);
 				}
-				$score_list[$team->id]['total'] += $score->chal_score;
-				$score_list[$team->id]['runs'] += $score->chal_runs;
-			}
-
-
-			// Find all of the teams with no scores yet and add them to the end of the list
-			$team_list = $division->teams->pluck('id')->all();
-			$missing_list = array_diff($team_list, array_keys($score_list));
-			foreach($missing_list as $missing_team) {
-			    $team = $teams->find($missing_team);
-				$score_list[$team->id]['school'] = $team->school->name;
-				$score_list[$team->id]['name'] = $team->name;
-				$score_list[$team->id]['total'] = 0;
-				$score_list[$team->id]['runs'] = 0;
-		    }
-		}
-
-		// Sort by school name, then by team name
-		uasort($score_list, function($a, $b) {
-			// Sort by score first:
-			if(strcmp($a['school'], $b['school']) == 0) {
-				return strcmp($a['name'], $b['name']);
-			} else {
-				return strcmp($a['school'], $b['school']);
-			}
+			});
+			return $score_list;
 		});
 
 		$now = Carbon::now()->setTimezone('America/Los_Angeles');

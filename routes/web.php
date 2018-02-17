@@ -29,10 +29,12 @@ Route::get('/', [ 'as' => 'home', function()
 {
     $today = Carbon\Carbon::now()->setTimezone('America/Los_Angeles')->startOfDay();
 
-    $compyears = CompYear::orderBy('year', 'desc')
-        ->with('competitions', 'competitions.divisions',
-            'vid_competitions')
-        ->get();
+    $compyears = Cache::remember('home', 24 * 60, function () {
+    	return CompYear::orderBy('year', 'desc')
+		    ->with('competitions', 'competitions.divisions',
+			    'vid_competitions')
+		    ->get();
+    });
 
     $noajax = [ 'data-ajax' => "false" ];
     return View::make('home', compact('compyears', 'noajax', 'today'));
