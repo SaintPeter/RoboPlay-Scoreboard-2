@@ -7,3 +7,30 @@
 
 // Bootstrap
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
+
+.nav-list {
+  list-style: none;
+  margin: 5px 0;
+  padding: 0;
+}
+
+.nav-item {
+  border: 1px solid black;
+  border-radius: 5px;
+  background: white;
+  padding: 5px;
+  display: block;
+  text-decoration: none;
+  color: black;
+}
+
+.nav-item:after {
+  text-align: right;
+  float: right;
+  content: ">";
+}
+
+.nav-item:hover {
+  background: lightgrey;
+  text-decoration: none;
+}

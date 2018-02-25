@@ -18,10 +18,9 @@ use App\Models\ {
 |
 */
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
-//Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/react/{path?}', [ 'as => react', function() {
+	return View::make('react.home');
+}])->where('path',".*");
 
 Auth::routes();
 
