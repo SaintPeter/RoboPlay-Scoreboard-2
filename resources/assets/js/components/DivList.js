@@ -6,25 +6,29 @@ export default class TeamList extends Component {
         super(props);
         const compId = props.match.params.compid;
         this.state = {
-            competitionName: props.myData[compId].name,
-            divs: Object.keys(props.myData[compId].divisions).reduce((list,divId) => {
+            competitionName: compData[compId].name,
+            divs: Object.keys(compData[compId].divisions).reduce((list,divId) => {
                 list.push( {
                     key: divId,
                     compid: compId,
                     divid: divId,
-                    name: props.myData[compId].divisions[divId].name
+                    name: compData[compId].divisions[divId].name
                 });
                 return list;
             },[])
         }
     }
 
+    componentDidMount() {
+        document.getElementById('header').innerHTML = "Choose Division";
+        this.props.updateBack('/');
+    }
+
     render() {
         return (
-            <div>
+            <div className="ui-content">
                 <h4>Competition: {this.state.competitionName}</h4>
-                <Link to={'/'}>Back to Competitions</Link>
-                <ul>
+                <ul className="ui-listview listview-spacer">
                     {
                         this.state.divs.map(item => {
                             return <Division {...item} />})
@@ -37,6 +41,6 @@ export default class TeamList extends Component {
 
 class Division extends  Component {
     render() {
-        return <li><Link to={`/c/${this.props.compid}/d/${this.props.divid}`}>{this.props.name}</Link></li>
+        return <li><Link to={`/c/${this.props.compid}/d/${this.props.divid}`} className="ui-btn ui-btn-icon-right ui-icon-carat-r">{this.props.name}</Link></li>
     }
 }

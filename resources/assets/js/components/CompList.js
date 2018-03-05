@@ -11,14 +11,21 @@ export default class CompList extends Component {
         this.setState(this.readData(nextProps));
     }
 
+    componentDidMount() {
+        document.getElementById('header').innerHTML = "Competition List";
+        if($.mobile && $.mobile.initalizePage) {
+            $.mobile.initializePage();
+        }
+    }
+
     readData(props) {
         let newState = {comps: []};
 
-        newState.comps = Object.keys(props.myData).reduce((list, compId) => {
+        newState.comps = Object.keys(compData).reduce((list, compId) => {
             list.push({
                 key: compId,
                 id: compId,
-                name: props.myData[compId].name
+                name: compData[compId].name
             });
             return list;
         }, []);
@@ -28,9 +35,8 @@ export default class CompList extends Component {
 
     render() {
         return (
-            <div>
-                <h4>Competition List</h4>
-                <ul>
+            <div className="ui-content">
+                <ul className="ui-listview">
                     {
                         this.state.comps.map(item => {
                             return <Comp {...item} />})
@@ -43,6 +49,6 @@ export default class CompList extends Component {
 
 class Comp extends  Component {
     render() {
-        return <li><Link to={`/c/${this.props.id}`}>{this.props.name}</Link></li>
+        return <li><Link to={`/c/${this.props.id}`} className="ui-btn ui-btn-icon-right ui-icon-carat-r">{this.props.name}</Link></li>
     }
 }

@@ -52,6 +52,8 @@ class RandomList extends \Eloquent {
 
 	public static $chosen = null;
 
+	protected $hidden = ['created_at', 'updated_at'];
+
 	// We will ALWAYS load elements
 	protected $with = [ 'elements' ];
 

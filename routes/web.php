@@ -18,10 +18,6 @@ use App\Models\ {
 |
 */
 
-Route::get('/react/{path?}', [ 'as => react', function() {
-	return View::make('react.home');
-}])->where('path',".*");
-
 Auth::routes();
 
 Route::get('/', [ 'as' => 'home', function()
@@ -310,6 +306,10 @@ Route::middleware([ 'auth' ])->group( function() {
             ->where('team_id', '\d+')
             ->where('challenge_id', '\d+');
         Route::post('score/save/{team_id}/{challenge_id}', 		[ 'as' => 'score.save',	'uses' =>'ScoreController@save' ] );
+
+        // React Scoring
+	    Route::get('scorer/{path?}', [ 'as' => 'scorer', 'uses' => 'ScoreController@scorer' ] )
+	        ->where('path',".*");
 
         // Video Judging
         Route::get('video/judge', [

@@ -5,10 +5,10 @@ import { render } from 'react-dom';
 
 import Master from "./components/Master";
 
-if (document.getElementById('example')) {
+if (document.getElementById('scorer')) {
     render((
        <Master />
-    ), document.getElementById('example'));
+    ), document.getElementById('scorer'));
 } else {
-    console.log('Error:  Cannot find #example element');
+    console.log('Error:  Cannot find #scorer element');
 }

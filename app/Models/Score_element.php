@@ -48,6 +48,8 @@ class Score_element extends Model {
 		'challenge_id' => 'required'
 	);
 
+	protected $hidden = ['created_at', 'updated_at'];
+
 	public function challenge()
 	{
 		return belongsTo('App\Models\Challenge');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use View;
 use Auth;
+use Cache;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -40,7 +41,7 @@ class ScoreController extends Controller {
 		}
 
 		if($team_id == 0) {
-			$teams = Team::where('division_id', $division_id)->get();
+			$teams = Team::where('division_id', $division_id)->with('school')->get();
 			return View::make('score.team_list', compact('teams', 'division_id', 'competition_id'));
 		}
 
@@ -114,7 +115,6 @@ class ScoreController extends Controller {
 	 return $scores;
 	}
 
-
 	public function save(Request $req, $team_id, $challenge_id)
 	{
 		$team = Team::find($team_id);
@@ -159,5 +159,39 @@ class ScoreController extends Controller {
 			'team_id' => $team_id,
 			'competition_id' => $team->division->competition->id,
 			'division_id' => $team->division_id]);
+	}
+
+	public function scorer (Request $req) {
+
+		if($req->has('clear_cache')) {
+			Cache::delete('competition_list');
+		}
+
+		$competition_list = Cache::remember('competition_list',24*60, function() {
+			$comps = Competition::with('divisions','divisions.teams', 'divisions.teams.school')->where('active',1)->get();
+
+			return json_encode(
+				$comps->reduce(function ($compOutput, $comp) {
+					$compOutput[$comp->id] = [
+						'name' => $comp->name,
+						'year' => $comp->year,
+						'divisions' => $comp->divisions->reduce(function ($divOutput, $div) {
+							$divOutput[$div->id] = [
+								'name' => $div->name,
+								'level' => $div->level,
+								'teams' => $div->teams->reduce(function ($teamOutput, $team) {
+									$teamOutput[$team->id] = $team->name . ' (' . $team->school->name . ')';
+									return $teamOutput;
+								}, [])
+							];
+							return $divOutput;
+						}, [])
+					];
+					return $compOutput;
+				}, [])
+			);
+		});
+
+		return View::make('scorer.index')->with(compact('competition_list'));
 	}
 }

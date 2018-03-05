@@ -40,7 +40,7 @@
 			}
 			@yield('style')
 		</style>
-		<link rel="icon" type="image/ico" href="http://cstem.ucdavis.edu/scoreboard/favicon.ico"/>
+		<link rel="icon" type="image/ico" href="https://scoreboard.c-stem.ucdavis.edu/favicon.ico"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     @yield('script')
 	</head>

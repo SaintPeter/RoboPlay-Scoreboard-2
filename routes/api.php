@@ -21,5 +21,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::namespace('Api')
 	->name('api.')
 	->group(function() {
-	Route::get('competition_list/{clear_cache?}', ['as' => 'competition_list', 'uses' => 'ScoreApiController@competitionList']);
+	Route::get('challenges/{year}/{level}', ['as' => 'challenges', 'uses' => 'ScoreApiController@challenges']);
 });
