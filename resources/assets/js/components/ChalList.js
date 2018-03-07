@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
-import {connect} from "react-redux";
 
-class DivListApp extends Component {
+export default class ChalList extends Component {
     constructor(props) {
         super(props);
         const compId = props.match.params.compid;
+        const divId = props.match.params.divid;
+        const teamId = props.match.params.teamid;
         this.state = {
             competitionName: compData[compId].name,
             divs: Object.keys(compData[compId].divisions).reduce((list,divId) => {
@@ -21,7 +22,7 @@ class DivListApp extends Component {
     }
 
     componentDidMount() {
-        this.props.updateTitle("Choose Division");
+        document.getElementById('header').innerHTML = "Choose Division";
         this.props.updateBack('/');
     }
 
@@ -45,26 +46,3 @@ class Division extends  Component {
         return <li><Link to={`/c/${this.props.compid}/d/${this.props.divid}`} className="ui-btn ui-btn-icon-right ui-icon-carat-r">{this.props.name}</Link></li>
     }
 }
-
-// Map Redux state to component props
-function mapStateToProps(state) {
-    return {
-        challengeData: state.challengeData,
-        backURL: state.backURL
-    }
-}
-
-// Map Redux actions to component props
-function mapDispatchToProps(dispatch) {
-    return {
-        updateBack: (newURL) => dispatch({ type: 'change_url', url: newURL}),
-        updateTitle: (newTitle) => dispatch({ type: 'change_title', title: newTitle })
-    }
-}
-
-const DivList =  connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(DivListApp);
-
-export default DivList;

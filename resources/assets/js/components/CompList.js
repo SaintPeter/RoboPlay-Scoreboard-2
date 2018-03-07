@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
+import {connect} from "react-redux";
 
-export default class CompList extends Component {
+class CompListApp extends Component {
     constructor(props) {
         super(props);
         this.state = this.readData(props);
@@ -13,9 +14,6 @@ export default class CompList extends Component {
 
     componentDidMount() {
         document.getElementById('header').innerHTML = "Competition List";
-        if($.mobile && $.mobile.initalizePage) {
-            $.mobile.initializePage();
-        }
     }
 
     readData(props) {
@@ -52,3 +50,26 @@ class Comp extends  Component {
         return <li><Link to={`/c/${this.props.id}`} className="ui-btn ui-btn-icon-right ui-icon-carat-r">{this.props.name}</Link></li>
     }
 }
+
+// Map Redux state to component props
+function mapStateToProps(state) {
+    return {
+        challengeData: state.challengeData,
+        backURL: state.backURL
+    }
+}
+
+// Map Redux actions to component props
+function mapDispatchToProps(dispatch) {
+    return {
+        updateBack: (newURL) => dispatch({ type: 'change_url', url: newURL}),
+        updateTitle: (newTitle) => dispatch({ type: 'change_title', title: newTitle })
+    }
+}
+
+const CompList =  connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(CompListApp);
+
+export default CompList;

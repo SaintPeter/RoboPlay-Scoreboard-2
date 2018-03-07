@@ -1,8 +1,9 @@
 
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
+import {connect} from "react-redux";
 
-export default class DivList extends Component {
+class TeamListApp extends Component {
     constructor(props) {
         super(props);
         const compId = props.match.params.compid;
@@ -24,12 +25,12 @@ export default class DivList extends Component {
                 });
                 return list;
             },[])
-        }
-        this.props.updateBack(`/c/${this.state.compid}`);
+        };
     }
 
     componentDidMount() {
-        document.getElementById('header').innerHTML = "Choose Team";
+        this.props.updateTitle("Choose Team");
+        this.props.updateBack(`/c/${this.state.compid}`);
     }
 
     inputUpdate = (e) => {
@@ -103,3 +104,26 @@ class Team extends  Component {
         )
     }
 }
+
+// Map Redux state to component props
+function mapStateToProps(state) {
+    return {
+        challengeData: state.challengeData,
+        backURL: state.backURL
+    }
+}
+
+// Map Redux actions to component props
+function mapDispatchToProps(dispatch) {
+    return {
+        updateBack: (newURL) => dispatch({ type: 'change_url', url: newURL}),
+        updateTitle: (newTitle) => dispatch({ type: 'change_title', title: newTitle })
+    }
+}
+
+const TeamList =  connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(TeamListApp);
+
+export default TeamList;
