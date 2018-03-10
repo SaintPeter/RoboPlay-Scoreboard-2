@@ -1,12 +1,14 @@
 
-const CACHE_EXPIRE_NAME = 'compDataCacheTime';
-const DATA_NAME = 'compData';
+const CACHE_EXPIRE_PREFIX = 'chalDataCacheTime_';
+const DATA_PREFIX = 'chalData_';
 const CACHE_TIME = 1000 * 60 * 60 * 6; // 6 Hour Cache Time
 
-export default class loadCompData {
-    static load(stateVariable, stateVariableName) {
+export default class loadChalData {
+    static load(year,level,callback) {
         let outputData = {};
         let hasLocalStorage = false;
+        const chalId = year + '_' + level;
+
         try {
             if(localStorage) {
                 hasLocalStorage = true;
@@ -16,17 +18,17 @@ export default class loadCompData {
         }
 
         if(hasLocalStorage) {
-            let cacheExpires = localStorage.getItem(CACHE_EXPIRE_NAME);
+            let cacheExpires = localStorage.getItem(CACHE_EXPIRE_PREFIX + chalId);
             // If we don't have a cache expires time
             // or we have not yet reached the expire time
             // Load data from localStorage and return it
             if(cacheExpires && cacheExpires > Date.now()) {
                 // Load the data from localStorage
-                let rawData = localStorage.getItem(DATA_NAME);
+                let rawData = localStorage.getItem(DATA_PREFIX + chalId);
                 if(rawData) {
                     try {
-                        outputData[stateVariableName] = JSON.parse(rawData);
-                        stateVariable.setState(outputData);
+                        console.log("Loading Challenge Data " + chalId + " from LocalStorage");
+                        callback(year,level,JSON.parse(rawData));
                         return;
                     } catch(e) {
                         console.log("Error parsing JSON data from localStorage: " + e.message);
@@ -36,15 +38,14 @@ export default class loadCompData {
         }
 
         // Remote Load
-        window.axios.get('api/competition_list')
+        window.axios.get('/api/challenges/' + year + "/" + level)
             .then(function(response) {
-                let temp = {};
-                temp[stateVariableName] = response.data;
-                stateVariable.setState(temp);
                 if(hasLocalStorage) {
-                    localStorage.setItem(CACHE_EXPIRE_NAME, Date.now() + CACHE_TIME);
-                    localStorage.setItem(DATA_NAME, JSON.stringify(response.data));
+                    localStorage.setItem(CACHE_EXPIRE_PREFIX + chalId, Date.now() + CACHE_TIME);
+                    localStorage.setItem(DATA_PREFIX + chalId, JSON.stringify(response.data));
+                    console.log("Stored Challenge Data " + chalId);
                 }
+                callback(year,level,response.data);
             }).catch(function(error) {
                 console.log("Error loading data from remote: " + error);
             });

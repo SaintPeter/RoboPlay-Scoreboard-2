@@ -6,6 +6,7 @@ import CompList from "./CompList";
 import DivList from "./DivList";
 import TeamList from "./TeamList";
 import ChalList from "./ChalList";
+import ScoreChallenge from "./ScoreChallenge";
 
 
 class MasterApp extends Component {
@@ -33,16 +34,17 @@ class MasterApp extends Component {
 
                     <Switch>
                         <Route exact path="/" component={CompList} />
-                        <Route exact path="/c/:compid" render={({match}) => <DivList match={match} /> } />
-                        <Route exact path="/c/:compid/d/:divid" render={({match}) => <TeamList match={match} /> } />
-                        <Route exact path="/c/:compid/d/:divid/t/:teamid" render={({match}) => <ChalList match={match} /> } />
+                        <Route exact path="/c/:compId" render={({match}) => <DivList match={match} /> } />
+                        <Route exact path="/c/:compId/d/:divId" render={({match}) => <TeamList match={match} /> } />
+                        <Route exact path="/c/:compId/d/:divId/t/:teamId" render={({match}) => <ChalList match={match} /> } />
+                        <Route exact path="/c/:compId/d/:divId/t/:teamId/h/:chalId" render={({match}) => <ScoreChallenge match={match} /> } />
                     </Switch>
 
 
                     <div className="ui-footer ui-bar-inherit">
                         <h4>
                             <div style={{ textAlign: 'center'}}>
-                                <span style={{ fontSize: 10 }}>blah</span>
+                                <span style={{ fontSize: 10 }}></span>
                             </div>
                         </h4>
 

@@ -29,6 +29,7 @@ class ScoreApiController extends Controller
 					return $challenge
 						->only([ 'id',
 								 'display_name',
+								 'display_order',
 								 'rules',
 								 'points',
 							     'randoms',

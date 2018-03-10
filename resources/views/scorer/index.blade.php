@@ -6,16 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Laravel</title>
-    {{ HTML::style('css/jquery.mobile-1.4.1.css') }}
-<!--
-    {{ HTML::style('//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css') }}
-    {{ HTML::script('//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js') }}
-    {{ HTML::script('js/jquery.mobile-1.4.1.js') }}
-    <link href="{{asset('css/app.css')}}" rel="stylesheet" type="text/css">
-    -->
+    <link rel="stylesheet" href="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script>
+        $(document).on("mobileinit", function() {
+            $.mobile.ajaxEnabled = false;
+            $.mobile.autoInitializePage = false;
+            //$.mobile.linkBindingEnabled = false;
+        });
+    </script>
+    <script src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<!--    {{ HTML::script('//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js') }}
 
+    {{ HTML::style('css/jquery.mobile-1.4.1.css') }}
+    {{ HTML::script('js/jquery.mobile-1.4.1.js') }}
+-->
     <script type="application/javascript">
         var compData = {!! $competition_list !!};
+        var judgeId = '{!! $judgeId !!}';
+        var judgeName = '{!! $judgeName !!}';
     </script>
 
     <style>
@@ -51,6 +60,9 @@
         .listview-spacer {
             margin-top: 1em !important;
         }
+        .ui-mobile .ui-page-active {
+            overflow-x: visible !important;
+        }
 
     </style>
 
@@ -58,6 +70,6 @@
 <body>
     <div id="scorer"></div>
 
-    <script src="{{asset('js/app.js')}}" ></script>
+    <script defer src="{{asset('js/app.js')}}" ></script>
 </body>
 </html>

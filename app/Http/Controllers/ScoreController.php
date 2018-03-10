@@ -174,7 +174,7 @@ class ScoreController extends Controller {
 				$comps->reduce(function ($compOutput, $comp) {
 					$compOutput[$comp->id] = [
 						'name' => $comp->name,
-						'year' => $comp->year,
+						'year' => $comp->event_date->year,
 						'divisions' => $comp->divisions->reduce(function ($divOutput, $div) {
 							$divOutput[$div->id] = [
 								'name' => $div->name,
@@ -192,6 +192,10 @@ class ScoreController extends Controller {
 			);
 		});
 
-		return View::make('scorer.index')->with(compact('competition_list'));
+		// Judge Info
+		$judgeName = Auth::user()->name;
+		$judgeId = Auth::user()->id;
+
+		return View::make('scorer.index')->with(compact('competition_list','judgeName', 'judgeId'));
 	}
 }

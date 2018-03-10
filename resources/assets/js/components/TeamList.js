@@ -2,17 +2,20 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import {connect} from "react-redux";
+import loadChalData from "../utils/loadChalData";
 
 class TeamListApp extends Component {
     constructor(props) {
         super(props);
-        const compId = props.match.params.compid;
-        const divId = props.match.params.divid;
+        const compId = props.match.params.compId;
+        const divId = props.match.params.divId;
         const divisionList = compData[compId].divisions[divId];
         const teamList = divisionList.teams;
         this.state = {
-            compid: compId,
-            divid: divId,
+            compId: compId,
+            divId: divId,
+            year: compData[compId].year,
+            level: compData[compId].divisions[divId].level,
             divisionName: divisionList.name,
             input: '',
             teams: Object.keys(teamList)
@@ -20,7 +23,7 @@ class TeamListApp extends Component {
                 .reduce((list,teamId) => {
                 list.push( {
                     key: teamId,
-                    teamid: teamId,
+                    teamId: teamId,
                     name: teamList[teamId]
                 });
                 return list;
@@ -30,7 +33,13 @@ class TeamListApp extends Component {
 
     componentDidMount() {
         this.props.updateTitle("Choose Team");
-        this.props.updateBack(`/c/${this.state.compid}`);
+        this.props.updateBack(`/c/${this.state.compId}`);
+
+        if(!this.props.challengeData[this.state.year] || !this.props.challengeData[this.state.year][this.state.level]) {
+            loadChalData.load(this.state.year, this.state.level, this.props.doLoadChalData)
+        } else {
+            console.log("TeamList - No need to load Challenge Data");
+        }
     }
 
     inputUpdate = (e) => {
@@ -77,8 +86,8 @@ class TeamListApp extends Component {
                     {
                         (list.length > 0) ? list.map(item => {
                             return <Team
-                                compid={this.state.compid}
-                                divid={this.state.divid}
+                                compId={this.state.compId}
+                                divId={this.state.divId}
                                 {...item}
                             />}) : <p>No Teams Found</p>
                     }
@@ -96,7 +105,7 @@ class Team extends  Component {
         return (
             <li className={childType}>
                 <Link
-                    to={`/c/${this.props.compid}/d/${this.props.divid}/t/${this.props.teamid}`}
+                    to={`/c/${this.props.compId}/d/${this.props.divId}/t/${this.props.teamId}`}
                     className='ui-btn ui-btn-icon-right ui-icon-carat-r'>
                     {this.props.name}
                 </Link>
@@ -117,7 +126,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         updateBack: (newURL) => dispatch({ type: 'change_url', url: newURL}),
-        updateTitle: (newTitle) => dispatch({ type: 'change_title', title: newTitle })
+        updateTitle: (newTitle) => dispatch({ type: 'change_title', title: newTitle }),
+        doLoadChalData: (year,level,data) =>dispatch({ type: 'load_chal_data', 'year': year, 'level': level, 'data': data})
     }
 }
 

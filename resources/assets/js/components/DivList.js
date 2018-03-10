@@ -1,18 +1,19 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import {connect} from "react-redux";
+import loadChalData from '../utils/loadChalData';
 
 class DivListApp extends Component {
     constructor(props) {
         super(props);
-        const compId = props.match.params.compid;
+        const compId = props.match.params.compId;
         this.state = {
             competitionName: compData[compId].name,
             divs: Object.keys(compData[compId].divisions).reduce((list,divId) => {
                 list.push( {
                     key: divId,
-                    compid: compId,
-                    divid: divId,
+                    compId: compId,
+                    divId: divId,
                     name: compData[compId].divisions[divId].name
                 });
                 return list;
@@ -42,7 +43,7 @@ class DivListApp extends Component {
 
 class Division extends  Component {
     render() {
-        return <li><Link to={`/c/${this.props.compid}/d/${this.props.divid}`} className="ui-btn ui-btn-icon-right ui-icon-carat-r">{this.props.name}</Link></li>
+        return <li><Link to={`/c/${this.props.compId}/d/${this.props.divId}`} className="ui-btn ui-btn-icon-right ui-icon-carat-r">{this.props.name}</Link></li>
     }
 }
 
