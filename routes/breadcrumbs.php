@@ -41,10 +41,16 @@ try {
 		$bc->parent('divisions.index');
 		$bc->push('Add Division', route('divisions.create'));
 	});
-	Breadcrumbs::register('divisions.show', function (BreadcrumbsGenerator $bc) {
+	Breadcrumbs::register('divisions.show', function (BreadcrumbsGenerator $bc, $div_id) {
 		$bc->parent('divisions.index');
-		$bc->push('Show Division');
+		$bc->push('Show Division', route('divisions.show', [$div_id]));
 	});
+
+	Breadcrumbs::register('divisions.assign', function (BreadcrumbsGenerator $bc, $div_id) {
+		$bc->parent('divisions.show', $div_id);
+		$bc->push('Assign Challenges', route('divisions.assign', [$div_id]));
+	});
+
 	Breadcrumbs::register('divisions.edit', function (BreadcrumbsGenerator $bc, $div_id) {
 		$bc->parent('divisions.index');
 		$bc->push('Edit Division', route('divisions.edit', [ $div_id ]));

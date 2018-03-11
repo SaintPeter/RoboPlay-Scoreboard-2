@@ -17,15 +17,19 @@
 		    {!! Form::textarea('rules', null, [ 'class'=>'form-control col-md-4' ])  !!}
 		</div>
 
-		<div class="form-group">
-			<div class="col-md-6">
+		<div class="form-group row">
+			<div class="col-md-4">
 				{!! Form::label('points', 'Points')  !!}
 				{!! Form::text('points', null, [ 'class'=>'form-control col-md-2' ])  !!}
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-4">
 				{!! Form::label('level', 'Level')  !!}
 				{!! Form::selectRange('level', 1, 3 , null, [ 'class'=>'form-control col-md-2' ])  !!}
 			</div>
+            <div class="col-md-4">
+                {!! Form::label('year', 'Year')  !!}
+                {!! Form::text('year', null, [ 'class'=>'form-control col-md-2' ])  !!}
+            </div>
 		</div>
 
 		{!! Form::submit('Submit', array('class' => 'btn btn-primary btn-margin'))  !!}

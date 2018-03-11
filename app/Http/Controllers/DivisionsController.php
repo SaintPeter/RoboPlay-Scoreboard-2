@@ -213,7 +213,7 @@ class DivisionsController extends Controller {
 	 	return View::make('divisions.assign', compact('all_list', 'selected_list', 'division_id'));
 	}
 
-	public function saveassign()
+	public function saveassign(Request $req)
 	{
 		$has_list = $req->input('has', array());
 		$division_id = $req->input('division_id', 0);

@@ -178,6 +178,7 @@ button:focus {outline:0;}
 				<th>Rules</th>
 				<th>Points</th>
 				<th>Level</th>
+                <th>Year</th>
 				<th>Actions</th>
 		</tr>
 	</thead>
@@ -189,6 +190,7 @@ button:focus {outline:0;}
 					<td>{{ nl2br($challenge->rules) }}</td>
 					<td>{{{ $challenge->points }}}</td>
 					<td>{{{ $challenge->level }}}</td>
+                    <td>{{{ $challenge->year }}}</td>
 					<td>{{ link_to_route('challenges.edit', 'Edit', array($challenge->id), array('class' => 'btn btn-info btn-margin')) }}
 						{!! Form::open(array('method' => 'DELETE', 'route' => array('challenges.destroy', $challenge->id), 'style' => 'display: inline-block'))  !!}
 							{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-margin'))  !!}

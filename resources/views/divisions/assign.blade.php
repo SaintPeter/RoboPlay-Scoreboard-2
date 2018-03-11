@@ -21,13 +21,15 @@
 </script>
 @endsection
 
+@inject('challenge','App\Models\Challenge')
+
 @section('main')
 <div class="content col-md-8">
 	<div class="clearfix">
 		@include('partials.year_select')
 
 		<div class="pull-right" style="margin-right: 10px">
-			{!! Form::select('level_select', Challenge::$levels, Session::get('level_select', 0), [ 'class' => 'form-control', 'id' => 'level_select' ])  !!}
+			{!! Form::select('level_select', $challenge::$levels, Session::get('level_select', 0), [ 'class' => 'form-control', 'id' => 'level_select' ])  !!}
 		</div>
 	</div>
 

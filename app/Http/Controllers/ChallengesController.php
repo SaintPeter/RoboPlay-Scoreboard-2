@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use View;
 use Session;
 use Validator;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\ {
@@ -78,7 +79,7 @@ class ChallengesController extends Controller {
 	public function store(Request $req)
 	{
 		$input = $req->all();
-		$input['year'] = Carbon::now()->year;
+
 		$validation = Validator::make($input, Challenge::$rules);
 
 		if ($validation->passes())
