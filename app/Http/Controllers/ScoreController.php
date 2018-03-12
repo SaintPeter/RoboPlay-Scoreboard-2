@@ -148,7 +148,7 @@ class ScoreController extends Controller {
 						'scores' => $scores,
 						'total' => $total,
 						'team_id' => $team_id,
-						'user_id' => Auth::user()->id,
+						'judge_id' => Auth::user()->id,
 						'challenge_id' => $challenge_id,
 						'division_id' => $team->division_id,
 						'run_time' => $date->format('H:i:s'));
