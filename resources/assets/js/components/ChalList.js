@@ -63,7 +63,7 @@ class Challenge extends  Component {
             <Link
                 to={`/c/${this.props.compInfo.compId}/d/${this.props.compInfo.divId}/t/${this.props.compInfo.teamId}/h/${this.props.number}`}
                 className="ui-btn ui-btn-icon-right ui-icon-carat-r">
-                {this.props.number}. {this.props.display_name} ({this.props.points} Points Possible)
+                {this.props.number + 1}. {this.props.display_name} ({this.props.points} Points Possible)
             </Link>
         </li>
         )

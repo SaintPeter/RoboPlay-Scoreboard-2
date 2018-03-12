@@ -31056,7 +31056,7 @@ var Challenge = function (_Component2) {
                     {
                         to: '/c/' + this.props.compInfo.compId + '/d/' + this.props.compInfo.divId + '/t/' + this.props.compInfo.teamId + '/h/' + this.props.number,
                         className: 'ui-btn ui-btn-icon-right ui-icon-carat-r' },
-                    this.props.number,
+                    this.props.number + 1,
                     '. ',
                     this.props.display_name,
                     ' (',
@@ -31166,19 +31166,34 @@ var ScoreChallengeApp = function (_Component) {
 
         var _this = _possibleConstructorReturn(this, (ScoreChallengeApp.__proto__ || Object.getPrototypeOf(ScoreChallengeApp)).call(this, props));
 
+        _this.scoreChange = function (scoreData) {
+            var total = {};
+            total[scoreData.id] = scoreData.base + scoreData.val * scoreData.multi;
+            _this.setState({ scores: Object.assign({}, _this.state.scores, total) });
+            _this.updateScore();
+        };
+
+        _this.updateScore = function () {
+            _this.setState({
+                score: Math.max(0, Object.keys(_this.state.scores).reduce(function (acc, key) {
+                    return acc + _this.state.scores[key];
+                }, 0))
+            });
+        };
+
         _this.challengeType = function (type, item) {
             switch (type) {
                 case 'yesno':
-                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(YesNo, _extends({ type: 'yesno', compInfo: _this.state, key: item.id }, item));
+                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(YesNo, _extends({ type: 'yesno', onChange: _this.scoreChange, compInfo: _this.state, key: item.id }, item));
                 case 'noyes':
-                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(YesNo, _extends({ type: 'noyes', compInfo: _this.state, key: item.id }, item));
+                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(YesNo, _extends({ type: 'noyes', onChange: _this.scoreChange, compInfo: _this.state, key: item.id }, item));
                 case 'slider':
                 case 'low_slider':
-                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(Slider, _extends({ type: 'low', compInfo: _this.state, key: item.id }, item));
+                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(Slider, _extends({ type: 'low', onChange: _this.scoreChange, compInfo: _this.state, key: item.id }, item));
                 case 'high_slider':
-                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(Slider, _extends({ type: 'high', compInfo: _this.state, key: item.id }, item));
+                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(Slider, _extends({ type: 'high', onChange: _this.scoreChange, compInfo: _this.state, key: item.id }, item));
                 case 'score_slider':
-                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(Slider, _extends({ type: 'score', compInfo: _this.state, key: item.id }, item));
+                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(Slider, _extends({ type: 'score', onChange: _this.scoreChange, compInfo: _this.state, key: item.id }, item));
             }
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'li',
@@ -31203,7 +31218,9 @@ var ScoreChallengeApp = function (_Component) {
             level: level,
             competitionName: compData[compId].name,
             divisionName: compData[compId].divisions[divId].name,
-            teamName: compData[compId].divisions[divId].teams[teamId]
+            teamName: compData[compId].divisions[divId].teams[teamId],
+            score: 0,
+            scores: {}
         };
         return _this;
     }
@@ -31277,6 +31294,15 @@ var ScoreChallengeApp = function (_Component) {
                         'li',
                         null,
                         'No Data'
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'li',
+                        { className: 'ui-field-contain ui-li-static ui-body-inherit' },
+                        'Estimated Score: ',
+                        this.state.score,
+                        ' out of ',
+                        chalData.points,
+                        ' points'
                     )
                 )
             );
@@ -31300,8 +31326,15 @@ var YesNo = function (_Component2) {
             args[_key] = arguments[_key];
         }
 
-        return _ret = (_temp = (_this3 = _possibleConstructorReturn(this, (_ref = YesNo.__proto__ || Object.getPrototypeOf(YesNo)).call.apply(_ref, [this].concat(args))), _this3), _this3.selectOrder = function (type) {
-            if (type === 'yesno') {
+        return _ret = (_temp = (_this3 = _possibleConstructorReturn(this, (_ref = YesNo.__proto__ || Object.getPrototypeOf(YesNo)).call.apply(_ref, [this].concat(args))), _this3), _this3.sendScore = function () {
+            _this3.props.onChange({
+                id: _this3.$node.data('id'),
+                val: _this3.$node.val(),
+                multi: _this3.$node.data('multi'),
+                base: _this3.$node.data('base')
+            });
+        }, _this3.selectOrder = function (type) {
+            if (type === 'noyes') {
                 return [__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'option',
                     { key: '0', value: '0' },
@@ -31328,15 +31361,10 @@ var YesNo = function (_Component2) {
     _createClass(YesNo, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var _this4 = this;
-
             this.$node = $(this.refs.flipswitch);
-
-            this.$node.flipswitch({
-                change: function change(event, ui) {
-                    return _this4.props.onChange(event, ui);
-                }
-            });
+            this.$node.flipswitch();
+            this.$node.on('change', this.sendScore);
+            this.sendScore();
         }
     }, {
         key: 'shouldComponentUpdate',
@@ -31356,30 +31384,18 @@ var YesNo = function (_Component2) {
                 { className: 'ui-field-contain ui-li-static ui-body-inherit' },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('h4', { dangerouslySetInnerHTML: { __html: this.props.display_text } }),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'div',
-                    { ref: 'flipswitch', className: 'ui-flipswitch ui-shadow-inset ui-bar-inherit ui-corner-all ui-flipswitch-active' },
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'a',
-                        { href: '#', className: 'ui-flipswitch-on ui-btn ui-shadow ui-btn-inherit' },
-                        'Yes'
-                    ),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'span',
-                        { className: 'ui-flipswitch-off' },
-                        'No'
-                    ),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'select',
-                        { id: 'sel_{this.props.id}',
-                            'data-base': '{this.props.base_value}',
-                            'data-multi': '{this.props.multiplier}',
-                            name: 'scores[{this.props.id}][value]',
-                            'data-role': 'flipswitch',
-                            className: 'ui-flipswitch-input',
-                            tabIndex: '-1'
-                        },
-                        this.selectOrder(this.props.type)
-                    )
+                    'select',
+                    { ref: 'flipswitch',
+                        'data-role': 'flipswitch',
+                        id: "sel_" + this.props.id,
+                        'data-id': this.props.id,
+                        'data-base': this.props.base_value,
+                        'data-multi': this.props.multiplier,
+                        name: "scores[" + this.props.id + "][value]",
+                        className: 'ui-flipswitch-input',
+                        tabIndex: '-1'
+                    },
+                    this.selectOrder(this.props.type)
                 )
             );
         }
@@ -31394,7 +31410,7 @@ var Slider = function (_Component3) {
     function Slider() {
         var _ref2;
 
-        var _temp2, _this5, _ret2;
+        var _temp2, _this4, _ret2;
 
         _classCallCheck(this, Slider);
 
@@ -31402,21 +31418,23 @@ var Slider = function (_Component3) {
             args[_key2] = arguments[_key2];
         }
 
-        return _ret2 = (_temp2 = (_this5 = _possibleConstructorReturn(this, (_ref2 = Slider.__proto__ || Object.getPrototypeOf(Slider)).call.apply(_ref2, [this].concat(args))), _this5), _this5.onChange = function (e, ui) {}, _temp2), _possibleConstructorReturn(_this5, _ret2);
+        return _ret2 = (_temp2 = (_this4 = _possibleConstructorReturn(this, (_ref2 = Slider.__proto__ || Object.getPrototypeOf(Slider)).call.apply(_ref2, [this].concat(args))), _this4), _this4.sendScore = function () {
+            _this4.props.onChange({
+                id: _this4.$node.data('id'),
+                val: _this4.$node.val(),
+                multi: _this4.$node.data('multi'),
+                base: _this4.$node.data('base')
+            });
+        }, _temp2), _possibleConstructorReturn(_this4, _ret2);
     }
 
     _createClass(Slider, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var _this6 = this;
-
             this.$node = $(this.refs.slider);
-
-            this.$node.slider({
-                change: function change(event, ui) {
-                    return _this6.onChange(event, ui);
-                }
-            });
+            this.$node.slider();
+            this.$node.on('change', this.sendScore);
+            this.sendScore();
         }
     }, {
         key: 'shouldComponentUpdate',
@@ -31431,23 +31449,29 @@ var Slider = function (_Component3) {
     }, {
         key: 'render',
         value: function render() {
+            var propSet = {
+                onChange: this.onChange,
+                id: "sel_" + this.props.id,
+                "data-id": this.props.id,
+                "data-base": this.props.base_value,
+                "data-multi": this.props.type === 'score_slider' ? 1 : this.props.multiplier,
+                step: this.props.type === 'score_slider' ? this.props.multiplier : 1,
+                name: "scores[" + this.props.id + "][value]",
+                min: this.props.min_entry,
+                max: this.props.max_entry,
+                defaultValue: this.props.type === 'high_slider' ? this.props.max_entry : 0
+            };
+
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'li',
                 { className: 'ui-field-contain ui-li-static ui-body-inherit' },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('h4', { dangerouslySetInnerHTML: { __html: this.props.display_text } }),
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { ref: "slider",
-                    onChange: this.onChange,
-                    id: "sel_" + this.props.id,
-                    'data-base': this.props.base_value,
-                    'data-multi': this.props.multiplier,
-                    name: "scores[" + this.props.id + "][value]",
-                    min: this.props.min_entry,
-                    max: this.props.max_entry,
-                    value: '0',
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', _extends({ ref: "slider"
+                }, propSet, {
                     type: 'number',
                     'data-type': 'range',
                     className: 'ui-clear-both ui-shadow-inset ui-body-inherit ui-corner-all ui-slider-input'
-                })
+                }))
             );
         }
     }]);
