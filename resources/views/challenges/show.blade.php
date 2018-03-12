@@ -3,7 +3,7 @@
 @section('script')
 <script>
 $(function() {
-	$( "#dialog" ).clone().attr('id', 'active_dialog').dialog({ autoOpen: false });
+	$( "#dialog" ).clone().attr('id', 'active_dialog').dialog({ autoOpen: false, minWidth: 350 });
 	$( "#random_dialog" ).clone().attr('id', 'active_random_dialog').dialog({ autoOpen: false });
 
 	jQuery(document).on('click', '.random_close', dialog_close_handler );

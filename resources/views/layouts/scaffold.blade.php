@@ -14,6 +14,11 @@
 
         @yield('head')
 
+        <script>
+            // Resolve conflict between JqueryUI and Bootstrap
+            $.fn.bootstrapBtn = $.fn.button.noConflict();
+        </script>
+
 		<style>
 			table form { margin-bottom: 0; }
 			form>ul { margin-left: 0; list-style: none; }

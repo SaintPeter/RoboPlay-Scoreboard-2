@@ -22,7 +22,7 @@
 			{!! Form::label('element_number', 'Display Order', [ 'class' => 'form-label' ])  !!}
 			{!! Form::text( 'element_number', $order, [ 'class' => 'form-control numeric' ])  !!}
 		</div>
-		<div class="col-md-6" style="padding-left:0px">
+		<div class="col-md-6" style="padding:0px">
 			{!! Form::label('type', 'Input Type', [ 'class' => 'form-label' ])  !!}
 			{!! Form::select('type', $input_types, null, [ 'class' => 'form-control' ])  !!}
 		</div>
@@ -33,7 +33,7 @@
 		{!! Form::label('multiplier', 'Multiplier', [ 'class' => 'form-label' ])  !!}
 		{!! Form::input('number', 'multiplier', null, [ 'class' => 'form-control numeric' ])  !!}
 		</div>
-		<div class="col-md-6" style="padding-left:0px">
+		<div class="col-md-6" style="padding:0px">
 		{!! Form::label('base_value', 'Base Value', [ 'class' => 'form-label' ])  !!}
 		{!! Form::input('number', 'base_value', null, [ 'class' => 'form-control numeric' ])  !!}
 		</div>
@@ -44,7 +44,7 @@
 			{!! Form::label('min_entry', 'Minimum Value', [ 'class' => 'form-label' ])  !!}
 			{!! Form::text( 'min_entry', null, [ 'class' => 'form-control numeric' ])  !!}
 		</div>
-		<div class="col-md-6" style="padding-left:0px">
+		<div class="col-md-6" style="padding:0px">
 			{!! Form::label('max_entry', 'Maximum Value', [ 'class' => 'form-label' ])  !!}
 			{!! Form::text( 'max_entry', null, [ 'class' => 'form-control numeric' ])  !!}
 		</div>
