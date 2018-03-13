@@ -7947,7 +7947,7 @@ var loadChalData = function () {
                         try {
                             console.log("Loading Challenge Data " + chalId + " from LocalStorage");
                             callback(year, level, JSON.parse(rawData));
-                            return;
+                            return Promise.resolve("Loaded Data from LocalStorage");
                         } catch (e) {
                             console.log("Error parsing JSON data from localStorage: " + e.message);
                         }
@@ -7956,13 +7956,18 @@ var loadChalData = function () {
             }
 
             // Remote Load
-            window.axios.get('/api/challenges/' + year + "/" + level).then(function (response) {
+            return window.axios.get('/api/challenges/' + year + "/" + level).then(function (response) {
+                console.log("Data Fetched");
                 if (hasLocalStorage) {
                     localStorage.setItem(CACHE_EXPIRE_PREFIX + chalId, Date.now() + CACHE_TIME);
                     localStorage.setItem(DATA_PREFIX + chalId, JSON.stringify(response.data));
                     console.log("Stored Challenge Data " + chalId);
                 }
-                callback(year, level, response.data);
+                return response.data;
+            }).then(function (data) {
+                return callback(year, level, data);
+            }).then(function () {
+                return "Fetched Data via AJAX";
             }).catch(function (error) {
                 console.log("Error loading data from remote: " + error);
             });
@@ -11907,10 +11912,10 @@ module.exports = getHostComponentFromComposite;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__ = __webpack_require__(264);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__compose__ = __webpack_require__(112);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_warning__ = __webpack_require__(111);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_0__createStore__["b"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_0__createStore__["b"]; });
 /* unused harmony reexport combineReducers */
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__["a"]; });
-/* unused harmony reexport applyMiddleware */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__["a"]; });
 /* unused harmony reexport compose */
 
 
@@ -13307,9 +13312,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(165);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_dom__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_redux__ = __webpack_require__(108);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_redux__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Master__ = __webpack_require__(274);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__reducers_reducer__ = __webpack_require__(304);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_redux_thunk__ = __webpack_require__(306);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_redux_thunk___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_redux_thunk__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react_redux__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Master__ = __webpack_require__(274);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__reducers_reducer__ = __webpack_require__(304);
 __webpack_require__(127);
 
 
@@ -13321,13 +13328,14 @@ __webpack_require__(127);
 
 
 
-var store = Object(__WEBPACK_IMPORTED_MODULE_2_redux__["b" /* createStore */])(__WEBPACK_IMPORTED_MODULE_5__reducers_reducer__["a" /* default */]);
+
+var store = Object(__WEBPACK_IMPORTED_MODULE_2_redux__["c" /* createStore */])(__WEBPACK_IMPORTED_MODULE_6__reducers_reducer__["a" /* default */], Object(__WEBPACK_IMPORTED_MODULE_2_redux__["a" /* applyMiddleware */])(__WEBPACK_IMPORTED_MODULE_3_redux_thunk___default.a));
 
 if (document.getElementById('scorer')) {
     Object(__WEBPACK_IMPORTED_MODULE_1_react_dom__["render"])(__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        __WEBPACK_IMPORTED_MODULE_3_react_redux__["a" /* Provider */],
+        __WEBPACK_IMPORTED_MODULE_4_react_redux__["a" /* Provider */],
         { store: store },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__components_Master__["a" /* default */], null)
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__components_Master__["a" /* default */], null)
     ), document.getElementById('scorer'));
 } else {
     console.log('Error:  Cannot find #scorer element');
@@ -26710,7 +26718,7 @@ function bindActionCreators(actionCreators, dispatch) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* unused harmony export default */
+/* harmony export (immutable) */ __webpack_exports__["a"] = applyMiddleware;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__compose__ = __webpack_require__(112);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -27123,7 +27131,7 @@ function whenMapDispatchToPropsIsMissing(mapDispatchToProps) {
 
 function whenMapDispatchToPropsIsObject(mapDispatchToProps) {
   return mapDispatchToProps && typeof mapDispatchToProps === 'object' ? Object(__WEBPACK_IMPORTED_MODULE_1__wrapMapToProps__["a" /* wrapMapToPropsConstant */])(function (dispatch) {
-    return Object(__WEBPACK_IMPORTED_MODULE_0_redux__["a" /* bindActionCreators */])(mapDispatchToProps, dispatch);
+    return Object(__WEBPACK_IMPORTED_MODULE_0_redux__["b" /* bindActionCreators */])(mapDispatchToProps, dispatch);
   }) : undefined;
 }
 
@@ -30974,13 +30982,15 @@ var ChalListApp = function (_Component) {
     }
 
     _createClass(ChalListApp, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
+        key: 'componentWillMount',
+        value: function componentWillMount() {
             this.props.updateTitle("Select Challenge");
             this.props.updateBack('/c/' + this.state.compId + '/d/' + this.state.divId);
 
             if (!this.props.challengeData[this.state.year] || !this.props.challengeData[this.state.year][this.state.level]) {
-                __WEBPACK_IMPORTED_MODULE_3__utils_loadChalData__["a" /* default */].load(this.state.year, this.state.level, this.props.doLoadChalData);
+                __WEBPACK_IMPORTED_MODULE_3__utils_loadChalData__["a" /* default */].load(this.state.year, this.state.level, this.props.doLoadChalData).then(function (result) {
+                    console.log("Dispatch Result: ", result);
+                });
             } else {
                 console.log("ChalList - No need to load Challenge Data");
             }
@@ -31166,6 +31176,23 @@ var ScoreChallengeApp = function (_Component) {
 
         var _this = _possibleConstructorReturn(this, (ScoreChallengeApp.__proto__ || Object.getPrototypeOf(ScoreChallengeApp)).call(this, props));
 
+        _this.populateScores = function () {
+            _this.setState({ 'scores': _this.props.challengeData[_this.state.year][_this.state.level][_this.state.chalNum].score_elements.reduce(function (acc, element) {
+                    switch (element.type) {
+                        case 'yesno':
+                            acc[element.id] = element.base_value + element.multiplier;
+                            break;
+                        case 'high_slider':
+                            acc[element.id] = element.max_entry;
+                            break;
+                        default:
+                            acc[element.id] = element.base_value;
+                    }
+                    return acc;
+                }, {})
+            }, _this.updateScore);
+        };
+
         _this.scoreChange = function (scoreData) {
             var total = {};
             total[scoreData.id] = scoreData.base + scoreData.val * scoreData.multi;
@@ -31226,21 +31253,27 @@ var ScoreChallengeApp = function (_Component) {
     }
 
     _createClass(ScoreChallengeApp, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            var _this2 = this;
+
             this.props.updateTitle("Score");
             this.props.updateBack('/c/' + this.state.compId + '/d/' + this.state.divId + '/t/' + this.state.teamId);
 
             if (!this.props.challengeData[this.state.year] || !this.props.challengeData[this.state.year][this.state.level]) {
-                __WEBPACK_IMPORTED_MODULE_3__utils_loadChalData__["a" /* default */].load(this.state.year, this.state.level, this.props.doLoadChalData);
+                __WEBPACK_IMPORTED_MODULE_3__utils_loadChalData__["a" /* default */].load(this.state.year, this.state.level, this.props.doLoadChalData).then(function (result) {
+                    console.log("Dispatch Result: ", result);
+                    _this2.populateScores();
+                });
             } else {
                 console.log("ScoreChallenge - No need to load Challenge Data");
+                this.populateScores();
             }
         }
     }, {
         key: 'render',
         value: function render() {
-            var _this2 = this;
+            var _this3 = this;
 
             var chalData = this.props.challengeData[this.state.year] && this.props.challengeData[this.state.year][this.state.level] && this.props.challengeData[this.state.year][this.state.level][this.state.chalNum] ? this.props.challengeData[this.state.year][this.state.level][this.state.chalNum] : {};
             var elements = chalData.score_elements ? chalData.score_elements : [];
@@ -31289,7 +31322,7 @@ var ScoreChallengeApp = function (_Component) {
                     'ul',
                     { className: 'ui-listview ui-listview-inset ui-corner-all ui-shadow' },
                     elements ? elements.map(function (item, num) {
-                        return _this2.challengeType(item.type, item);
+                        return _this3.challengeType(item.type, item);
                     }) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'li',
                         null,
@@ -31318,7 +31351,7 @@ var YesNo = function (_Component2) {
     function YesNo() {
         var _ref;
 
-        var _temp, _this3, _ret;
+        var _temp, _this4, _ret;
 
         _classCallCheck(this, YesNo);
 
@@ -31326,14 +31359,14 @@ var YesNo = function (_Component2) {
             args[_key] = arguments[_key];
         }
 
-        return _ret = (_temp = (_this3 = _possibleConstructorReturn(this, (_ref = YesNo.__proto__ || Object.getPrototypeOf(YesNo)).call.apply(_ref, [this].concat(args))), _this3), _this3.sendScore = function () {
-            _this3.props.onChange({
-                id: _this3.$node.data('id'),
-                val: _this3.$node.val(),
-                multi: _this3.$node.data('multi'),
-                base: _this3.$node.data('base')
+        return _ret = (_temp = (_this4 = _possibleConstructorReturn(this, (_ref = YesNo.__proto__ || Object.getPrototypeOf(YesNo)).call.apply(_ref, [this].concat(args))), _this4), _this4.sendScore = function () {
+            _this4.props.onChange({
+                id: _this4.$node.data('id'),
+                val: _this4.$node.val(),
+                multi: _this4.$node.data('multi'),
+                base: _this4.$node.data('base')
             });
-        }, _this3.selectOrder = function (type) {
+        }, _this4.selectOrder = function (type) {
             if (type === 'noyes') {
                 return [__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'option',
@@ -31355,7 +31388,7 @@ var YesNo = function (_Component2) {
                     'No'
                 )];
             }
-        }, _temp), _possibleConstructorReturn(_this3, _ret);
+        }, _temp), _possibleConstructorReturn(_this4, _ret);
     }
 
     _createClass(YesNo, [{
@@ -31410,7 +31443,7 @@ var Slider = function (_Component3) {
     function Slider() {
         var _ref2;
 
-        var _temp2, _this4, _ret2;
+        var _temp2, _this5, _ret2;
 
         _classCallCheck(this, Slider);
 
@@ -31418,14 +31451,14 @@ var Slider = function (_Component3) {
             args[_key2] = arguments[_key2];
         }
 
-        return _ret2 = (_temp2 = (_this4 = _possibleConstructorReturn(this, (_ref2 = Slider.__proto__ || Object.getPrototypeOf(Slider)).call.apply(_ref2, [this].concat(args))), _this4), _this4.sendScore = function () {
-            _this4.props.onChange({
-                id: _this4.$node.data('id'),
-                val: _this4.$node.val(),
-                multi: _this4.$node.data('multi'),
-                base: _this4.$node.data('base')
+        return _ret2 = (_temp2 = (_this5 = _possibleConstructorReturn(this, (_ref2 = Slider.__proto__ || Object.getPrototypeOf(Slider)).call.apply(_ref2, [this].concat(args))), _this5), _this5.sendScore = function () {
+            _this5.props.onChange({
+                id: _this5.$node.data('id'),
+                val: _this5.$node.val(),
+                multi: _this5.$node.data('multi'),
+                base: _this5.$node.data('base')
             });
-        }, _temp2), _possibleConstructorReturn(_this4, _ret2);
+        }, _temp2), _possibleConstructorReturn(_this5, _ret2);
     }
 
     _createClass(Slider, [{
@@ -31507,6 +31540,35 @@ function mapDispatchToProps(dispatch) {
 var ScoreChallenge = Object(__WEBPACK_IMPORTED_MODULE_2_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(ScoreChallengeApp);
 
 /* harmony default export */ __webpack_exports__["a"] = (ScoreChallenge);
+
+/***/ }),
+/* 306 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+function createThunkMiddleware(extraArgument) {
+  return function (_ref) {
+    var dispatch = _ref.dispatch,
+        getState = _ref.getState;
+    return function (next) {
+      return function (action) {
+        if (typeof action === 'function') {
+          return action(dispatch, getState, extraArgument);
+        }
+
+        return next(action);
+      };
+    };
+  };
+}
+
+var thunk = createThunkMiddleware();
+thunk.withExtraArgument = createThunkMiddleware;
+
+exports['default'] = thunk;
 
 /***/ })
 /******/ ]);

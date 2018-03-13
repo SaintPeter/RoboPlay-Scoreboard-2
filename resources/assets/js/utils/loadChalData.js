@@ -29,7 +29,7 @@ export default class loadChalData {
                     try {
                         console.log("Loading Challenge Data " + chalId + " from LocalStorage");
                         callback(year,level,JSON.parse(rawData));
-                        return;
+                        return Promise.resolve("Loaded Data from LocalStorage");
                     } catch(e) {
                         console.log("Error parsing JSON data from localStorage: " + e.message);
                     }
@@ -38,15 +38,22 @@ export default class loadChalData {
         }
 
         // Remote Load
-        window.axios.get('/api/challenges/' + year + "/" + level)
+        return window.axios.get('/api/challenges/' + year + "/" + level)
             .then(function(response) {
+                console.log("Data Fetched");
                 if(hasLocalStorage) {
                     localStorage.setItem(CACHE_EXPIRE_PREFIX + chalId, Date.now() + CACHE_TIME);
                     localStorage.setItem(DATA_PREFIX + chalId, JSON.stringify(response.data));
                     console.log("Stored Challenge Data " + chalId);
                 }
-                callback(year,level,response.data);
-            }).catch(function(error) {
+                return response.data;
+            })
+            .then((data) => {
+                return callback(year,level,data);
+            }).then(() => {
+                return "Fetched Data via AJAX";
+            })
+            .catch(function(error) {
                 console.log("Error loading data from remote: " + error);
             });
     }

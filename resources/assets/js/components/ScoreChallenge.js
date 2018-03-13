@@ -27,16 +27,39 @@ class ScoreChallengeApp extends Component {
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.props.updateTitle("Score");
         this.props.updateBack(`/c/${this.state.compId}/d/${this.state.divId}/t/${this.state.teamId}`);
 
         if(!this.props.challengeData[this.state.year] || !this.props.challengeData[this.state.year][this.state.level]) {
             loadChalData.load(this.state.year, this.state.level, this.props.doLoadChalData)
+                .then((result) => {
+                    console.log("Dispatch Result: ", result);
+                    this.populateScores();
+                })
         } else {
             console.log("ScoreChallenge - No need to load Challenge Data");
+            this.populateScores();
         }
     }
+
+    populateScores = () => {
+        this.setState({ 'scores': this.props.challengeData[this.state.year][this.state.level][this.state.chalNum]
+                .score_elements.reduce((acc, element)=> {
+                    switch(element.type) {
+                        case 'yesno':
+                            acc[element.id] = element.base_value + element.multiplier;
+                            break;
+                        case 'high_slider':
+                            acc[element.id] = element.max_entry;
+                            break;
+                        default:
+                            acc[element.id] = element.base_value;
+                    }
+                    return acc;
+                },{})
+        },this.updateScore);
+    };
 
     scoreChange = (scoreData) => {
         let total = {};
@@ -231,7 +254,7 @@ function mapDispatchToProps(dispatch) {
     return {
         updateBack: (newURL) => dispatch({ type: 'change_url', url: newURL}),
         updateTitle: (newTitle) => dispatch({ type: 'change_title', title: newTitle }),
-        doLoadChalData: (year,level,data) =>dispatch({ type: 'load_chal_data', 'year': year, 'level': level, 'data': data})
+        doLoadChalData: (year,level,data) => dispatch({ type: 'load_chal_data', 'year': year, 'level': level, 'data': data})
     }
 }
 
