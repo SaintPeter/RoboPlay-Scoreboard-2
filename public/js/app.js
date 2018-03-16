@@ -31314,7 +31314,7 @@ var ScoreChallengeApp = function (_Component) {
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('hr', null),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { dangerouslySetInnerHTML: { __html: chalData.rules } })
                 ),
-                chalData.randoms.length > 0 ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__RandomsPopup__["a" /* default */], { randoms: chalData.randoms }) : '',
+                chalData.randoms && chalData.randoms.length > 0 ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__RandomsPopup__["a" /* default */], { randoms: chalData.randoms }) : '',
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'ul',
                     { className: 'ui-listview ui-listview-inset ui-corner-all ui-shadow' },

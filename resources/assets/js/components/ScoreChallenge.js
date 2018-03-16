@@ -116,7 +116,7 @@ class ScoreChallengeApp extends Component {
                     <div dangerouslySetInnerHTML={{__html: chalData.rules}} />
                 </div>
                 {
-                    (chalData.randoms.length > 0) ?
+                    (chalData.randoms && chalData.randoms.length > 0) ?
                         <RandomsPopup randoms={chalData.randoms}/> : ''
                 }
                 <ul className="ui-listview ui-listview-inset ui-corner-all ui-shadow">
