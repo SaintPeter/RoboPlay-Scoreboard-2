@@ -29,8 +29,9 @@ export default class loadChalData {
                     try {
                         console.log("Loading Challenge Data " + chalId + " from LocalStorage");
                         callback(year,level,JSON.parse(rawData));
-                        return Promise.resolve("Loaded Data from LocalStorage");
+                        return Promise.resolve("Loaded Challenge Data " + chalId + " from LocalStorage");
                     } catch(e) {
+                        // On errors we fall through and use AJAX
                         console.log("Error parsing JSON data from localStorage: " + e.message);
                     }
                 }
@@ -54,7 +55,8 @@ export default class loadChalData {
                 return "Fetched Data via AJAX";
             })
             .catch(function(error) {
-                console.log("Error loading data from remote: " + error);
+                console.log("Error loading Challlenge data from remote: " + error);
+                throw "Error loading Challlenge data from remote: " + error;
             });
     }
 

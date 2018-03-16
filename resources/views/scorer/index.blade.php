@@ -64,6 +64,16 @@
             overflow-x: visible !important;
         }
 
+        .bigtext {
+            font-size: 100px;
+        }
+        .center {
+            text-align: center;
+        }
+        #abortPopup-popup, #submitPopup-popup, #randomPopup-popup, #randomListPopup-popup {
+            width: 90%;
+        }
+
     </style>
 
 </head>

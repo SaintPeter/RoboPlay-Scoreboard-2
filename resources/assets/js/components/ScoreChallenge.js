@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import {connect} from "react-redux";
 import loadChalData from "../utils/loadChalData";
 
+import RandomsPopup from "./RandomsPopup";
+
 class ScoreChallengeApp extends Component {
     constructor(props) {
         super(props);
@@ -113,6 +115,10 @@ class ScoreChallengeApp extends Component {
                     <hr />
                     <div dangerouslySetInnerHTML={{__html: chalData.rules}} />
                 </div>
+                {
+                    (chalData.randoms.length > 0) ?
+                        <RandomsPopup randoms={chalData.randoms}/> : ''
+                }
                 <ul className="ui-listview ui-listview-inset ui-corner-all ui-shadow">
                     {
                         (elements) ? elements.map((item,num) => {
