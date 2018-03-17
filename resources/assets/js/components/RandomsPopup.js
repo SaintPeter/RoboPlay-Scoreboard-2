@@ -15,12 +15,12 @@ export default class RandomsPopup extends Component {
     formatRandom = function(random) {
         let rand1, rand2;
 
-        rand1 = rn({ min: random.min1, max: random.max1,integer: true});
-        rand2 = rn({min: random.min2, max: random.max2,integer: true});
+        rand1 = rn({ min: random.min1, max: random.max1, integer: true});
+        rand2 = rn({ min: random.min2, max: random.max2, integer: true});
 
         if(random.may_not_match) {
             while(rand1 == rand2) {
-                rand2 = rn(random.min2, random.max2, true);
+                rand2 = rn({ min: random.min2, max: random.max2, integer: true});
             }
         }
 
