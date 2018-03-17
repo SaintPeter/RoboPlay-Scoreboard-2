@@ -169,6 +169,8 @@ function dialog_close_handler(event) {
 button:focus {outline:0;}
 @endsection
 
+@inject('randoms', "App\Models\Random")
+
 @section('main')
 <table class="table table-striped table-bordered">
 	<thead>
@@ -263,7 +265,7 @@ button:focus {outline:0;}
 			@foreach( $challenge->randoms as $random)
 			<tr>
 				<td>{{{ $random->name }}}</td>
-				<td>{{{ Random::$types[$random->type] }}}</td>
+				<td>{{{ $randoms::$types[$random->type] }}}</td>
 				<td>{{{ $random->format }}}</td>
 				<td>{{{ $random->min1 }}} to {{{ $random->max1 }}}</td>
 				<td>{{{ $random->min2 }}} to {{{ $random->max2 }}}</td>

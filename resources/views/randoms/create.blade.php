@@ -1,3 +1,4 @@
+@inject("random","App\Models\Random")
 {!! Form::model('Random', [ 'route' => 'randoms.store', 'id' => 'random_form' ])  !!}
 	<div class="form-group">
 		{!! Form::label('name', 'Name', [ 'class' => 'form-label' ])  !!}
@@ -5,7 +6,7 @@
 	</div>
 	<div class="form-group">
 		{!! Form::label('type', 'Type', [ 'class' => 'form-label' ])  !!}
-		{!! Form::select('type', Random::$types, null, [ 'class' => 'form-control' ])  !!}
+		{!! Form::select('type', $random::$types, null, [ 'class' => 'form-control' ])  !!}
 	</div>
 	<div class="form-group">
 		{!! Form::label('format', 'Format', [ 'class' => 'form-label' ])  !!}
@@ -41,8 +42,9 @@
     </div>
 	<div class="checkbox">
 		{!! Form::hidden('may_not_match', 0)  !!}
-		<label class="form-label">May not Match</label>
-		{!! Form::checkbox('may_not_match', true)  !!}
+		<label class="form-label">
+		    {!! Form::checkbox('may_not_match', true) !!} May not Match
+        </label>
 	</div>
 
 	<div class="form-group">
