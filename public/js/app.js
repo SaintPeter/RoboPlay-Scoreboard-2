@@ -31147,6 +31147,7 @@ var ChalList = Object(__WEBPACK_IMPORTED_MODULE_2_react_redux__["b" /* connect *
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_redux__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loadChalData__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__RandomsPopup__ = __webpack_require__(303);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__RandomListPopup__ = __webpack_require__(306);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -31156,6 +31157,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 
 
 
@@ -31271,8 +31273,13 @@ var ScoreChallengeApp = function (_Component) {
         value: function render() {
             var _this3 = this;
 
-            var chalData = this.props.challengeData[this.state.year] && this.props.challengeData[this.state.year][this.state.level] && this.props.challengeData[this.state.year][this.state.level][this.state.chalNum] ? this.props.challengeData[this.state.year][this.state.level][this.state.chalNum] : {};
+            var chalData = {};
+            if (this.props.challengeData[this.state.year] && this.props.challengeData[this.state.year][this.state.level] && this.props.challengeData[this.state.year][this.state.level][this.state.chalNum]) {
+                chalData = this.props.challengeData[this.state.year][this.state.level][this.state.chalNum];
+                chalData.rules = chalData.rules.replace(/\r\n/g, "<br />");
+            }
             var elements = chalData.score_elements ? chalData.score_elements : [];
+
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 { className: 'ui-content' },
@@ -31315,6 +31322,7 @@ var ScoreChallengeApp = function (_Component) {
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { dangerouslySetInnerHTML: { __html: chalData.rules } })
                 ),
                 chalData.randoms && chalData.randoms.length > 0 ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__RandomsPopup__["a" /* default */], { randoms: chalData.randoms }) : '',
+                chalData.random_lists && chalData.random_lists.length > 0 ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__RandomListPopup__["a" /* default */], { random_lists: chalData.random_lists }) : '',
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'ul',
                     { className: 'ui-listview ui-listview-inset ui-corner-all ui-shadow' },
@@ -31612,7 +31620,7 @@ var RandomsPopup = function (_Component) {
 
             if (random.may_not_match) {
                 while (rand1 == rand2) {
-                    rand2 = __WEBPACK_IMPORTED_MODULE_2_random_number___default()(random.min2, random.max2, true);
+                    rand2 = __WEBPACK_IMPORTED_MODULE_2_random_number___default()({ min: random.min2, max: random.max2, integer: true });
                 }
             }
 
@@ -31986,6 +31994,167 @@ void function(root){
   module.exports.defaults = defaults
 }(this)
 
+
+/***/ }),
+/* 306 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_sprintf_js__ = __webpack_require__(304);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_sprintf_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_sprintf_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_random_number__ = __webpack_require__(305);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_random_number___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_random_number__);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+
+
+var RandomListPopup = function (_Component) {
+    _inherits(RandomListPopup, _Component);
+
+    function RandomListPopup(props) {
+        _classCallCheck(this, RandomListPopup);
+
+        var _this = _possibleConstructorReturn(this, (RandomListPopup.__proto__ || Object.getPrototypeOf(RandomListPopup)).call(this, props));
+
+        _this.formatRandomList = function (randomList) {
+            var chosen = __WEBPACK_IMPORTED_MODULE_2_random_number___default()({ min: 0, max: randomList.elements.length - 1, integer: true });
+
+            var formatted = _this.formatElements(randomList.elements[chosen], randomList);
+
+            var html = Object.keys(formatted).reduce(function (acc, format) {
+                var re = new RegExp(format, "g");
+                return acc.replace(re, formatted[format]);
+            }, randomList.format);
+
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("span", { key: randomList.id, dangerouslySetInnerHTML: { __html: html } });
+        };
+
+        _this.formatRandomListPopup = function (randomList) {
+            var chosen = __WEBPACK_IMPORTED_MODULE_2_random_number___default()({ min: 0, max: randomList.elements.length - 1, integer: true });
+
+            var formatted = _this.formatElements(randomList.elements[chosen], randomList);
+
+            var html = Object.keys(formatted).reduce(function (acc, format) {
+                var re = new RegExp(format, "g");
+                return acc.replace(re, formatted[format]);
+            }, randomList.popup_format);
+
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("span", { key: randomList.id, className: "bigtext", dangerouslySetInnerHTML: { __html: html } });
+        };
+
+        _this.formatElements = function (elements, randomList) {
+            var names = ['d1', 'd2', 'd3', 'd4', 'd5'];
+            var formats = ['d1_format', 'd2_format', 'd3_format', 'd4_format', 'd5_format'];
+            var output = [];
+
+            for (var i = 0; i < 5; i++) {
+                if (formats[i]) {
+                    output['{' + names[i] + '}'] = Object(__WEBPACK_IMPORTED_MODULE_1_sprintf_js__["sprintf"])(randomList[formats[i]], elements[names[i]]);
+                } else {
+                    break;
+                }
+            }
+            return output;
+        };
+
+        _this.onPopoutClick = function () {
+            _this.$node.popup("open");
+        };
+
+        _this.state = {
+            randomLists: props.random_lists.map(_this.formatRandomList),
+            randomListPopups: props.random_lists.map(_this.formatRandomListPopup)
+        };
+
+        return _this;
+    }
+
+    _createClass(RandomListPopup, [{
+        key: "componentDidMount",
+        value: function componentDidMount() {
+            this.$node = $(this.refs.popup);
+            this.$node.popup();
+        }
+    }, {
+        key: "shouldComponentUpdate",
+        value: function shouldComponentUpdate() {
+            return false;
+        }
+    }, {
+        key: "componentWillUnmount",
+        value: function componentWillUnmount() {
+            this.$node.remove();
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                "div",
+                null,
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    "div",
+                    { className: "ui-body ui-body-a" },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        "button",
+                        {
+                            onClick: this.onPopoutClick,
+                            id: "random_popout",
+                            "data-rel": "popup",
+                            "data-position-to": "window",
+                            className: "ui-btn ui-btn-inline pull-right" },
+                        "Popout"
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        "h4",
+                        null,
+                        "RandomList"
+                    ),
+                    this.state.randomLists
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    "div",
+                    { ref: "popup",
+                        "data-role": "popup",
+                        "data-history": "false",
+                        id: "randomPopup",
+                        className: "ui-corner-all" },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        "div",
+                        { role: "banner", "data-role": "header", "data-theme": "a", className: "ui-corner-top ui-header ui-bar-a" },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            "h1",
+                            { role: "heading", className: "ui-title" },
+                            "Random Number"
+                        )
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        "div",
+                        { role: "main", className: "ui-corner-bottom ui-content center" },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            "span",
+                            { className: "bigtext" },
+                            this.state.randomListPopups
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return RandomListPopup;
+}(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]);
+
+/* harmony default export */ __webpack_exports__["a"] = (RandomListPopup);
 
 /***/ })
 /******/ ]);

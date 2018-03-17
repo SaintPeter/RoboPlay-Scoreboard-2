@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import loadChalData from "../utils/loadChalData";
 
 import RandomsPopup from "./RandomsPopup";
+import RandomListPopup from "./RandomListPopup";
 
 class ScoreChallengeApp extends Component {
     constructor(props) {
@@ -98,12 +99,16 @@ class ScoreChallengeApp extends Component {
     };
 
     render() {
-        let chalData = (this.props.challengeData[this.state.year] &&
+        let chalData = {};
+        if(this.props.challengeData[this.state.year] &&
                           this.props.challengeData[this.state.year][this.state.level] &&
                           this.props.challengeData[this.state.year][this.state.level][this.state.chalNum]
-                        ) ?
-            this.props.challengeData[this.state.year][this.state.level][this.state.chalNum] : {};
+                        ) {
+            chalData = this.props.challengeData[this.state.year][this.state.level][this.state.chalNum];
+            chalData.rules = chalData.rules.replace(/\r\n/g,"<br />");
+        }
         let elements = (chalData.score_elements) ? chalData.score_elements : [];
+
         return (
             <div className="ui-content">
                 <div className="ui-body ui-body-a ui-corner-all">
@@ -118,6 +123,10 @@ class ScoreChallengeApp extends Component {
                 {
                     (chalData.randoms && chalData.randoms.length > 0) ?
                         <RandomsPopup randoms={chalData.randoms}/> : ''
+                }
+                {
+                    (chalData.random_lists && chalData.random_lists.length > 0) ?
+                        <RandomListPopup random_lists={chalData.random_lists}/> : ''
                 }
                 <ul className="ui-listview ui-listview-inset ui-corner-all ui-shadow">
                     {
