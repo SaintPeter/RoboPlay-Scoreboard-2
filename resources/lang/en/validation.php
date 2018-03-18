@@ -102,9 +102,12 @@ return [
 	*/
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'score_map.*.i' => [
+            'integer' => 'Score Map Input Values must be Integers',
         ],
+	    'score_map.*.v' => [
+		    'integer' => 'Score Map Output Values must be Integers',
+	    ],
     ],
 
     /*
@@ -134,7 +137,8 @@ return [
 		'ethnicity_id' => 'Ethnicity',
 		'math_level_id' => 'Math Level',
 		'grade'		=> 'Grade',
-		'email'		=> 'E-mail'
+		'email'		=> 'E-mail',
+		'score_map' => 'Score Map'
 	),
 
 ];

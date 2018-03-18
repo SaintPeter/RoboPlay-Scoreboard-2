@@ -35,9 +35,20 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  */
 class Score_element extends Model {
-	protected $guarded = array();
+	protected $fillable = [
+		'name',
+		'display_text',
+		'element_number',
+		'base_value',
+		'multiplier',
+		'min_entry',
+		'max_entry',
+		'type',
+		'challenge_id',
+		'score_map'
+	];
 
-	public static $rules = array(
+	public static $rules = [
 		'display_text' => 'required',
 		'element_number' => 'required',
 		'base_value' => 'required',
@@ -46,17 +57,38 @@ class Score_element extends Model {
 		'max_entry' => 'required',
 		'type' => 'required',
 		'challenge_id' => 'required'
-	);
+	];
 
 	protected $hidden = ['created_at', 'updated_at'];
 
+	// Accessors and Mutators
+	public function setScoreMapAttribute($value) {
+		$this->attributes['score_map'] = join(",", array_map(function($subArr) {
+			return join(":", $subArr);
+		}, $value));
+	}
+
+	public function getScoreMapAttribute($value) {
+		return array_reduce(preg_split("/,/",$value), function ($acc, $subStr) {
+			$temp = preg_split("/:/",$subStr);
+			if(count($temp) != 2) return [];
+			$acc[] = ['i' => $temp[0], 'v' => $temp[1]];
+			return $acc;
+		},[]);
+	}
+
+	public function getScoreMapRawAttribute() {
+		return $this->attributes['score_map'];
+	}
+
+	// Relations
 	public function challenge()
 	{
-		return belongsTo('App\Models\Challenge');
+		return $this->belongsTo('App\Models\Challenge');
 	}
 
 	public function user()
 	{
-		return hasOne('App\Models\User');
+		return $this->hasOne('App\Models\User');
 	}
 }

@@ -2,11 +2,15 @@
 
 @section('script')
 <script>
+var WIDTH_NARROW = 400;
+var WIDTH_WIDE = 700;
 $(function() {
-	$( "#dialog" ).clone().attr('id', 'active_dialog').dialog({ autoOpen: false, minWidth: 350 });
+	$( "#dialog" ).clone().attr('id', 'active_dialog').dialog({ autoOpen: false, minWidth: WIDTH_NARROW });
 	$( "#random_dialog" ).clone().attr('id', 'active_random_dialog').dialog({ autoOpen: false });
 
-	jQuery(document).on('click', '.random_close', dialog_close_handler );
+	$(document).on('click', '.random_close', dialog_close_handler );
+    $(document).on('click', '.add_row', score_map_add_row );
+    $(document).on('click', '.delete_row', score_map_delete_row );
 
 	// Add Score Element Button
 	$("#add_score_element").click(function() {
@@ -107,6 +111,71 @@ function setup_form_handler() {
     	jQuery( "#active_dialog" ).remove();
     	$( "#dialog" ).clone().attr('id', 'active_dialog').dialog({ autoOpen: false });
     });
+
+	// Setup Dialog Width
+	var hasScoreMap = $("input[name|='has_score_map']");
+    var dialog = $("#active_dialog");
+    if(hasScoreMap.val() == 1) {
+        dialog.dialog("option", "minWidth", WIDTH_WIDE );
+        dialog.dialog("option", "width", WIDTH_WIDE );
+    } else {
+        dialog.dialog("option", "minWidth", WIDTH_NARROW );
+        dialog.dialog("option", "width", WIDTH_NARROW );
+    }
+    $("#edit_map").click(edit_map_handler);
+}
+
+function edit_map_handler() {
+    var button = $(this);
+    var dialog = $("#active_dialog");
+    var hasScoreMap = $("input[name|='has_score_map']");
+    var minWidth = dialog.dialog("option", "minWidth");
+
+    $("#maincol").toggleClass('col-lg-12').toggleClass('col-lg-8');
+    $("#mapcol").toggleClass('hidden');
+
+    if(minWidth == WIDTH_NARROW) {
+        dialog.dialog("option", "minWidth", WIDTH_WIDE );
+        dialog.dialog("option", "width", WIDTH_WIDE );
+        hasScoreMap.val(1);
+        button.attr('value','Remove Map');
+    } else {
+        dialog.dialog("option", "minWidth", WIDTH_NARROW );
+        dialog.dialog("option", "width", WIDTH_NARROW );
+        hasScoreMap.val(0);
+        button.attr('value','Create Map');
+    }
+}
+
+function score_map_add_row(e) {
+    var button = $(this);
+    var index = button.data('index');
+
+    var newRow = $(
+        '<tr id="score_map_row_' + index + '">' +
+        '<td><input type="text" name="score_map[' + index + '][i]" class="numeric text-center" /></td>' +
+        '<td><input type="text" name="score_map[' + index + '][v]" class="numeric text-center" /></td>' +
+        '<td><a href="javascript:void(0)" class="btn btn-xs delete_row" data-index="'+ index +'" title="Delete Row">' +
+        '<span class="glyphicon glyphicon-minus text-danger" aria-hidden="true"></span>' +
+        '</a></td>' +
+        '</tr>');
+
+    newRow.find('.numeric').spinner();
+
+    $('.score_map tbody').append(newRow);
+
+    // Increment the next row
+    button.data('index', index + 1);
+}
+
+function score_map_delete_row(e) {
+    var button = $(this);
+    var index = button.data('index');
+
+    $('#score_map_row_' + index).remove();
+
+    // Decrement the next row
+    button.data('index', index - 1);
 }
 
 function setup_random_handler() {
@@ -162,11 +231,18 @@ function dialog_close_handler(event) {
 </script>
 @endsection
 
-@section('style')
-.mix .col-md-6 {
-	margin-left: 0px;
-}
-button:focus {outline:0;}
+@section('head')
+    <style>
+        .mix .col-md-6 {
+            margin-left: 0px;
+        }
+        button:focus {outline:0;}
+
+        .score_map input {
+            width: 50px;
+        }
+
+    </style>
 @endsection
 
 @inject('randoms', "App\Models\Random")
@@ -189,7 +265,7 @@ button:focus {outline:0;}
 		<tr>
 			<td>{{{ $challenge->internal_name }}}</td>
 					<td>{{ $challenge->display_name }}</td>
-					<td>{{ nl2br($challenge->rules) }}</td>
+					<td>{!! $challenge->rules !!} </td>
 					<td>{{{ $challenge->points }}}</td>
 					<td>{{{ $challenge->level }}}</td>
                     <td>{{{ $challenge->year }}}</td>
@@ -212,6 +288,7 @@ button:focus {outline:0;}
 				<th>Multiplier</th>
 				<th>Min</th>
 				<th>Max</th>
+                <th>Map</th>
 				<th>Type</th>
 				<th>Actions</th>
 		</tr>
@@ -230,6 +307,7 @@ button:focus {outline:0;}
 						<td>{{{ $score_element->multiplier }}}</td>
 						<td>{{{ $score_element->min_entry }}}</td>
 						<td>{{{ $score_element->max_entry }}}</td>
+                        <td>{{  count($score_element->score_map) ?: 'None' }}</td>
 						<td>{{{ $score_element->type }}}</td>
 						<td>{{ link_to_route('score_elements.edit', 'Edit', array($score_element->id), array('class' => 'btn btn-info btn_se_edit')) }}
 							&nbsp;

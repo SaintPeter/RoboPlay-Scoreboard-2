@@ -7,9 +7,8 @@ use Response;
 use Validator;
 use Illuminate\Http\Request;
 
-use App\ {
-    Models\Score_element,
-    Models\Challenge
+use App\{
+	Models\Score_element, Models\Challenge, Rules\validateScoreMap
 };
 
 class Score_elementsController extends Controller {
@@ -49,13 +48,24 @@ class Score_elementsController extends Controller {
 	 * @param $challenge_id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function create($challenge_id)
+	public function create(Request $req, $challenge_id)
 	{
 		$challenge = Challenge::with('score_elements')->findOrFail($challenge_id);
 		$order = $challenge->score_elements->max('element_number') + 1;
 
+		$has_score_map = 0;
+		if($req->old('score_map', 0) && $req->old('has_score_map',0) == 1) {
+			$score_map = $req->old('score_map');
+			$has_score_map = 1;
+		} else {
+			$score_map = [
+				[ 'i' => 0, 'v' => 0],
+				[ 'i' => 10, 'v' => 10 ]
+			];
+		}
+
 		return View::make('score_elements.create')
-				   ->with(compact('challenge_id', 'order'))
+				   ->with(compact('challenge_id', 'order', 'score_map', 'has_score_map'))
 				   ->with('input_types', $this->input_types);
 	}
 
@@ -67,19 +77,40 @@ class Score_elementsController extends Controller {
      */
 	public function store(Request $req)
 	{
-		$input = $req->all();
-		$validation = Validator::make($input, Score_element::$rules);
+		$score_map = $req->input('score_map');
+
+		// Sort by 'i' value
+		usort($score_map,function($a, $b) {
+			return $a['i'] <=> $b['i'];
+		});
+
+		// Remove Duplicate 'i' values
+		for($i = 0; $i < count($score_map) - 2; $i++) {
+			if($score_map[$i]['i'] == $score_map[$i + 1]['i']) {
+				array_splice($score_map, $i,1);
+			}
+		}
+
+		$req->merge(['score_map' => $score_map]);
+
+		$validation = Validator::make($req->all(), Score_element::$rules);
+		$validation->sometimes('score_map.*.i', 'required|integer', function($input) {
+			return $input->has_score_map;
+		});
+		$validation->sometimes('score_map.*.v', 'required|integer', function($input) {
+			return $input->has_score_map;
+		});
 
 		if ($validation->passes())
 		{
-			$this->score_element->create($input);
+			$this->score_element->create($req->all());
 			$this->update_order($this->score_element->challenge_id);
 
 			return "true";
 		}
 
 
-		return redirect()->route('score_elements.create', $input['challenge_id'])
+		return redirect()->route('score_elements.create', $req->input('challenge_id'))
 			->withInput()
 			->withErrors($validation)
 			->with('message', 'There were validation errors.');
@@ -104,7 +135,7 @@ class Score_elementsController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function edit($id)
+	public function edit(Request $req, $id)
 	{
 		$score_element = $this->score_element->find($id);
 
@@ -113,7 +144,21 @@ class Score_elementsController extends Controller {
 			return redirect()->route('score_elements.index');
 		}
 
-		return View::make('score_elements.edit', compact('score_element'))
+		$has_score_map = 0;
+		if($req->old('score_map', 0) && $req->old('has_score_map',0) == 1) {
+			$score_map = $req->old('score_map');
+			$has_score_map = 1;
+		} elseif(count($score_element->score_map)) {
+			$score_map = $score_element->score_map;
+			$has_score_map = 1;
+		} else {
+			$score_map = [
+				[ 'i' => 0, 'v' => 0],
+				[ 'i' => 10, 'v' => 10 ]
+			];
+		}
+
+		return View::make('score_elements.edit', compact('score_element', 'has_score_map','score_map'))
 				   ->with('input_types', $this->input_types);
 	}
 
@@ -126,13 +171,34 @@ class Score_elementsController extends Controller {
 	 */
 	public function update(Request $req, $id)
 	{
-		$input = array_except($req->all(), '_method');
-		$validation = Validator::make($input, Score_element::$rules);
+		$score_map = $req->input('score_map');
+
+		// Sort by 'i' value
+		usort($score_map,function($a, $b) {
+			return $a['i'] <=> $b['i'];
+		});
+
+		// Remove Duplicate 'i' values
+		for($i = 0; $i < count($score_map) - 2; $i++) {
+			if($score_map[$i]['i'] == $score_map[$i + 1]['i']) {
+				array_splice($score_map, $i,1);
+			}
+		}
+
+		$req->merge(['score_map' => $score_map]);
+
+		$validation = Validator::make($req->all(), Score_element::$rules);
+		$validation->sometimes('score_map.*.i', 'required|integer', function($input) {
+			return $input->has_score_map;
+		});
+		$validation->sometimes('score_map.*.v', 'required|integer', function($input) {
+			return $input->has_score_map;
+		});
 
 		if ($validation->passes())
 		{
 			$score_element = $this->score_element->find($id);
-			$score_element->update($input);
+			$score_element->update($req->all());
 
 			$this->update_order($this->score_element->challenge_id);
 
