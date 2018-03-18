@@ -55,10 +55,28 @@
 		$('#score').html = "Blah";
 		var total = 0;
 		$('[id^=sel_]').each(function(i, obj) {
-			var base = parseInt($(obj).attr('base'));
-			var val = parseInt($(obj).val());
-			var multi = parseInt($(obj).attr('multi'));
-			total += base + ( val * multi);
+		    var element = $(obj)
+			var base = parseInt(element.attr('base'));
+			var val = parseInt(element.val());
+			var multi = parseInt(element.attr('multi'));
+            var subScore = base + ( val * multi);
+
+			var map = [];
+			var mapTemp = element.attr('map')
+			if(mapTemp) {
+			    map = mapTemp.split(/,/).map(function(subStr) {
+			        var temp = subStr.split(/:/);
+			        return { 'i': temp[0], 'v': temp[1] };
+                })
+            }
+            for(var m = map.length - 1; m > -1; m--) {
+			    if(subScore >= map[m].i) {
+			        subScore = parseInt(map[m].v,10);
+			        break;
+                }
+            }
+			total += subScore;
+
 		});
 		total = Math.max(total, 0);
 		$('.score').html(total);
