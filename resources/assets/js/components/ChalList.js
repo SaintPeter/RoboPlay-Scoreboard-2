@@ -28,9 +28,10 @@ class ChalListApp extends Component {
         this.props.updateBack(`/c/${this.state.compId}/d/${this.state.divId}`);
 
         if(!this.props.challengeData[this.state.year] || !this.props.challengeData[this.state.year][this.state.level]) {
-            loadChalData.load(this.state.year, this.state.level, this.props.doLoadChalData).then((result) => {
-                console.log("Dispatch Result: ", result);
-            })
+            loadChalData.load(this.state.year, this.state.level, this.props.doLoadChalData)
+                .then((result) => {
+                    console.log("Dispatch Result: ", result);
+                })
         } else {
             console.log("ChalList - No need to load Challenge Data");
         }

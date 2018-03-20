@@ -34,10 +34,10 @@ class MasterApp extends Component {
 
                     <Switch>
                         <Route exact path="/" component={CompList} />
-                        <Route exact path="/c/:compId" render={({match}) => <DivList match={match} /> } />
-                        <Route exact path="/c/:compId/d/:divId" render={({match}) => <TeamList match={match} /> } />
-                        <Route exact path="/c/:compId/d/:divId/t/:teamId" render={({match}) => <ChalList match={match} /> } />
-                        <Route exact path="/c/:compId/d/:divId/t/:teamId/h/:chalId" render={({match}) => <ScoreChallenge match={match} /> } />
+                        <Route exact path="/c/:compId" component={DivList} />
+                        <Route exact path="/c/:compId/d/:divId" component={TeamList} />
+                        <Route exact path="/c/:compId/d/:divId/t/:teamId" component={ChalList} /> } />
+                        <Route exact path="/c/:compId/d/:divId/t/:teamId/h/:chalId" component={ScoreChallenge} /> } />
                     </Switch>
 
 
