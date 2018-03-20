@@ -73,6 +73,10 @@
         #abortPopup-popup, #submitPopup-popup, #randomPopup-popup, #randomListPopup-popup {
             width: 90%;
         }
+        .score_display {
+            top: 25%;
+            width: 2em;
+        }
 
     </style>
 

@@ -72,7 +72,7 @@ class Score_element extends Model {
 		return array_reduce(preg_split("/,/",$value), function ($acc, $subStr) {
 			$temp = preg_split("/:/",$subStr);
 			if(count($temp) != 2) return [];
-			$acc[] = ['i' => $temp[0], 'v' => $temp[1]];
+			$acc[] = ['i' => intval($temp[0]), 'v' => intval($temp[1])];
 			return $acc;
 		},[]);
 	}

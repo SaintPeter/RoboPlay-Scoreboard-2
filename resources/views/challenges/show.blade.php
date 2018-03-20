@@ -169,13 +169,7 @@ function score_map_add_row(e) {
 }
 
 function score_map_delete_row(e) {
-    var button = $(this);
-    var index = button.data('index');
-
-    $('#score_map_row_' + index).remove();
-
-    // Decrement the next row
-    button.data('index', index - 1);
+    $('#score_map_row_' + $(this).data('index')).remove();
 }
 
 function setup_random_handler() {

@@ -5,6 +5,9 @@ import loadChalData from "../utils/loadChalData";
 
 import RandomsPopup from "./RandomsPopup";
 import RandomListPopup from "./RandomListPopup";
+import YesNo from "./ScoreElements/YesNo";
+import Slider from "./ScoreElements/Slider";
+import ScoreElement from "./ScoreElements/ScoreElement";
 
 class ScoreChallengeApp extends Component {
     constructor(props) {
@@ -38,62 +41,70 @@ class ScoreChallengeApp extends Component {
             loadChalData.load(this.state.year, this.state.level, this.props.doLoadChalData)
                 .then((result) => {
                     console.log("Dispatch Result: ", result);
-                    this.populateScores();
+                    this.prePopulateStateScores();
                 })
         } else {
             console.log("ScoreChallenge - No need to load Challenge Data");
-            this.populateScores();
+            this.prePopulateStateScores();
         }
     }
 
-    populateScores = () => {
+    prePopulateStateScores = () => {
         this.setState({ 'scores': this.props.challengeData[this.state.year][this.state.level][this.state.chalNum]
                 .score_elements.reduce((acc, element)=> {
                     switch(element.type) {
                         case 'yesno':
-                            acc[element.id] = element.base_value + element.multiplier;
+                            acc[element.element_number] = {
+                                id: element.id,
+                                score: element.base_value + element.multiplier };
                             break;
                         case 'high_slider':
-                            acc[element.id] = element.max_entry;
+                            acc[element.element_number] = {
+                                id: element.id,
+                                score: element.max_entry * element.multiplier};
                             break;
                         default:
-                            acc[element.id] = element.base_value;
+                            acc[element.element_number] = {
+                                id: element.id,
+                                score: element.base_value};
                     }
                     return acc;
                 },{})
-        },this.updateScore);
+        },
+        this.updateTotalScore);
     };
 
-    scoreChange = (scoreData) => {
-        let total = {};
-        total[scoreData.id] = scoreData.base + scoreData.val * scoreData.multi;
-        this.setState({scores: Object.assign({},this.state.scores, total)});
-        this.updateScore();
-    };
-
-    updateScore = () => {
+    updateTotalScore = () => {
         this.setState(
             {
                 score: Math.max(0, Object.keys(this.state.scores).reduce((acc, key) => {
-                    return acc + this.state.scores[key];
+                    return acc + this.state.scores[key].score;
                 },0))
             }
         )
-    }
+    };
+
+    // Handles the change from an individual score element
+    // Updates the state, then updates the total
+    scoreChange = (scoreData) => {
+        let newState = {scores: Object.assign({},this.state.scores, scoreData)};
+        this.setState(newState,
+            this.updateTotalScore);
+    };
 
     challengeType = (type, item) => {
         switch(type) {
             case 'yesno':
-                return <YesNo type="yesno" onChange={this.scoreChange} compInfo={this.state} key={item.id} {...item} />;
+                return <YesNo type="yesno" compInfo={this.state} key={item.id} {...item} />;
             case 'noyes':
-                return <YesNo type="noyes" onChange={this.scoreChange} compInfo={this.state} key={item.id} {...item} />;
+                return <YesNo type="noyes" compInfo={this.state} key={item.id} {...item} />;
             case 'slider':
             case 'low_slider':
-                return <Slider type="low" onChange={this.scoreChange} compInfo={this.state} key={item.id} {...item} />;
+                return <Slider type="low"  compInfo={this.state} key={item.id} {...item} />;
             case 'high_slider':
-                return <Slider type="high" onChange={this.scoreChange} compInfo={this.state} key={item.id} {...item} />;
+                return <Slider type="high"  compInfo={this.state} key={item.id} {...item} />;
             case 'score_slider':
-                return <Slider type="score" onChange={this.scoreChange} compInfo={this.state} key={item.id} {...item} />;
+                return <Slider type="score"  compInfo={this.state} key={item.id} {...item} />;
         }
         return <li>Unknown Type: {type}</li>;
     };
@@ -131,127 +142,18 @@ class ScoreChallengeApp extends Component {
                 <ul className="ui-listview ui-listview-inset ui-corner-all ui-shadow">
                     {
                         (elements) ? elements.map((item,num) => {
-                            return this.challengeType(item.type,item)}) :
-                            <li>No Data</li>
+                            return (
+                                <ScoreElement key={item.id} scoreChange={this.scoreChange} {...item}>
+                                    {this.challengeType(item.type,item)}
+                                </ScoreElement>
+                            )
+                        }) : <li>No Data</li>
                     }
                     <li className="ui-field-contain ui-li-static ui-body-inherit">
                         Estimated Score: {this.state.score} out of { chalData.points } points
                     </li>
                 </ul>
             </div>
-        )
-    }
-}
-
-class YesNo extends  Component {
-    componentDidMount() {
-        this.$node = $(this.refs.flipswitch);
-        this.$node.flipswitch();
-        this.$node.on('change', this.sendScore);
-        this.sendScore();
-    }
-
-    sendScore = () => {
-        this.props.onChange({
-            id: this.$node.data('id'),
-            val: this.$node.val(),
-            multi: this.$node.data('multi'),
-            base: this.$node.data('base')
-        });
-    }
-
-    shouldComponentUpdate() {
-        return false;
-    }
-
-    componentWillUnmount() {
-        this.$node.remove();
-    }
-
-    selectOrder = (type) => {
-        if(type === 'noyes') {
-            return [
-                <option key="0" value="0">No</option>,
-                <option key="1" value="1">Yes</option>
-                ];
-        } else {
-            return [
-                <option key="1" value="1">Yes</option>,
-                <option key="0" value="0">No</option>
-            ];
-        }
-    }
-
-    render() {
-        return (
-            <li className="ui-field-contain ui-li-static ui-body-inherit">
-                <h4 dangerouslySetInnerHTML={{ __html: this.props.display_text }} />
-                <select ref="flipswitch"
-                        data-role="flipswitch"
-                        id={"sel_" + this.props.id}
-                        data-id={this.props.id}
-                        data-base={this.props.base_value}
-                        data-multi={this.props.multiplier}
-                        name={"scores[" + this.props.id + "][value]"}
-                        className="ui-flipswitch-input"
-                        tabIndex="-1"
-                    >
-                    { this.selectOrder(this.props.type) }
-                </select>
-            </li>
-        )
-    }
-}
-
-class Slider extends  Component {
-    componentDidMount() {
-        this.$node = $(this.refs.slider);
-        this.$node.slider();
-        this.$node.on('change', this.sendScore);
-        this.sendScore()
-    }
-
-    shouldComponentUpdate() {
-        return false;
-    }
-
-    componentWillUnmount() {
-        this.$node.remove();
-    }
-
-    sendScore = () => {
-        this.props.onChange({
-            id: this.$node.data('id'),
-            val: this.$node.val(),
-            multi: this.$node.data('multi'),
-            base: this.$node.data('base')
-        });
-    }
-
-    render() {
-        var propSet = {
-            onChange: this.onChange,
-            id: "sel_" +this.props.id,
-            "data-id": this.props.id,
-            "data-base": this.props.base_value,
-            "data-multi": (this.props.type==='score_slider') ? 1 : this.props.multiplier,
-            step: (this.props.type==='score_slider') ? this.props.multiplier : 1,
-            name: "scores[" + this.props.id +"][value]",
-            min: this.props.min_entry,
-            max: this.props.max_entry,
-            defaultValue: (this.props.type === 'high_slider') ? this.props.max_entry : 0,
-        };
-        
-        return (
-            <li className="ui-field-contain ui-li-static ui-body-inherit">
-                <h4 dangerouslySetInnerHTML={{ __html: this.props.display_text }} />
-                <input ref={"slider"}
-                       {...propSet}
-                       type="number"
-                       data-type="range"
-                       className="ui-clear-both ui-shadow-inset ui-body-inherit ui-corner-all ui-slider-input"
-                    />
-            </li>
         )
     }
 }

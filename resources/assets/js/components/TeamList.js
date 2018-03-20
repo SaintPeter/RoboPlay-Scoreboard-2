@@ -19,7 +19,7 @@ class TeamListApp extends Component {
             divisionName: divisionList.name,
             input: '',
             teams: Object.keys(teamList)
-                .sort((a,b) => teamList[a].localeCompare(teamList[b], 'en', {'sensitivity': 'base'}))
+                .sort((a,b) => teamList[a].localeCompare(teamList[b], 'en', {'sensitivity': 'base'})) // TODO: Add Favorites
                 .reduce((list,teamId) => {
                 list.push( {
                     key: teamId,
