@@ -2,23 +2,19 @@ require('./bootstrap');
 
 import React from 'react';
 import { render } from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
+import { PersistGate } from 'redux-persist/integration/react'
 import { Provider } from 'react-redux';
 
 import Master from "./components/Master";
 
-import reducer from "./reducers/reducer";
-
-let store = createStore(
-    reducer,
-    applyMiddleware(thunk)
-);
+import { store, persistor } from './configureStore';
 
 if (document.getElementById('scorer')) {
     render((
         <Provider store={store}>
-            <Master />
+            <PersistGate loading={null} persistor={persistor}>
+                <Master />
+            </PersistGate>
         </Provider>
         ), document.getElementById('scorer'));
 } else {

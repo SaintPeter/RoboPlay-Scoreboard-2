@@ -5,21 +5,9 @@ import {connect} from "react-redux";
 class CompListApp extends Component {
     constructor(props) {
         super(props);
-        this.state = this.readData(props);
-    }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState(this.readData(nextProps));
-    }
-
-    componentDidMount() {
-        document.getElementById('header').innerHTML = "Competition List";
-    }
-
-    readData(props) {
-        let newState = {comps: []};
-
-        newState.comps = Object.keys(compData).reduce((list, compId) => {
+        // compData is passed in via a global in the hosting html document
+        this.comps = Object.keys(compData).reduce((list, compId) => {
             list.push({
                 key: compId,
                 id: compId,
@@ -27,8 +15,10 @@ class CompListApp extends Component {
             });
             return list;
         }, []);
+    }
 
-        return newState;
+    componentDidMount() {
+        document.getElementById('header').innerHTML = "Competition List";
     }
 
     render() {
@@ -36,7 +26,7 @@ class CompListApp extends Component {
             <div className="ui-content">
                 <ul className="ui-listview">
                     {
-                        this.state.comps.map(item => {
+                        this.comps.map(item => {
                             return <Comp {...item} />})
                     }
                 </ul>
@@ -53,10 +43,7 @@ class Comp extends  Component {
 
 // Map Redux state to component props
 function mapStateToProps(state) {
-    return {
-        challengeData: state.challengeData,
-        backURL: state.backURL
-    }
+    return {}
 }
 
 // Map Redux actions to component props

@@ -6,10 +6,7 @@ export default class RandomsPopup extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            randoms: props.randoms.map(this.formatRandom)
-        };
-
+        this.randoms = props.randoms.map(this.formatRandom);
     }
 
     formatRandom = function(random) {
@@ -61,7 +58,7 @@ export default class RandomsPopup extends Component {
                        data-position-to="window"
                        className="ui-btn ui-btn-inline pull-right">Popout</button>
                     <h4>Randoms</h4>
-                    { this.state.randoms }
+                    { this.randoms }
                 </div>
                 <div ref={"popup"}
                     data-role="popup"
@@ -72,7 +69,7 @@ export default class RandomsPopup extends Component {
                         <h1 role="heading" className="ui-title">Random Number</h1>
                     </div>
                     <div role="main" className="ui-corner-bottom ui-content center">
-                        <span className="bigtext">{ this.state.randoms }</span>
+                        <span className="bigtext">{ this.randoms }</span>
                     </div>
                 </div>
             </div>

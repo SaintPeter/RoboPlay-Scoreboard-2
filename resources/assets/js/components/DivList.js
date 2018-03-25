@@ -6,19 +6,18 @@ import loadChalData from '../utils/loadChalData';
 class DivListApp extends Component {
     constructor(props) {
         super(props);
-        const compId = props.match.params.compId;
-        this.state = {
-            competitionName: compData[compId].name,
-            divs: Object.keys(compData[compId].divisions).reduce((list,divId) => {
+        this.compId = props.match.params.compId;
+        this.competitionName = compData[this.compId].name;
+        this.divs = Object.keys(compData[this.compId].divisions).reduce((list,divId) => {
                 list.push( {
                     key: divId,
-                    compId: compId,
                     divId: divId,
-                    name: compData[compId].divisions[divId].name
+                    compId: this.compId,
+                    name: compData[this.compId].divisions[divId].name
                 });
                 return list;
-            },[])
-        }
+            },[]);
+
     }
 
     componentDidMount() {
@@ -29,10 +28,10 @@ class DivListApp extends Component {
     render() {
         return (
             <div className="ui-content">
-                <h4>Competition: {this.state.competitionName}</h4>
+                <h4>Competition: {this.competitionName}</h4>
                 <ul className="ui-listview listview-spacer">
                     {
-                        this.state.divs.map(item => {
+                        this.divs.map(item => {
                             return <Division {...item} />})
                     }
                 </ul>
@@ -49,10 +48,7 @@ class Division extends  Component {
 
 // Map Redux state to component props
 function mapStateToProps(state) {
-    return {
-        challengeData: state.challengeData,
-        backURL: state.backURL
-    }
+    return {}
 }
 
 // Map Redux actions to component props

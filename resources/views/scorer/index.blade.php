@@ -16,11 +16,8 @@
         });
     </script>
     <script src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-<!--    {{ HTML::script('//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js') }}
+    {{ HTML::style('//maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css') }}
 
-    {{ HTML::style('css/jquery.mobile-1.4.1.css') }}
-    {{ HTML::script('js/jquery.mobile-1.4.1.js') }}
--->
     <script type="application/javascript">
         var compData = {!! $competition_list !!};
         var judgeId = '{!! $judgeId !!}';
@@ -77,6 +74,29 @@
             top: 25%;
             width: 2em;
         }
+
+        .favoriteButton {
+            position: absolute;
+            right: 50px;
+            top: 25%;
+            border-radius: 50%;
+            background-color: darkgrey;
+            border: 2px solid lightgrey;
+            padding: 0;
+            width: 1.75em;
+            height: 1.75em;
+        }
+
+        .favoriteStar-active {
+            color: yellow;
+            -webkit-text-stroke: 1px black;
+        }
+
+        .favoriteStar-inactive {
+            color: black;
+            -webkit-text-stroke: unset;
+        }
+
 
     </style>
 

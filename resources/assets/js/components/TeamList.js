@@ -7,36 +7,49 @@ import loadChalData from "../utils/loadChalData";
 class TeamListApp extends Component {
     constructor(props) {
         super(props);
-        const compId = props.match.params.compId;
-        const divId = props.match.params.divId;
-        const divisionList = compData[compId].divisions[divId];
-        const teamList = divisionList.teams;
-        this.state = {
-            compId: compId,
-            divId: divId,
-            year: compData[compId].year,
-            level: compData[compId].divisions[divId].level,
-            divisionName: divisionList.name,
-            input: '',
-            teams: Object.keys(teamList)
-                .sort((a,b) => teamList[a].localeCompare(teamList[b], 'en', {'sensitivity': 'base'})) // TODO: Add Favorites
-                .reduce((list,teamId) => {
+        this.compId = props.match.params.compId;
+        this.divId = props.match.params.divId;
+        this.year =  compData[this.compId].year;
+
+        const divisionList = compData[this.compId].divisions[this.divId];
+        this.teamList = divisionList.teams;
+        this.divisionName = divisionList.name;
+        this.level =  divisionList.level;
+
+        this.teams = Object.keys(this.teamList)
+            .reduce((list,teamId) => {
                 list.push( {
                     key: teamId,
                     teamId: teamId,
-                    name: teamList[teamId]
+                    name: this.teamList[teamId]
                 });
                 return list;
             },[])
+            .sort(this.teamSort);
+
+        this.state = {
+            input: ''
         };
     }
 
+    teamSort = (a,b) => {
+        if((this.props.teamFavorites[a.teamId] === this.props.teamFavorites[b.teamId])) {
+            // If favorites are the same (set or unset), sort by name
+            return a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'})
+        } else {
+            // If they're not equal, then one is set and one is unset
+            // If 'a' is set, we want it to be first in the list
+            // Otherwise, not, compared to a non-favorite
+            return (this.props.teamFavorites[a.teamId]) ? -1 : 1;
+        }
+    };
+
     componentDidMount() {
         this.props.updateTitle("Choose Team");
-        this.props.updateBack(`/c/${this.state.compId}`);
+        this.props.updateBack(`/c/${this.compId}`);
 
-        if(!this.props.challengeData[this.state.year] || !this.props.challengeData[this.state.year][this.state.level]) {
-            loadChalData.load(this.state.year, this.state.level, this.props.doLoadChalData)
+        if(!compData[this.year] || !compData[this.year][this.level]) {
+            loadChalData.load(this.year, this.level, this.props.doLoadChalData)
         } else {
             console.log("TeamList - No need to load Challenge Data");
         }
@@ -54,6 +67,7 @@ class TeamListApp extends Component {
         }
         this.setState({input: e.target.value})
     };
+
     clearInput = (e) => {
         this.setState({input: ''});
         document.getElementById('filter').value = "";
@@ -61,14 +75,14 @@ class TeamListApp extends Component {
 
     render() {
         let re = new RegExp('.*' + this.state.input + '.*',"gi");
-        let list = this.state.teams.filter(item => item.name.match(re));
+        let list = this.teams.filter(item => item.name.match(re)).sort(this.teamSort);
         if(list.length) {
             list[0].firstItem = true;
             list[list.length - 1].lastItem = true;
         }
         return (
             <div className="ui-content">
-                <h4>{this.state.divisionName} Teams</h4>
+                <h4>{this.divisionName} Teams</h4>
 
                 <div className="ui-filterable">
                     <div className="ui-input-search ui-shadow-inset ui-input-has-clear ui-body-inherit ui-corner-all">
@@ -86,8 +100,11 @@ class TeamListApp extends Component {
                     {
                         (list.length > 0) ? list.map(item => {
                             return <Team
-                                compId={this.state.compId}
-                                divId={this.state.divId}
+                                compId={this.compId}
+                                divId={this.divId}
+                                saveFavorite={this.props.saveFavorite}
+                                deleteFavorite={this.props.deleteFavorite}
+                                isFavorite={(this.props.teamFavorites[item.teamId]) ? 1 : 0 }
                                 {...item}
                             />}) : <p>No Teams Found</p>
                     }
@@ -98,6 +115,14 @@ class TeamListApp extends Component {
 }
 
 class Team extends  Component {
+    doToggleFavorite = () => {
+        if(this.props.isFavorite) {
+            this.props.deleteFavorite(this.props.teamId);
+        } else {
+            this.props.saveFavorite(this.props.teamId);
+        }
+    };
+
     render() {
         let childType = this.props.firstItem ? 'ui-first-child' : '';
         childType += this.props.lastItem ? 'ui-last-child' : '';
@@ -109,6 +134,12 @@ class Team extends  Component {
                     className='ui-btn ui-btn-icon-right ui-icon-carat-r'>
                     {this.props.name}
                 </Link>
+                <button onClick={this.doToggleFavorite}
+                    title={(this.props.isFavorite) ? 'Remove from Favorites' : 'Add to Favorites'}
+                        className="favoriteButton"
+                >
+                    <i className={this.props.isFavorite ? "favoriteStar-active fa fa-star" : "favoriteStar-inactive fa fa-star-o"}></i>
+                </button>
             </li>
         )
     }
@@ -117,8 +148,7 @@ class Team extends  Component {
 // Map Redux state to component props
 function mapStateToProps(state) {
     return {
-        challengeData: state.challengeData,
-        backURL: state.backURL
+        teamFavorites: state.teamFavorites
     }
 }
 
@@ -127,7 +157,9 @@ function mapDispatchToProps(dispatch) {
     return {
         updateBack: (newURL) => dispatch({ type: 'change_url', url: newURL}),
         updateTitle: (newTitle) => dispatch({ type: 'change_title', title: newTitle }),
-        doLoadChalData: (year,level,data) =>dispatch({ type: 'load_chal_data', 'year': year, 'level': level, 'data': data})
+        doLoadChalData: (year,level,data) => dispatch({ type: 'load_chal_data', 'year': year, 'level': level, 'data': data}),
+        saveFavorite: (id) => dispatch({ type: 'save_favorite', id: id }),
+        deleteFavorite: (id) => dispatch({ type: 'delete_favorite', id: id }),
     }
 }
 
