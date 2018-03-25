@@ -1,44 +1,49 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import loadChalData from "../utils/loadChalData";
 
-import RandomsPopup from "./RandomsPopup";
-import RandomListPopup from "./RandomListPopup";
+import RandomsPopup from "./Popups/RandomsPopup";
+import RandomListPopup from "./Popups/RandomListPopup";
+import UIButton from "./UIButton";
 import YesNo from "./ScoreElements/YesNo";
 import Slider from "./ScoreElements/Slider";
 import ScoreElement from "./ScoreElements/ScoreElement";
+import SubmitConfirmPopup from "./Popups/SubmitConfirmPopup";
+import AbortConfirmPopup from "./Popups/AbortConfirmPopup";
 
 class ScoreChallengeApp extends Component {
     constructor(props) {
         super(props);
-        const compId = props.match.params.compId;
-        const divId = props.match.params.divId;
-        const teamId = props.match.params.teamId;
-        const chalNum = props.match.params.chalId;
-        const year = compData[compId].year;
-        const level = compData[compId].divisions[divId].level;
+        this.compId = props.match.params.compId;
+        this.divId = props.match.params.divId;
+        this.teamId = props.match.params.teamId;
+        this.chalNum = props.match.params.chalId;
+        this.year = compData[this.compId].year;
+        this.level = compData[this.compId].divisions[this.divId].level;
+        this.divisionName =  compData[this.compId].divisions[this.divId].name;
+        this.teamName = compData[this.compId].divisions[this.divId].teams[this.teamId];
+
+        this.backURL = `/c/${this.compId}/d/${this.divId}/t/${this.teamId}`;
+        
+        // TODO:  Import Run Number
+        this.runNumber = 0;
+        
         this.state = {
-            compId: compId,
-            divId: divId,
-            teamId: teamId,
-            chalNum: chalNum,
-            year: year,
-            level: level,
-            competitionName: compData[compId].name,
-            divisionName: compData[compId].divisions[divId].name,
-            teamName: compData[compId].divisions[divId].teams[teamId],
             score: 0,
-            scores: {}
-        }
+            scores: {},
+            submitConfirmVisible: false,
+            abortConfirmVisible: false
+        };
+        
     }
 
     componentWillMount() {
         this.props.updateTitle("Score");
-        this.props.updateBack(`/c/${this.state.compId}/d/${this.state.divId}/t/${this.state.teamId}`);
+        this.props.updateBack(this.backURL);
 
-        if(!this.props.challengeData[this.state.year] || !this.props.challengeData[this.state.year][this.state.level]) {
-            loadChalData.load(this.state.year, this.state.level, this.props.doLoadChalData)
+        if(!this.props.challengeData[this.year] || !this.props.challengeData[this.year][this.level]) {
+            loadChalData.load(this.year, this.level, this.props.doLoadChalData)
                 .then((result) => {
                     console.log("Dispatch Result: ", result);
                     this.prePopulateStateScores();
@@ -50,7 +55,7 @@ class ScoreChallengeApp extends Component {
     }
 
     prePopulateStateScores = () => {
-        this.setState({ 'scores': this.props.challengeData[this.state.year][this.state.level][this.state.chalNum]
+        this.setState({ 'scores': this.props.challengeData[this.year][this.level][this.chalNum]
                 .score_elements.reduce((acc, element)=> {
                     switch(element.type) {
                         case 'yesno':
@@ -109,13 +114,33 @@ class ScoreChallengeApp extends Component {
         return <li>Unknown Type: {type}</li>;
     };
 
+    submitConfirmCanceled = () => {
+      this.setState({ submitConfirmVisible: false });
+    };
+    
+    submitConfirmConfirmed = () => {
+        this.setState({ submitConfirmVisible: false });
+        console.log('Submitted!');
+        this.props.history.push(this.backURL);
+    };
+
+    abortConfirmCanceled = () => {
+        this.setState({ abortConfirmVisible: false });
+    };
+
+    abortConfirmConfirmed = () => {
+        this.setState({ abortConfirmVisible: false });
+        console.log('Aborted!');
+        this.props.history.push(this.backURL);
+    };
+
     render() {
         let chalData = {};
-        if(this.props.challengeData[this.state.year] &&
-                          this.props.challengeData[this.state.year][this.state.level] &&
-                          this.props.challengeData[this.state.year][this.state.level][this.state.chalNum]
+        if(this.props.challengeData[this.year] &&
+                          this.props.challengeData[this.year][this.level] &&
+                          this.props.challengeData[this.year][this.level][this.chalNum]
                         ) {
-            chalData = this.props.challengeData[this.state.year][this.state.level][this.state.chalNum];
+            chalData = this.props.challengeData[this.year][this.level][this.chalNum];
             chalData.rules = chalData.rules.replace(/\r\n/g,"<br />");
         }
         let elements = (chalData.score_elements) ? chalData.score_elements : [];
@@ -124,10 +149,10 @@ class ScoreChallengeApp extends Component {
             <div className="ui-content">
                 <div className="ui-body ui-body-a ui-corner-all">
                     <strong>Judge: </strong>{judgeName}<br />
-                    <strong>Division: </strong>{this.state.divisionName}<br />
-                    <strong>Team: </strong>{this.state.teamName}
-                    <h1>Run X</h1>
-                    <strong>{parseInt(this.state.chalNum,10) + 1}. {chalData.display_name}</strong>
+                    <strong>Division: </strong>{this.divisionName}<br />
+                    <strong>Team: </strong>{this.teamName}
+                    <h1>Run { this.runNumber }</h1>
+                    <strong>{parseInt(this.chalNum,10) + 1}. {chalData.display_name}</strong>
                     <hr />
                     <div dangerouslySetInnerHTML={{__html: chalData.rules}} />
                 </div>
@@ -152,7 +177,40 @@ class ScoreChallengeApp extends Component {
                     <li className="ui-field-contain ui-li-static ui-body-inherit">
                         Estimated Score: {this.state.score} out of { chalData.points } points
                     </li>
+                    <li className="ui-field-contain ui-li-static ui-body-inherit">
+                        <fieldset className="ui-grid-b">
+                            <div className="ui-block-b">
+                                <UIButton onClick={(e) => { this.setState({ submitConfirmVisible: true }) }} >
+                                    Submit
+                                </UIButton>
+                            </div>
+                            <div className="ui-block-b">
+                                <Link to={ this.backURL }
+                                      className="ui-btn ui-input-btn ui-corner-all ui-shadow">
+                                    Back
+                                </Link>
+                            </div>
+                            <div className="ui-block-b">
+                                <UIButton onClick={(e) => { this.setState({ abortConfirmVisible: true }) }}>
+                                    Abort
+                                </UIButton>
+                            </div>
+                        </fieldset>
+                    </li>
                 </ul>
+                <SubmitConfirmPopup
+                    onSubmit={ this.submitConfirmConfirmed }
+                    onCancel={ this.submitConfirmCanceled }
+                    runNumber={ this.runNumber }
+                    visible={ this.state.submitConfirmVisible }
+                    score={ this.state.score }
+                />
+                <AbortConfirmPopup
+                    onAbort={ this.abortConfirmConfirmed }
+                    onCancel={ this.abortConfirmCanceled }
+                    runNumber={ this.runNumber }
+                    visible={ this.state.abortConfirmVisible }
+                />
             </div>
         )
     }
