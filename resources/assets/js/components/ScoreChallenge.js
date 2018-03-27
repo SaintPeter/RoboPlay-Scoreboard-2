@@ -11,6 +11,8 @@ import Slider from "./ScoreElements/Slider";
 import ScoreElement from "./ScoreElements/ScoreElement";
 import SubmitConfirmPopup from "./Popups/SubmitConfirmPopup";
 import AbortConfirmPopup from "./Popups/AbortConfirmPopup";
+import {abortChallenge, loadChallengeData, scoreChallenge} from "../actions/ScoreChallenge";
+import {updateBackButton, updatePageTitle} from "../actions/Generic";
 
 class ScoreChallengeApp extends Component {
     constructor(props) {
@@ -30,7 +32,7 @@ class ScoreChallengeApp extends Component {
         this.runNumber = 0;
         
         this.state = {
-            score: 0,
+            total: 0,
             scores: {},
             submitConfirmVisible: false,
             abortConfirmVisible: false
@@ -82,7 +84,7 @@ class ScoreChallengeApp extends Component {
     updateTotalScore = () => {
         this.setState(
             {
-                score: Math.max(0, Object.keys(this.state.scores).reduce((acc, key) => {
+                total: Math.max(0, Object.keys(this.state.scores).reduce((acc, key) => {
                     return acc + this.state.scores[key].score;
                 },0))
             }
@@ -120,7 +122,8 @@ class ScoreChallengeApp extends Component {
     
     submitConfirmConfirmed = () => {
         this.setState({ submitConfirmVisible: false });
-        console.log('Submitted!');
+        let chalId = this.props.challengeData[this.year][this.level][this.chalNum].id;
+        this.props.submitScore(this.teamId, chalId, this.state.scores);
         this.props.history.push(this.backURL);
     };
 
@@ -175,7 +178,7 @@ class ScoreChallengeApp extends Component {
                         }) : <li>No Data</li>
                     }
                     <li className="ui-field-contain ui-li-static ui-body-inherit">
-                        Estimated Score: {this.state.score} out of { chalData.points } points
+                        Estimated Score: {this.state.total} out of { chalData.points } points
                     </li>
                     <li className="ui-field-contain ui-li-static ui-body-inherit">
                         <fieldset className="ui-grid-b">
@@ -187,7 +190,7 @@ class ScoreChallengeApp extends Component {
                             <div className="ui-block-b">
                                 <Link to={ this.backURL }
                                       className="ui-btn ui-input-btn ui-corner-all ui-shadow">
-                                    Back
+                                    Cancel
                                 </Link>
                             </div>
                             <div className="ui-block-b">
@@ -203,7 +206,7 @@ class ScoreChallengeApp extends Component {
                     onCancel={ this.submitConfirmCanceled }
                     runNumber={ this.runNumber }
                     visible={ this.state.submitConfirmVisible }
-                    score={ this.state.score }
+                    score={ this.state.total }
                 />
                 <AbortConfirmPopup
                     onAbort={ this.abortConfirmConfirmed }
@@ -220,16 +223,18 @@ class ScoreChallengeApp extends Component {
 function mapStateToProps(state) {
     return {
         challengeData: state.challengeData,
-        backURL: state.backURL
+        backURL: state.generic.backURL
     }
 }
 
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
-        updateBack: (newURL) => dispatch({ type: 'change_url', url: newURL}),
-        updateTitle: (newTitle) => dispatch({ type: 'change_title', title: newTitle }),
-        doLoadChalData: (year,level,data) => dispatch({ type: 'load_chal_data', 'year': year, 'level': level, 'data': data})
+        updateBack: (newURL) => dispatch(updateBackButton(newURL)),
+        updateTitle: (newTitle) => dispatch(updatePageTitle(newTitle)),
+        doLoadChalData: (year,level,data) => dispatch(loadChallengeData(year,level,data)),
+        submitScore: (teamId, chalId, scores) => dispatch(scoreChallenge(teamId,chalId,scores)),
+        submitAbort: (teamId, chalId) => dispatch(abortChallenge(teamId,chalId))
     }
 }
 

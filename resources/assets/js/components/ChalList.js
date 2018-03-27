@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import {connect} from "react-redux";
 import loadChalData from "../utils/loadChalData";
+import {loadChallengeData} from "../actions/ScoreChallenge";
+import {updateBackButton, updatePageTitle} from "../actions/Generic";
 
 class ChalListApp extends Component {
     constructor(props) {
@@ -84,9 +86,9 @@ function mapStateToProps(state) {
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
-        updateBack: (newURL) => dispatch({ type: 'change_url', url: newURL}),
-        updateTitle: (newTitle) => dispatch({ type: 'change_title', title: newTitle }),
-        doLoadChalData: (year,level,data) =>dispatch({ type: 'load_chal_data', 'year': year, 'level': level, 'data': data})
+        updateBack: (newURL) => dispatch(updateBackButton(newURL)),
+        updateTitle: (newTitle) => dispatch(updatePageTitle(newTitle)),
+        doLoadChalData: (year,level,data) => dispatch(loadChallengeData(year,level,data))
     }
 }
 

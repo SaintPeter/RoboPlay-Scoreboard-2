@@ -11,7 +11,6 @@ export default class ScoreElement extends Component {
             score_map: props.score_map,
             score: 0,
             scoreChange: props.scoreChange
-
         }
     }
 
@@ -31,9 +30,7 @@ export default class ScoreElement extends Component {
       this.setState({score: newScore});
 
       // Send the change up to ScoreChallenge
-      let updatedScore = {};
-      updatedScore[this.state.element_number] = {id: this.state.id, score: newScore};
-      this.state.scoreChange(updatedScore);
+      this.state.scoreChange({[this.state.element_number]: {id: this.state.id, score: newScore}});
     };
 
     render() {

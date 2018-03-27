@@ -7,8 +7,7 @@ import rootReducer from './reducers/reducer';
 
 const persistConfig = {
     key: 'root',
-    storage,
-    whitelist: ['teamFavorites']
+    storage
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

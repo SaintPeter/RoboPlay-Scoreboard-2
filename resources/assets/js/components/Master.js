@@ -12,9 +12,6 @@ import ScoreChallenge from "./ScoreChallenge";
 class MasterApp extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            backURL: ""
-        };
         document.title = "Choose Competition";
     }
 
@@ -58,8 +55,8 @@ class MasterApp extends Component {
 // Map Redux state to component props
 function mapStateToProps(state) {
     return {
-        backURL: state.backURL,
-        title: state.title
+        backURL: state.generic.backURL,
+        title: state.generic.title
     }
 }
 

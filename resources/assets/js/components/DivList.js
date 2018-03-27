@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import {connect} from "react-redux";
-import loadChalData from '../utils/loadChalData';
+import {updateBackButton, updatePageTitle} from "../actions/Generic";
 
 class DivListApp extends Component {
     constructor(props) {
@@ -54,8 +54,8 @@ function mapStateToProps(state) {
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
-        updateBack: (newURL) => dispatch({ type: 'change_url', url: newURL}),
-        updateTitle: (newTitle) => dispatch({ type: 'change_title', title: newTitle })
+        updateBack: (newURL) => dispatch(updateBackButton(newURL)),
+        updateTitle: (newTitle) => dispatch(updatePageTitle(newTitle))
     }
 }
 

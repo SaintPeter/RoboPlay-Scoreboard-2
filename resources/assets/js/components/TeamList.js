@@ -1,8 +1,10 @@
-
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import {connect} from "react-redux";
 import loadChalData from "../utils/loadChalData";
+import {updateBackButton, updatePageTitle} from "../actions/Generic";
+import {loadChallengeData} from "../actions/ScoreChallenge";
+import {deleteFavorite, saveFavorite} from "../actions/TeamList";
 
 class TeamListApp extends Component {
     constructor(props) {
@@ -48,7 +50,7 @@ class TeamListApp extends Component {
         this.props.updateTitle("Choose Team");
         this.props.updateBack(`/c/${this.compId}`);
 
-        if(!compData[this.year] || !compData[this.year][this.level]) {
+        if(!this.props.challengeData[this.year] || !this.props.challengeData[this.year][this.level]) {
             loadChalData.load(this.year, this.level, this.props.doLoadChalData)
         } else {
             console.log("TeamList - No need to load Challenge Data");
@@ -148,18 +150,19 @@ class Team extends  Component {
 // Map Redux state to component props
 function mapStateToProps(state) {
     return {
-        teamFavorites: state.teamFavorites
+        challengeData: state.challengeData,
+        teamFavorites: state.teamList.teamFavorites
     }
 }
 
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
-        updateBack: (newURL) => dispatch({ type: 'change_url', url: newURL}),
-        updateTitle: (newTitle) => dispatch({ type: 'change_title', title: newTitle }),
-        doLoadChalData: (year,level,data) => dispatch({ type: 'load_chal_data', 'year': year, 'level': level, 'data': data}),
-        saveFavorite: (id) => dispatch({ type: 'save_favorite', id: id }),
-        deleteFavorite: (id) => dispatch({ type: 'delete_favorite', id: id }),
+        updateBack: (newURL) => dispatch(updateBackButton(newURL)),
+        updateTitle: (newTitle) => dispatch(updatePageTitle(newTitle)),
+        doLoadChalData: (year,level,data) => dispatch(loadChallengeData(year,level,data)),
+        saveFavorite: (id) => dispatch(saveFavorite(id)),
+        deleteFavorite: (id) => dispatch(deleteFavorite(id))
     }
 }
 
