@@ -93,7 +93,7 @@
         }
 
         .favoriteStar-inactive {
-            color: black;
+            color: white;
             -webkit-text-stroke: unset;
         }
 
