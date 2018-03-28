@@ -7,6 +7,8 @@ import DivList from "./DivList";
 import TeamList from "./TeamList";
 import ChalList from "./ChalList";
 import ScoreChallenge from "./ScoreChallenge";
+import {updateBackButton} from "../actions/Generic";
+import {submitScores, updateScoreSummary} from "../actions/ScoreChallenge";
 
 
 class MasterApp extends Component {
@@ -17,6 +19,10 @@ class MasterApp extends Component {
 
     componentDidUpdate(prevProps) {
         document.title = this.props.title;
+    }
+
+    componentDidMount() {
+        this.props.updateScoreSummary(this.props.teamScores);
     }
 
     render(){
@@ -41,7 +47,10 @@ class MasterApp extends Component {
                     <div className="ui-footer ui-bar-inherit">
                         <h4>
                             <div style={{ textAlign: 'center'}}>
-                                <span style={{ fontSize: 10 }}></span>
+                                <span style={{ fontSize: 10 }}>Saved: {this.props.scoreSummary.s} Unsaved: {this.props.scoreSummary.u}</span>
+                                <button onClick={(e) => this.props.submitScores(this.props.teamScores)}>
+                                    Submit
+                                </button>
                             </div>
                         </h4>
 
@@ -56,14 +65,18 @@ class MasterApp extends Component {
 function mapStateToProps(state) {
     return {
         backURL: state.generic.backURL,
-        title: state.generic.title
+        title: state.generic.title,
+        teamScores: state.teamScores,
+        scoreSummary: state.scoreSummary
     }
 }
 
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
-        updateBack: (newURL) => dispatch({ type: 'change_url', url: newURL})
+        updateBack: (newURL) => dispatch(updateBackButton(newURL)),
+        updateScoreSummary: (teamScores) => dispatch(updateScoreSummary(teamScores)),
+        submitScores: (teamScores) => dispatch(submitScores(teamScores))
     }
 }
 

@@ -13,7 +13,8 @@ import {
 import {
     LOAD_CHALLENGE_DATA,
     SCORE_CHALLENGE,
-    ABORT_CHALLENGE
+    ABORT_CHALLENGE, UPDATE_SCORE_SUMMARY, SUBMIT_SCORES,
+    UPDATE_SCORES_SAVED_STATUS
 } from '../actions/ScoreChallenge';
 
 function generic(state = { backURL: '/', title: 'Choose Competition'}, action) {
@@ -61,21 +62,43 @@ function teamScores(state = {}, action) {
         case SCORE_CHALLENGE:
             const currentScores = state[action.teamId] ? state[action.teamId] : [];
             return Object.assign({}, state, {
-                challengeData: {
-                    [action.teamId]: [
-                        ...currentScores,
-                        {
-                            teamId: action.teamId,
-                            chalId: action.chalId,
-                            abort: false,
-                            saved: false,
-                            scores: action.scores
-                        }
-                    ]
-                }
+                [action.teamId]: [
+                    ...currentScores,
+                    {
+                        teamId: action.teamId,
+                        chalId: action.chalId,
+                        timestamp: Math.floor(Date.now() / 1000),
+                        abort: false,
+                        saved: false,
+                        scores: action.scores
+                    }
+                ]
             });
         case ABORT_CHALLENGE:
 
+        case UPDATE_SCORES_SAVED_STATUS:
+            return state;
+        default:
+            return state;
+    }
+}
+
+function scoreSummary(state = { s: 0, u: 0 }, action) {
+    switch (action.type) {
+        case UPDATE_SCORE_SUMMARY:
+            let scoreSummary = { s: 0, u: 0 };
+            if(action.teamScores) {
+                scoreSummary = Object.keys(action.teamScores).reduce( (summary, teamId)=> {
+                    let scores = action.teamScores[teamId].reduce((saved, scoreRecord) => {
+                        saved[ scoreRecord.saved === true ? 1 : 0 ]++;
+                        return saved;
+                    },[0,0]);
+                    summary.u += scores[0];
+                    summary.s += scores[1];
+                    return summary;
+                }, scoreSummary );
+            }
+            return scoreSummary;
         default:
             return state;
     }
@@ -85,7 +108,8 @@ const reducer = combineReducers({
     generic,
     teamList,
     challengeData,
-    teamScores
+    teamScores,
+    scoreSummary
 });
 
 export default reducer;

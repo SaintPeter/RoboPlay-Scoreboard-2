@@ -11,7 +11,7 @@ import Slider from "./ScoreElements/Slider";
 import ScoreElement from "./ScoreElements/ScoreElement";
 import SubmitConfirmPopup from "./Popups/SubmitConfirmPopup";
 import AbortConfirmPopup from "./Popups/AbortConfirmPopup";
-import {abortChallenge, loadChallengeData, scoreChallenge} from "../actions/ScoreChallenge";
+import {abortChallenge, loadChallengeData, scoreChallenge, updateScoreSummary} from "../actions/ScoreChallenge";
 import {updateBackButton, updatePageTitle} from "../actions/Generic";
 
 class ScoreChallengeApp extends Component {
@@ -124,6 +124,7 @@ class ScoreChallengeApp extends Component {
         this.setState({ submitConfirmVisible: false });
         let chalId = this.props.challengeData[this.year][this.level][this.chalNum].id;
         this.props.submitScore(this.teamId, chalId, this.state.scores);
+        this.props.updateScoreSummary(this.props.teamScores);
         this.props.history.push(this.backURL);
     };
 
@@ -222,6 +223,7 @@ class ScoreChallengeApp extends Component {
 // Map Redux state to component props
 function mapStateToProps(state) {
     return {
+        teamScores: state.teamScores,
         challengeData: state.challengeData,
         backURL: state.generic.backURL
     }
@@ -234,7 +236,8 @@ function mapDispatchToProps(dispatch) {
         updateTitle: (newTitle) => dispatch(updatePageTitle(newTitle)),
         doLoadChalData: (year,level,data) => dispatch(loadChallengeData(year,level,data)),
         submitScore: (teamId, chalId, scores) => dispatch(scoreChallenge(teamId,chalId,scores)),
-        submitAbort: (teamId, chalId) => dispatch(abortChallenge(teamId,chalId))
+        submitAbort: (teamId, chalId) => dispatch(abortChallenge(teamId,chalId)),
+        updateScoreSummary: (teamScores) => dispatch(updateScoreSummary(teamScores))
     }
 }
 

@@ -41,4 +41,8 @@ class ScoreApiController extends Controller
 
 		return response()->json($challenge_data);
 	}
+
+	public function save_scores(Request $req) {
+		$data = $req->input('scores', []);
+	}
 }
