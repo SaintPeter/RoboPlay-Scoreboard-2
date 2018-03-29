@@ -38,6 +38,12 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\variablePickup::class,
         ],
 
+	    'myapi' => [
+		    \Illuminate\Session\Middleware\StartSession::class,
+		    \Illuminate\Session\Middleware\AuthenticateSession::class,
+		    \App\Http\Middleware\VerifyCsrfToken::class,
+	    ],
+
         'api' => [
             'throttle:60,1',
             'bindings',

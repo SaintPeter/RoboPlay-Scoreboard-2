@@ -5,7 +5,12 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\CompYear;
+use Auth;
+use App\Models\ {
+	CompYear,
+	Score_run
+};
+use Carbon\Carbon;
 
 class ScoreApiController extends Controller
 {
@@ -43,6 +48,35 @@ class ScoreApiController extends Controller
 	}
 
 	public function save_scores(Request $req) {
-		$data = $req->input('scores', []);
+		$score_runs = $req->input('scores', []);
+		$completed = [];
+		foreach($score_runs as $run) {
+			// TODO: Set Global Constant for Score Element count
+			$scores = array_fill(1, 6, '-');
+			$total = 0;
+			foreach($run['scores'] as $index => $value) {
+				$scores[$index] = $value;
+				$total += $value;
+			}
+			$total = max(0, $total);
+
+			$user = Auth::user()->id;
+
+			$newREcord = [
+				"run_number" => $run['timestamp'],
+				"run_time" => Carbon::createFromTimestamp($run['timestamp']),
+				"scores" => $scores,
+				"total" => $total,
+				"abort" => 0,
+				"judge_id" => Auth::user()->id,
+				"team_id" => $run['teamId'],
+				"challenge_id" => $run['chalId'],
+				"division_id" => $run['divId']
+			];
+			Score_run::create($newREcord);
+			$completed[] = $run['timestamp'];
+		}
+		return \Response::json($completed);
+
 	}
 }

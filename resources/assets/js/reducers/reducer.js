@@ -67,6 +67,7 @@ function teamScores(state = {}, action) {
                     {
                         teamId: action.teamId,
                         chalId: action.chalId,
+                        divId: action.divId,
                         timestamp: Math.floor(Date.now() / 1000),
                         abort: false,
                         saved: false,
@@ -77,6 +78,7 @@ function teamScores(state = {}, action) {
         case ABORT_CHALLENGE:
 
         case UPDATE_SCORES_SAVED_STATUS:
+            console.log(action.updates);
             return state;
         default:
             return state;

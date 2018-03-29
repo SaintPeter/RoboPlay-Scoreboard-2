@@ -3,25 +3,21 @@ import React, { Component } from "react";
 export default class ScoreElement extends Component {
     constructor(props) {
         super(props);
+
+        this.multi = (props.type==='score_slider') ? 1 : props.multiplier;
         this.state = {
-            id: props.id,
-            base: props.base_value,
-            multi: (props.type==='score_slider') ? 1 : props.multiplier,
-            element_number: props.element_number,
-            score_map: props.score_map,
             score: 0,
-            scoreChange: props.scoreChange
         }
     }
 
     // Calculate the individual score for this element when it changes
     handleScoreChange = (value) => {
-      const baseScore = this.state.base + (value * this.state.multi);
+      const baseScore = this.props.base_value + (value * this.multi);
       let newScore = baseScore;
-      if(this.state.score_map.length) {
-          for(let i = this.state.score_map.length - 1; i > -1; i--) {
-              if(baseScore >= this.state.score_map[i].i) {
-                  newScore = this.state.score_map[i].v * 1;
+      if(this.props.score_map.length) {
+          for(let i = this.props.score_map.length - 1; i > -1; i--) {
+              if(baseScore >= this.props.score_map[i].i) {
+                  newScore = this.props.score_map[i].v * 1;
                   break;
               }
           }
@@ -30,7 +26,7 @@ export default class ScoreElement extends Component {
       this.setState({score: newScore});
 
       // Send the change up to ScoreChallenge
-      this.state.scoreChange({[this.state.element_number]: {id: this.state.id, score: newScore}});
+      this.props.scoreChange({[this.props.element_number]: newScore });
     };
 
     render() {

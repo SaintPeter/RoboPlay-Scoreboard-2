@@ -12,17 +12,20 @@ export function loadChallengeData(year, level, data) {
     }
 }
 
-export function scoreChallenge(teamId, chalId, scores) {
-    return {
-        type: SCORE_CHALLENGE,
-        teamId, chalId, scores
-    }
-}
+export const scoreChallenge = (teamId, chalId, divId, scores) =>
+    (dispatch, getState) => {
+        dispatch({
+            type: SCORE_CHALLENGE,
+            teamId, chalId, divId, scores
+        });
+        const { teamScores } = getState();
+        dispatch(updateScoreSummary(teamScores));
+    };
 
-export function abortChallenge(teamId, chalId) {
+export function abortChallenge(teamId, chalId, divId, elementCount) {
     return {
         type: ABORT_CHALLENGE,
-        teamId, chalId
+        teamId, chalId, divId, elementCount
     }
 }
 
@@ -51,7 +54,7 @@ export function submitScores(teamScores) {
             });
         }
         if (submitData.length > 0) {
-            axios.post(
+            return axios.post(
                 '/api/scorer/save_scores',
                 { scores: submitData },
                 {headers: {'Content-Type': 'application/json'}})
@@ -61,6 +64,8 @@ export function submitScores(teamScores) {
             .catch((error) => {
                 console.error("Submit Scores Error: " + error);
             });
+        } else {
+            return Promise.resolve();
         }
     }
 }

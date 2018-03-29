@@ -61,19 +61,13 @@ class ScoreChallengeApp extends Component {
                 .score_elements.reduce((acc, element)=> {
                     switch(element.type) {
                         case 'yesno':
-                            acc[element.element_number] = {
-                                id: element.id,
-                                score: element.base_value + element.multiplier };
+                            acc[element.element_number] = element.base_value + element.multiplier ;
                             break;
                         case 'high_slider':
-                            acc[element.element_number] = {
-                                id: element.id,
-                                score: element.max_entry * element.multiplier};
+                            acc[element.element_number] = element.max_entry * element.multiplier;
                             break;
                         default:
-                            acc[element.element_number] = {
-                                id: element.id,
-                                score: element.base_value};
+                            acc[element.element_number] = element.base_value;
                     }
                     return acc;
                 },{})
@@ -85,7 +79,7 @@ class ScoreChallengeApp extends Component {
         this.setState(
             {
                 total: Math.max(0, Object.keys(this.state.scores).reduce((acc, key) => {
-                    return acc + this.state.scores[key].score;
+                    return acc + this.state.scores[key];
                 },0))
             }
         )
@@ -123,8 +117,7 @@ class ScoreChallengeApp extends Component {
     submitConfirmConfirmed = () => {
         this.setState({ submitConfirmVisible: false });
         let chalId = this.props.challengeData[this.year][this.level][this.chalNum].id;
-        this.props.submitScore(this.teamId, chalId, this.state.scores);
-        this.props.updateScoreSummary(this.props.teamScores);
+        this.props.submitScore(this.teamId, chalId, this.divId, this.state.scores);
         this.props.history.push(this.backURL);
     };
 
@@ -134,7 +127,11 @@ class ScoreChallengeApp extends Component {
 
     abortConfirmConfirmed = () => {
         this.setState({ abortConfirmVisible: false });
-        console.log('Aborted!');
+        this.props.submitScore(
+            this.teamId,
+            chalId,
+            this.divId,count(this.props.challengeData[this.year][this.level][this.chalNum].score_elements)
+        );
         this.props.history.push(this.backURL);
     };
 
@@ -235,8 +232,8 @@ function mapDispatchToProps(dispatch) {
         updateBack: (newURL) => dispatch(updateBackButton(newURL)),
         updateTitle: (newTitle) => dispatch(updatePageTitle(newTitle)),
         doLoadChalData: (year,level,data) => dispatch(loadChallengeData(year,level,data)),
-        submitScore: (teamId, chalId, scores) => dispatch(scoreChallenge(teamId,chalId,scores)),
-        submitAbort: (teamId, chalId) => dispatch(abortChallenge(teamId,chalId)),
+        submitScore: (teamId, chalId, divId, scores) => dispatch(scoreChallenge(teamId,chalId,divId,scores)),
+        submitAbort: (teamId, chalId, divId) => dispatch(abortChallenge(teamId,chalId, divId)),
         updateScoreSummary: (teamScores) => dispatch(updateScoreSummary(teamScores))
     }
 }

@@ -18,7 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::namespace('Api')->name('api.')->group(function() {
-	Route::get('challenges/{year}/{level}', ['as' => 'challenges', 'uses' => 'ScoreApiController@challenges']);
-	Route::post('scorer/save_scores', ['as' => 'save_score', 'uses' => 'ScoreApiController@save_scores']);
+Route::middleware('auth')->namespace('Api')->name('api.')->group(function() {
+
 });

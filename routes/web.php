@@ -336,6 +336,12 @@ Route::middleware([ 'auth' ])->group( function() {
         Route::get('video/judge/clear/{video_id}/{judge_id}', [
             'as' => 'video.judge.clear_scores',
             'uses' => 'ScoreVideosController@clear_scores' ]);
+
+        Route::prefix('/api/')->namespace('Api')->name('api.')->group(function() {
+	        Route::get('challenges/{year}/{level}', ['as' => 'challenges', 'uses' => 'ScoreApiController@challenges']);
+	        Route::post('scorer/save_scores', ['as' => 'save_score', 'uses' => 'ScoreApiController@save_scores']);
+        });
+
     });
 
 	/* -----------------------------------------------------------------------------
