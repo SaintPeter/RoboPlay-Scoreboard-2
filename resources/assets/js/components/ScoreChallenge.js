@@ -20,9 +20,10 @@ class ScoreChallengeApp extends Component {
         this.compId = props.match.params.compId;
         this.divId = props.match.params.divId;
         this.teamId = props.match.params.teamId;
-        this.chalNum = props.match.params.chalId;
         this.year = compData[this.compId].year;
         this.level = compData[this.compId].divisions[this.divId].level;
+        this.chalNum = props.match.params.chalId;
+        this.chalId = this.props.challengeData[this.year][this.level][this.chalNum].id;
         this.divisionName =  compData[this.compId].divisions[this.divId].name;
         this.teamName = compData[this.compId].divisions[this.divId].teams[this.teamId];
 
@@ -116,8 +117,7 @@ class ScoreChallengeApp extends Component {
     
     submitConfirmConfirmed = () => {
         this.setState({ submitConfirmVisible: false });
-        let chalId = this.props.challengeData[this.year][this.level][this.chalNum].id;
-        this.props.submitScore(this.teamId, chalId, this.divId, this.state.scores);
+        this.props.submitScore(this.teamId, this.chalId, this.divId, this.state.scores);
         this.props.history.push(this.backURL);
     };
 
@@ -127,10 +127,11 @@ class ScoreChallengeApp extends Component {
 
     abortConfirmConfirmed = () => {
         this.setState({ abortConfirmVisible: false });
-        this.props.submitScore(
+        this.props.submitAbort(
             this.teamId,
-            chalId,
-            this.divId,count(this.props.challengeData[this.year][this.level][this.chalNum].score_elements)
+            this.chalId,
+            this.divId,
+            this.props.challengeData[this.year][this.level][this.chalNum].score_elements.length
         );
         this.props.history.push(this.backURL);
     };
@@ -233,7 +234,7 @@ function mapDispatchToProps(dispatch) {
         updateTitle: (newTitle) => dispatch(updatePageTitle(newTitle)),
         doLoadChalData: (year,level,data) => dispatch(loadChallengeData(year,level,data)),
         submitScore: (teamId, chalId, divId, scores) => dispatch(scoreChallenge(teamId,chalId,divId,scores)),
-        submitAbort: (teamId, chalId, divId) => dispatch(abortChallenge(teamId,chalId, divId)),
+        submitAbort: (teamId, chalId, divId, elementCount) => dispatch(abortChallenge(teamId,chalId,divId,elementCount)),
         updateScoreSummary: (teamScores) => dispatch(updateScoreSummary(teamScores))
     }
 }

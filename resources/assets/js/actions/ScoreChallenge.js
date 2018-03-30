@@ -22,12 +22,15 @@ export const scoreChallenge = (teamId, chalId, divId, scores) =>
         dispatch(updateScoreSummary(teamScores));
     };
 
-export function abortChallenge(teamId, chalId, divId, elementCount) {
-    return {
-        type: ABORT_CHALLENGE,
-        teamId, chalId, divId, elementCount
-    }
-}
+export const abortChallenge = (teamId, chalId, divId, elementCount) =>
+    (dispatch, getState) => {
+        dispatch( {
+            type: ABORT_CHALLENGE,
+            teamId, chalId, divId, elementCount
+        });
+        const { teamScores } = getState();
+        dispatch(updateScoreSummary(teamScores));
+    };
 
 export function updateScoreSummary(teamScores) {
     return {
@@ -36,12 +39,15 @@ export function updateScoreSummary(teamScores) {
     }
 }
 
-export function updateScoresSavedStatus(updates) {
-    return {
-        type: UPDATE_SCORES_SAVED_STATUS,
-        updates
-    }
-}
+export const  updateScoresSavedStatus = (updates) =>
+    (dispatch, getState) => {
+        dispatch( {
+            type: UPDATE_SCORES_SAVED_STATUS,
+            updates
+        });
+        const { teamScores } = getState();
+        dispatch(updateScoreSummary(teamScores));
+    };
 
 export function submitScores(teamScores) {
     return (dispatch) => {
@@ -54,6 +60,7 @@ export function submitScores(teamScores) {
             });
         }
         if (submitData.length > 0) {
+            console.log("Posting Scores");
             return axios.post(
                 '/api/scorer/save_scores',
                 { scores: submitData },
@@ -65,6 +72,7 @@ export function submitScores(teamScores) {
                 console.error("Submit Scores Error: " + error);
             });
         } else {
+            console.log("No Scores to Send");
             return Promise.resolve();
         }
     }

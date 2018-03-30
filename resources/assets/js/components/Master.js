@@ -23,6 +23,19 @@ class MasterApp extends Component {
 
     componentDidMount() {
         this.props.updateScoreSummary(this.props.teamScores);
+
+        console.log('Starting Timer');
+        let intervalId = setInterval(this.scoreSendingTimer.bind(this), 1000 * 60);
+        this.setState({intervalId: intervalId});
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.state.intervalId);
+    }
+
+    scoreSendingTimer() {
+        console.log("Submitting Scores");
+        this.props.submitScores(this.props.teamScores)
     }
 
     render(){
@@ -47,10 +60,10 @@ class MasterApp extends Component {
                     <div className="ui-footer ui-bar-inherit">
                         <h4>
                             <div style={{ textAlign: 'center'}}>
-                                <span style={{ fontSize: 10 }}>Saved: {this.props.scoreSummary.s} Unsaved: {this.props.scoreSummary.u}</span>
-                                <button onClick={(e) => this.props.submitScores(this.props.teamScores)}>
-                                    Submit
-                                </button>
+                                <span onClick={this.scoreSendingTimer.bind(this)} className="score-status">
+                                    Saved: {this.props.scoreSummary.s} &nbsp;
+                                    Unsaved: {this.props.scoreSummary.u}
+                                </span>
                             </div>
                         </h4>
 

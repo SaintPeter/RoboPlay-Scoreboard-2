@@ -97,7 +97,10 @@
             -webkit-text-stroke: unset;
         }
 
-
+        .score-status {
+            font-size: 10px;
+            cursor: pointer;
+        }
     </style>
 
 </head>

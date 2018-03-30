@@ -21,6 +21,7 @@ class CompListApp extends Component {
 
     componentDidMount() {
         document.getElementById('header').innerHTML = "Competition List";
+        this.props.updateTitle('Choose Competition');
     }
 
     render() {

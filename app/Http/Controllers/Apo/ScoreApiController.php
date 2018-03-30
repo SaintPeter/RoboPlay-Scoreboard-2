@@ -54,29 +54,35 @@ class ScoreApiController extends Controller
 			// TODO: Set Global Constant for Score Element count
 			$scores = array_fill(1, 6, '-');
 			$total = 0;
-			foreach($run['scores'] as $index => $value) {
-				$scores[$index] = $value;
-				$total += $value;
+			if($run['abort']) {
+				for($i = 1; $i <= $run['elementCount']; $i++) {
+					$scores[$i] = 'A';
+				}
+			} else {
+				foreach($run['scores'] as $index => $value) {
+					$scores[$index] = $value;
+					$total += $value;
+				}
+				$total = max(0, $total);
 			}
-			$total = max(0, $total);
 
-			$user = Auth::user()->id;
-
-			$newREcord = [
-				"run_number" => $run['timestamp'],
-				"run_time" => Carbon::createFromTimestamp($run['timestamp']),
-				"scores" => $scores,
-				"total" => $total,
-				"abort" => 0,
-				"judge_id" => Auth::user()->id,
-				"team_id" => $run['teamId'],
-				"challenge_id" => $run['chalId'],
-				"division_id" => $run['divId']
-			];
-			Score_run::create($newREcord);
-			$completed[] = $run['timestamp'];
+			try {
+				Score_run::create([
+					"run_number" => $run['timestamp'],
+					"run_time" => Carbon::createFromTimestamp($run['timestamp']),
+					"scores" => $scores,
+					"total" => $total,
+					"abort" => $run['abort'],
+					"judge_id" => Auth::user()->id,
+					"team_id" => $run['teamId'],
+					"challenge_id" => $run['chalId'],
+					"division_id" => $run['divId']
+				]);
+				$completed[] = $run['timestamp'];
+			} catch(\Exception $exception) {
+				// Ignore errors
+			}
 		}
 		return \Response::json($completed);
-
 	}
 }

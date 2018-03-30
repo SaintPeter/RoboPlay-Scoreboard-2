@@ -23,6 +23,7 @@
         "webpack-bundle-analyzer": "^2.11.1"
     },
     "dependencies": {
+        "immutability-helper": "^2.6.6",
         "random-number": "0.0.9",
         "react-redux": "^5.0.7",
         "react-router": "^4.2.0",

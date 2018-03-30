@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import update from 'immutability-helper';
 
 import {
     UPDATE_PAGE_TITLE,
@@ -22,7 +23,7 @@ function generic(state = { backURL: '/', title: 'Choose Competition'}, action) {
         case UPDATE_BACK_BUTTON:
             return Object.assign({}, state, { backURL: action.newURL });
         case UPDATE_PAGE_TITLE:
-            return Object.assign({}, state, {title: action.title });
+            return Object.assign({}, state, {title: action.newTitle });
         default:
             return state;
     }
@@ -58,9 +59,10 @@ function challengeData(state = {} , action) {
 }
 
 function teamScores(state = {}, action) {
+    let currentScores;
     switch (action.type) {
         case SCORE_CHALLENGE:
-            const currentScores = state[action.teamId] ? state[action.teamId] : [];
+            currentScores = state[action.teamId] ? state[action.teamId] : [];
             return Object.assign({}, state, {
                 [action.teamId]: [
                     ...currentScores,
@@ -76,9 +78,37 @@ function teamScores(state = {}, action) {
                 ]
             });
         case ABORT_CHALLENGE:
-
+            currentScores = state[action.teamId] ? state[action.teamId] : [];
+            return Object.assign({}, state, {
+                [action.teamId]: [
+                    ...currentScores,
+                    {
+                        teamId: action.teamId,
+                        chalId: action.chalId,
+                        divId: action.divId,
+                        timestamp: Math.floor(Date.now() / 1000),
+                        abort: true,
+                        saved: false,
+                        elementCount: action.elementCount
+                    }
+                ]
+            });
         case UPDATE_SCORES_SAVED_STATUS:
-            console.log(action.updates);
+            let scoreUpdates = Object.keys(state).reduce((teamScores, teamId) => {
+                let updates = state[teamId].reduce((acc, score, index) => {
+                    if(action.updates.indexOf(score.timestamp) > -1) {
+                        acc[index] = { saved: { $set: true } };
+                    }
+                    return acc;
+                }, {});
+                if(Object.keys(updates).length > 0) {
+                    teamScores[teamId] = updates;
+                }
+                return teamScores;
+            }, {} );
+            if(Object.keys(scoreUpdates).length > 0) {
+                return update(state,scoreUpdates);
+            }
             return state;
         default:
             return state;
