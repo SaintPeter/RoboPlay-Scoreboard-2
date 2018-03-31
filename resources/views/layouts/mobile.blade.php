@@ -8,12 +8,6 @@
 		{{ HTML::style('//maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css') }}
 		{{ HTML::style('css/jquery.mobile-1.4.1.css') }}
 		{{ HTML::script('//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js') }}
-        <script>
-            $(document).on("mobileinit", function() {
-                $.mobile.ajaxEnabled = false;
-            });
-        </script>
-
         {{ HTML::script('js/jquery.mobile-1.4.1.js') }}
 		<style>
 			table form { margin-bottom: 0; }

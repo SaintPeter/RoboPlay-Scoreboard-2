@@ -78,7 +78,8 @@
 @if(Roles::isJudge())
 <h2>Judge Menu</h2>
 <ul data-role="listview" data-inset="true">
-	<li>{{ link_to_route('score.choose_competition', 'Score Challenges', null, $noajax) }}</li>
+	<li>{{ link_to_route('score.choose_competition', 'Score Challenges (PHP)', null, $noajax) }}</li>
+    <li>{{ link_to_route('scorer', 'Score Challenges (React)', null, $noajax) }}</li>
 	<li>{{ link_to_route('video.judge.index', 'Score Videos', null, $noajax) }}</li>
 	<li><a href="{{ asset('docs/Video_Judge_Instructions_2016.pdf') }}" target="_blank"><i class="fa fa-video-camera"></i>&nbsp;Video Judging Guide</a></li>
 </ul>
