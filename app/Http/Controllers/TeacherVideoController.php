@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use View;
 use Session;
 use Validator;
@@ -39,7 +40,7 @@ class TeacherVideoController extends Controller {
 	{
         // Get the most recent competition year with video divisisons
 	    $comp_year = CompYear::orderBy('year', 'desc')
-	                         ->with([ 'vid_divisions' => function(MorphMany $q) {
+	                         ->with([ 'vid_divisions' => function($q) {
 										return $q->orderby('display_order');
 									}])
 							->first();
