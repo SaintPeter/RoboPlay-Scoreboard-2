@@ -269,6 +269,11 @@ try {
 		$bc->push('Video Uploader', route('videos.uploader', [$video_id]));
 	});
 
+	Breadcrumbs::register('filetypes.index', function (BreadcrumbsGenerator $bc) {
+		$bc->parent('home');
+		$bc->push('Manage Filetypes', route('filetypes.index'));
+	});
+
 } catch (\DaveJamesMiller\Breadcrumbs\Facades\DuplicateBreadcrumbException $e) {
 	echo "Duplicate Breadcrumb Route Exception " . $e->getMessage();
 }

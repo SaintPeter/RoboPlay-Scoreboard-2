@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use View;
 use Session;
 use Validator;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use App\Enums\VideoCheckStatus;
 
 use App\Models\ {
     Video,
@@ -285,4 +284,189 @@ class TeacherVideoController extends Controller {
 
 		return redirect()->route('teacher.index');
 	}
+
+	public function validate_video(Request $req, $video_id) {
+		try {
+			list($status, $results) = $this->check_video_files($video_id);
+		} catch (\Exception $e) {
+			return response('Cannot Find Video', 404 );
+		}
+
+		return View::make('teacher.videos.partial.file_status')->with(compact('results'));
+	}
+
+
+	/**
+	 * Check the files associated with a video and display their status
+	 *
+	 * @param $video_id
+	 * @return (\App\Enums\VideoCheckStatus, array)
+	 */
+	public function check_video_files($video_id) {
+		// Get the video and associated files
+		$video = Video::findOrFail($video_id)->with('files', 'files.filetype')->get();
+		$files = $video->files();
+
+		$counts = [
+			'video' => 0,
+			'code' => 0,
+			'doc' => 0,
+			'cad' => 0,
+			'image' => 0,
+			'script' => 0,
+		];
+
+		$code_results = [];
+		$fail = false;
+		$warning = false;
+
+		// Scan files for metadata etc
+		foreach($files as $file) {
+			$counts[$file->filetype->type]++;
+
+			switch($file->filetype->type) {
+				case 'doc':
+					// Look for scripts
+					if (preg_match("/script/gi", $file->filename)) {
+						$counts['script']++;
+					}
+					break;
+				case 'code':
+					// Scan the code files
+					try {
+						$codeFile = file_get_contents($file->full_path());
+						if (preg_match("/File|" .
+							"Video Title|" .
+							"Scene #|" .
+							"Teacher Advisors|" .
+							"School Name|" .
+							"School District|" .
+							"Code Written by|" .
+							"Student Names|" .
+							"Purpose/gi",
+							$codeFile, $matches)) {
+							if (count($matches) < 7) {
+								$code_results[] = [
+									'filename' => $file->filename,
+									'message' => 'Required header not found'
+								];
+							}
+						}
+					} catch (\Exception $e) {
+						$code_results[] = [
+							'filename' => $file->filename,
+							'message' => "Unable to read/parse file"
+						];
+					}
+			}
+		}
+
+		$results = [];
+
+		// Video File Present
+		if($counts['video'] > 0) {
+			$results[] = [
+				'status' => 'PASS',
+				'message' => 'Video File Uploaded'
+			];
+		} else {
+			$results[] = [
+				'status' => 'FAIL',
+				'message' => 'Video File Missing'
+			];
+			$fail = true;
+		}
+
+		// CAD file, but only if "Custom" selected
+		if($video->has_custom) {
+			if(($counts['cad'] + $counts['image']) > 0) {
+				$results[] = [
+					'status' => 'PASS',
+					'message' => 'CAD Files Present for Custom Part'
+				];
+			} else {
+				$results[] = [
+					'status' => 'FAIL',
+					'message' => 'Custom Part: CAD Files Missing',
+					'note' => 'Custom Parts submissions must include CAD files or drawings.  If you ' .
+						'have included them in a different file type, please contact the Video Coordinator for approval.'
+				];
+				$fail = true;
+			}
+
+			if($counts['doc'] > 0) {
+				$results[] = [
+					'status' => 'PASS',
+					'message' => 'Custom Part: Explanation Files Present'
+				];
+			} else {
+				$results[] = [
+					'status' => 'FAIL',
+					'message' => 'Custom Part: Explanation File(s) Missing',
+					'note' => 'Custom Parts are required to have a document with at least a paragraph ' .
+						      'explaining the function and use of the part.'
+				];
+				$fail = true;
+			}
+		} else {
+			if(($counts['cad'] + $counts['image']) > 0) {
+				$results[] = [
+					'status' => 'WARNING',
+					'message' => 'CAD Files Present but Custom Part flag not set'
+				];
+				$warning = true;
+			}
+		}
+
+		// Script Present
+		if($counts['script'] > 0) {
+			$results[] = [
+				'status' => 'PASS',
+				'message' => 'Script File Present'
+			];
+		} else {
+			$results[] = [
+				'status' => 'WARNING',
+				'message' => 'Script File Missing',
+				'note' => 'No document file was found with string "script" in the filename found. ' .
+					'If your video contains no dialog and/or stage direction (such as a music video), a script is not required. ' .
+					'If dialog or stage direction are present, the video will be disqualified.'
+			];
+			$fail = true;
+		}
+
+		// Code File(s) Present
+		if($counts['code'] > 0) {
+			$results[] = [
+				'status' => 'PASS',
+				'message' => 'Code File(s) Present'
+			];
+			if(count($code_results) > 0) {
+				$results[] = [
+					'status' => 'FAIL',
+					'message' => count($code_results) . ' of ' . $counts['code'] . ' code files have issues',
+					'note' => 'This is a new feature.  If you believe you have the proper headers, please ' .
+						      'contact the Video Coordinator',
+					'files' => $code_results
+				];
+				$fail = true;
+			}
+		} else {
+			$results[] = [
+				'status' => 'FAIL',
+				'message' => 'Code File(s) Missing'
+			];
+			$fail = true;
+		}
+
+		if($fail) {
+			return [VideoCheckStatus::Fail, $results];
+		} elseif($warning) {
+			return [VideoCheckStatus::Warnings, $results];
+		} else {
+			return [VideoCheckStatus::Pass, $results];
+		}
+	}
+
+
 }
