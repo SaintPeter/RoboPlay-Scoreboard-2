@@ -86,7 +86,7 @@ class DisplayController extends Controller {
 						'run_time' => $score_run->run_time,
 						'total'    => $score_run->total,
 						'user'     => $score_run->user->name,
-						'is_user'  => Auth::check() ? ($score_run->user->id == Auth::user()->id) : 0,
+						'is_judge'  => Auth::check() ? ($score_run->user->id == Auth::user()->id) : 0,
 						'id'       => $score_run->id,
 						'deleted'  => $score_run->trashed()
 						];
