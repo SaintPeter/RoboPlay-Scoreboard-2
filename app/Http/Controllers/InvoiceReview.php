@@ -5,20 +5,26 @@ namespace App\Http\Controllers;
 use View;
 use Session;
 use Illuminate\Http\Request;
+use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Response;
+
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-use App\ {
-    Models\Schools,
-    Models\Team,
-    Models\Wp_invoice_table,
-    Models\Video,
-    Models\School,
-    Models\Frm_items,
-    Models\CompYear,
-    Models\Invoices
+use App\{
+	Enums\UserTypes,
+	Models\Schools,
+	Models\Team,
+	Models\User,
+	Models\Video,
+	Models\School,
+	Models\Frm_items,
+	Models\CompYear,
+	Models\Invoices,
+	Models\Wp_user,
+	Models\Wp_invoice_table
 };
 class InvoiceReview extends Controller {
+	use Illuminate\Foundation\Auth\ResetsPasswords;
 
 	/**
 	 * Display a listing of the resource.
@@ -139,6 +145,7 @@ class InvoiceReview extends Controller {
 	{
 		$message = "Invoice Type Not Found";
 	    $comp_year = CompYear::where('year', $year)->firstOrFail();
+	    $userList = [];
 
 	    // C-STEM Invoices (2014-2016)
 	    if($comp_year->invoice_type == 1) {
@@ -162,6 +169,9 @@ class InvoiceReview extends Controller {
                 $invoice->math_count = $raw_invoice->getData('PreMath', 0) + $raw_invoice->getData('AlgMath', 0);
 
                 $invoice->paid = $raw_invoice->paid;
+
+	            // Store the users
+	            $userList[$invoice->user_id] = $invoice->user_id;
 
                 $invoice->save();
                 $count++;
@@ -204,7 +214,30 @@ class InvoiceReview extends Controller {
             965        Challenge Competition - Complete Package ($320 per team)
             964        Challenge Competition - Basic Package ($250 per team)
             961        wp_school_id from usermeta
+
+            __ 2018 Field Information__
+            field_id   Description
+            1703       Video Competition
+			1702       Challenge Competition - Complete Package ($320 per team)
+            N/A        Challenge Competition - Basic Package - Not included this year
+			1711       wp_school_id entry from usermeta
             */
+
+	        $field_ids = [
+		        '2017' => [
+			        'video' => 966,
+			        'challenge_complete' => 965,
+			        'challenge_basic' => 964,
+			        'school_id' => 961
+		        ],
+		        '2018' => [
+					'video' => 1703,
+					'challenge_complete' => 1702,
+					'school_id' => 1711
+		        ]
+	        ];
+
+            $field_lookup = $field_ids[$year];
 
             $count = 0;
             foreach($raw_invoices as $raw_invoice) {
@@ -218,16 +251,24 @@ class InvoiceReview extends Controller {
                     'year' => $year
                 ]);
 
-                $invoice->school_id = intval(arr_get($vals[961],0)); // School id
+                $invoice->school_id = intval($this->arr_get($vals[$field_lookup['school_id']],0)); // School id
 
-                // Basic and Complete Packages
-                $invoice->team_count = intval(arr_get($vals[964],0)) + intval(arr_get($vals[965],0));
+                // Complete Packages
+                $invoice->team_count = intval($this->arr_get($vals[$field_lookup['challenge_complete']],0));
+
+                // Basic Packagae, if it exists
+	            if($field_lookup['challenge_basic']) {
+	            	$invoice->team_count += intval($this->arr_get($vals[$field_lookup['challenge_basic']],0));
+	            }
 
                 // Video Package
-                $invoice->video_count = intval(arr_get($vals[966],0));
+                $invoice->video_count = intval($this->arr_get($vals[$field_lookup['video']],0));
 
                 // Not doing this anymore
                 $invoice->math_count = 0;
+
+                // Store the users
+                $userList[$invoice->user_id] = $invoice->user_id;
 
                 $invoice->save();
                 $count++;
@@ -249,12 +290,57 @@ class InvoiceReview extends Controller {
             $message = 'Synced ' . $count . " Invoices, Removed $removed for $year";
         }
 
+        // Sync over users
+        if(count($userList)) {
+	    	$this->create_invoice_users($userList);
+	    }
+
 		// Only redirect if online
 		if($online) {
 			return redirect()->route('invoice_review', $year)->with('message', $message);
 		} else {
 			return $message;
 		}
+	}
+
+	public function create_invoice_users($userList) {
+		$users = User::whereIn('id',$userList)->get();
+
+		// Check to see if the users have already been created
+		foreach($users as $user) {
+			if($userList[$user->id]) {
+				unset($userList[$user->id]);
+			}
+		}
+
+		// Any users left will need to be created
+		if(count($userList)) {
+			$wpUserData = Wp_user::whereIn('ID', $userList)->with('usermeta')->get();
+
+			$newUserData = [];
+			foreach($wpUserData as $wpUser) {
+				$newUserData[] = new User([
+					'id' => $wpUser->ID,
+					'name' => $wpUser->getName(),
+					'email' => $wpUser->user_email,
+					'roles' => UserTypes::Teacher
+				]);
+			}
+			User::insert($newUserData);
+
+			/*foreach($newUserData as $newUser) {
+				// Send Password reset notifications
+				$this->broker()->sendResetLink(['email' => $newUser['email']], function (Message $message) {
+					$message->subject("[RoboPlay Scoreboard] User Account Created");
+					$message->line('An account has been created for you at https://scoreboard.c-stem.edu.')
+						->line('You must set your password to be able to log in.')
+						->action('Set Password', url('admin/password/reset', $this->token))
+						->line('We encourage you to set your password as soon as possible.')
+						->line('If you encounter issues, contact webmaster@scoreboard.c-stem.edu');
+				});
+			}*/
+		}
+
 	}
 
     // Make a flat, local copy of the wordpress schools table
@@ -510,6 +596,11 @@ class InvoiceReview extends Controller {
 			'Content-Type' => 'application/octet-stream',
 			'Content-Disposition' => 'attachment; filename="video_demographics_' . $year . '.csv"'
 		));
+	}
+
+	// Gets an array element or returns a default value
+	function arr_get(&$var, $default=null) {
+		return isset($var) ? $var : $default;
 	}
 
 }
