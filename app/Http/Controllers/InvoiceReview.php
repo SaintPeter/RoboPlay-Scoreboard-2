@@ -152,7 +152,7 @@ class InvoiceReview extends Controller {
 	    // C-STEM Invoices (2014-2016)
 	    if($comp_year->invoice_type == 1) {
 
-    	    $raw_invoices = Wp_invoice_table::with('invoice_data', 'user', 'user.usermeta')
+    	    $raw_invoices = Wp_invoice_table::with('invoice_data', 'wp_user', 'wp_user.usermeta')
     									->where('invoice_type_id', $comp_year->invoice_type_id)->get();
 
             $count = 0;
@@ -305,7 +305,7 @@ class InvoiceReview extends Controller {
 		}
 	}
 
-	public function create_invoice_users($userList) {
+	public static function create_invoice_users($userList, $skip_notification = false) {
 		$users = User::whereIn('id',$userList)->get();
 
 		// Check to see if the users have already been created
@@ -336,15 +336,17 @@ class InvoiceReview extends Controller {
 
 			User::insert($newUserData);
 
-			$newUserList = array_pluck($newUserData, 'id');
-			$newUsers = User::whereIn('id', $newUserList)->get();
+			if(!$skip_notification) {
+				$newUserList = array_pluck($newUserData, 'id');
+				$newUsers = User::whereIn('id', $newUserList)->get();
 
-			foreach($newUsers as $newUser) {
-				// Send Password reset notifications
-				$token = Password::getRepository()->create($newUser);
-				$newUser->notify(new UserCreated($token));
+				foreach ($newUsers as $newUser) {
+					// Send Password reset notifications
+					$token = Password::getRepository()->create($newUser);
+					$newUser->notify(new UserCreated($token));
+				}
+				return '<br>' . count($userList) . " New Users Created.";
 			}
-			return '<br>' . count($userList) . " New Users Created.";
 		}
 		return '<br>No new users created';
 	}
@@ -352,7 +354,7 @@ class InvoiceReview extends Controller {
     // Make a flat, local copy of the wordpress schools table
 	public function school_sync() {
 	    $invoices = Invoices::all();
-	    $school_list = $invoices->pluck('wp_school_id')->all();
+	    $school_list = $invoices->pluck('school_id')->all();
 	    $wp_schools = Schools::whereIn('school_id', $school_list)->with('district', 'district.county')->get();
 	    $schools = School::all()->keyBy('id');
 

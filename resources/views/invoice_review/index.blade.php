@@ -297,7 +297,7 @@ function division_change(e) {
 			{{ $invoice->user->email }}
 		</td>
 		<td>
-			{{ ($invoice->school) ? $invoice->school->name : "(Not Set)" }}
+			{!!  ($invoice->school && $invoice->school->name != 'School Name Not Set') ? $invoice->school->name : "<span class='btn btn-danger'>Not Set</span>" !!}
 		</td>
 		<td class="text-center">
 			{{ $invoice->teams->count() }} / {{ $invoice->team_count }}
