@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Models\User;
 use Illuminate\Console\Command;
 
-class setUserPassword extends Command
+class userSetPassword extends Command
 {
     /**
      * The name and signature of the console command.
@@ -43,13 +43,17 @@ class setUserPassword extends Command
 	        $password = $this->secret("Enter Password");
 		    $password2 = $this->secret("Re-enter Password");
 
-		    if($password == $password2) {
+		    if($password == $password2 && $password != '') {
 			    $user->password = bcrypt($password);
 			    $user->save();
 
 			    $this->info("Password Set");
 		    } else {
-			    $this->warn("Passwords did not match, setting password aborted");
+		    	if($password == '') {
+				    $this->warn("Passwords may not be blank, setting password aborted");
+			    } else {
+				    $this->warn("Passwords did not match, setting password aborted");
+			    }
 		    }
 	    } else {
 		    $this->warn("No user found for email '" . $this->argument('email') . "'");

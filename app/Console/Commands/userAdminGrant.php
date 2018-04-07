@@ -6,14 +6,14 @@ use App\Models\User;
 use App\Enums\UserTypes;
 use Illuminate\Console\Command;
 
-class GrantAdmin extends Command
+class userAdminGrant extends Command
 {
 	 /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'grant:admin {email}';
+    protected $signature = 'user:admin {email}';
 
     /**
      * The console command description.
