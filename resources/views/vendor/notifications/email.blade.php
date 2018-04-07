@@ -11,10 +11,11 @@
 @endif
 
 {{-- Intro Lines --}}
+<p>
 @foreach ($introLines as $line)
-{{ $line }}
-
+    {!! $line  !!}
 @endforeach
+</p>
 
 {{-- Action Button --}}
 @isset($actionText)
@@ -36,10 +37,11 @@
 @endisset
 
 {{-- Outro Lines --}}
+<p>
 @foreach ($outroLines as $line)
-{{ $line }}
-
+    {!! $line  !!}
 @endforeach
+</p>
 
 {{-- Salutation --}}
 @if (! empty($salutation))

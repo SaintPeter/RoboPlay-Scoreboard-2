@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use View;
 use Session;
+use Password;
+use Carbon\Carbon;
+use App\Notifications\UserCreated;
 use Illuminate\Http\Request;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Response;
@@ -24,7 +27,6 @@ use App\{
 	Models\Wp_invoice_table
 };
 class InvoiceReview extends Controller {
-	use Illuminate\Foundation\Auth\ResetsPasswords;
 
 	/**
 	 * Display a listing of the resource.
@@ -257,7 +259,7 @@ class InvoiceReview extends Controller {
                 $invoice->team_count = intval($this->arr_get($vals[$field_lookup['challenge_complete']],0));
 
                 // Basic Packagae, if it exists
-	            if($field_lookup['challenge_basic']) {
+	            if(array_key_exists('challenge_basic', $field_lookup)) {
 	            	$invoice->team_count += intval($this->arr_get($vals[$field_lookup['challenge_basic']],0));
 	            }
 
@@ -292,7 +294,7 @@ class InvoiceReview extends Controller {
 
         // Sync over users
         if(count($userList)) {
-	    	$this->create_invoice_users($userList);
+	    	$message .= $this->create_invoice_users($userList);
 	    }
 
 		// Only redirect if online
@@ -319,28 +321,32 @@ class InvoiceReview extends Controller {
 
 			$newUserData = [];
 			foreach($wpUserData as $wpUser) {
-				$newUserData[] = new User([
+				$newUserData[] = [
 					'id' => $wpUser->ID,
 					'name' => $wpUser->getName(),
 					'email' => $wpUser->user_email,
-					'roles' => UserTypes::Teacher
-				]);
+					'roles' => UserTypes::Teacher,
+					'password' => '',
+					'tshirt' => '',
+					'remember_token' => '',
+					'created_at' => Carbon::now(),
+					'updated_at' => Carbon::now()
+				];
 			}
+
 			User::insert($newUserData);
 
-			/*foreach($newUserData as $newUser) {
-				// Send Password reset notifications
-				$this->broker()->sendResetLink(['email' => $newUser['email']], function (Message $message) {
-					$message->subject("[RoboPlay Scoreboard] User Account Created");
-					$message->line('An account has been created for you at https://scoreboard.c-stem.edu.')
-						->line('You must set your password to be able to log in.')
-						->action('Set Password', url('admin/password/reset', $this->token))
-						->line('We encourage you to set your password as soon as possible.')
-						->line('If you encounter issues, contact webmaster@scoreboard.c-stem.edu');
-				});
-			}*/
-		}
+			$newUserList = array_pluck($newUserData, 'id');
+			$newUsers = User::whereIn('id', $newUserList)->get();
 
+			foreach($newUsers as $newUser) {
+				// Send Password reset notifications
+				$token = Password::getRepository()->create($newUser);
+				$newUser->notify(new UserCreated($token));
+			}
+			return '<br>' . count($userList) . " New Users Created.";
+		}
+		return '<br>No new users created';
 	}
 
     // Make a flat, local copy of the wordpress schools table

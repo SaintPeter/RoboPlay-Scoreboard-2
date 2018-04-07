@@ -6,7 +6,7 @@ Updated to Laravel Framework 5.5
 ## Server Side Dependencies
 * [Composer](https://getcomposer.org/)
 * MySQL
-* PHP >= 7.0.0
+* PHP >= 7.1.0
    * PDO Extension
    * OpenSSL Extension
    * Mbstring Extension
@@ -14,10 +14,10 @@ Updated to Laravel Framework 5.5
    * XML Extension
 * Apache2 or Nginx
    * mod_rewrite
-* Redis (Forthcoming)
+* Redis 
 
 ## Client Side Dependencies
-* Bootstrap 4 Support
+* Node/npm/Babel
 
 ## Environment Dependencies
 Invoices are synced from a Formidable Install in a joined Wordpress Database.
@@ -31,4 +31,14 @@ Invoices are synced from a Formidable Install in a joined Wordpress Database.
     * Setting up a "local subdomain" for development is recommended.
 1. Setup MySQL Databases and Users
 1. Copy `.env.example` to `.env` and enter missing variables
+    Reccomended:  
+    CACHE_DRIVER=redis  
+    SESSION_DRIVER=redis  
+    QUEUE_DRIVER=redis      
 1. Run `php artisan migrate` to setup DB, or install master DB files. 
+
+## Queue Processing
+Notification e-mails are processed by `artisan queue:work`. For development work you can simply leave this running in the background, so long as you have configured an e-mail server (or the default mailtrap.io).
+
+For production, a process monitor such as `Supervisor` is recommended.
+
