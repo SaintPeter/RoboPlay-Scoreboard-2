@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use DB;
 use Auth;
 use App\Models\ {
 	CompYear,
@@ -84,5 +85,15 @@ class ScoreApiController extends Controller
 			}
 		}
 		return \Response::json($completed);
+	}
+
+	public function team_runs(Request $req, $team_id) {
+		$runs = DB::select(
+			'SELECT team_id, challenge_id, COUNT(*) AS runs, SUM(abort = 1) AS aborts ' .
+			'FROM scoreboard2.score_runs ' .
+			'WHERE team_id = ? ' .
+			'GROUP BY team_id , challenge_id'
+		, [ $team_id ]);
+		return \Response::json($runs);
 	}
 }
