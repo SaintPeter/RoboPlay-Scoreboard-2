@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use URL;
 use Auth;
 use View;
+use Response;
 use App\Helpers\Roles;
 use Illuminate\Http\Request;
+use Uploader;
 
 use App\ {
     Models\Filetype,
@@ -93,7 +95,7 @@ class UploadController extends Controller {
 
 	public function handler($video_id)
 	{
-		$base_dir = public_path() . '/uploads/';
+		$base_dir = public_path() . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR;
 		$file_dir = $base_dir . 'video_' . $video_id;
 
 		$valid_ext = Filetype::pluck('ext')->all();
@@ -178,7 +180,7 @@ class UploadController extends Controller {
 		return redirect()->to(URL::previous());
 	}
 
-	public function rename_file($video_id, $file_id)
+	public function rename_file(Request $req, $video_id, $file_id)
 	{
 	    // Make sure they have permission to rename
 	    $video = Video::findorfail($video_id);
