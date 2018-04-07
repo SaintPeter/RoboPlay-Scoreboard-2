@@ -6,7 +6,7 @@ use App\Models\Invoices;
 use Illuminate\Console\Command;
 use App\Http\Controllers\InvoiceReview;
 
-class ForceSyncExistingTeachers extends Command
+class OneTimeForceSyncExistingTeachers extends Command
 {
     /**
      * The name and signature of the console command.
