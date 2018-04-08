@@ -25,7 +25,7 @@ class AdminController extends Controller
 
 	// List all Users
 	public function list_users() {
-		$users = User::all();
+		$users = User::with('password_resets')->get();
 
 		View::share('title', 'List Users');
 		return View::make('admin.list_users')->with(compact('users'));

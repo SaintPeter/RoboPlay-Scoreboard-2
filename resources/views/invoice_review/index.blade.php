@@ -290,7 +290,18 @@ function division_change(e) {
 
 			<small style="white-space: nowrap">(
 			    <a href="{{ route('switch_user', $invoice->user->id) }}" title="Switch to this User"><i class="fa fa-arrow-circle-right"></i></a>
-			    / <a href="http://c-stem.ucdavis.edu/wp-admin/user-edit.php?user_id={{ $invoice->user_id }}" title="Edit User's Wordpress Profile" target="_blank"><i class="fa fa-pencil"></i></a>
+			    /
+                <a href="http://c-stem.ucdavis.edu/wp-admin/user-edit.php?user_id={{ $invoice->user_id }}"
+                     title="Edit User's Wordpress Profile" target="_blank">
+                    <i class="fa fa-pencil"></i>
+                </a>
+                @if($year >= 2017)
+                    /
+                    <a href="http://c-stem.ucdavis.edu/wp-admin/admin.php?page=formidable-entries&frm_action=edit&id={{ $invoice->remote_id }}"
+                         title="Edit Formidable Invoice" target="_blank">
+                        <i class="fa fa-file-text"></i>
+                    </a>
+                @endif
 			    )</small>
 		</td>
 		<td>

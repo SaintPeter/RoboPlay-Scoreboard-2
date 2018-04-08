@@ -20,6 +20,7 @@
 		<tr>
 			<th>Name</th>
 			<th>E-mail</th>
+            <th>Password</th>
 			<th>User Id</th>
 			<th>Roles</th>
 			<th>Action</th>
@@ -30,6 +31,22 @@
 		<tr>
 			<td>{{ $user->name }}</td>
 			<td>{{ $user->email }}</td>
+            <td>
+                @if($user->password)
+                    @if($user->password_resets)
+                        <span class="text-info">Set, Reset on <br>{{ $user->password_resets->created_at }}</span>
+                    @else
+                        <span class="text-success">Set</span>
+                    @endif
+                @else
+                    @if($user->password_resets)
+                        <span class="text-info">Not Set, Reset on <br>{{ $user->password_resets->created_at }}</span>
+                    @else
+                        <span class="text-danger">Not Set</span>
+                    @endif
+                @endif
+
+            </td>
 			<td>{{ $user->id }}</td>
 			<td>{{ join(',',$userTypes::getAllDescriptions($user->roles)) }}</td>
 			<td>{{ link_to_route('switch_user', 'Switch To', [ $user->id ], [ 'class' => 'btn btn-primary' ]) }}</td>
