@@ -292,9 +292,9 @@ class InvoiceReview extends Controller {
             $message = 'Synced ' . $count . " Invoices, Removed $removed for $year";
         }
 
-        // Sync over users
+        // Create Local Users
         if(count($userList)) {
-	    	$message .= $this->create_invoice_users($userList);
+	    	$message .= '<br>' . $this->create_invoice_users($userList);
 	    }
 
 		// Only redirect if online
@@ -306,17 +306,23 @@ class InvoiceReview extends Controller {
 	}
 
 	public static function create_invoice_users($userList, $skip_notification = false) {
-		$users = User::whereIn('id',$userList)->get();
+		$users = User::whereIn('id',$userList)->with('password_resets')->get();
 
 		// Check to see if the users have already been created
+		$notifyUsers = [];
 		foreach($users as $user) {
 			if($userList[$user->id]) {
+				// If a user exists but has not had a password reset
+				// we still need to notify them
+				if(!$user->password_resets) {
+					$notifyUsers[$user->id] = $user->id;
+				}
 				unset($userList[$user->id]);
 			}
 		}
 
 		// Any users left will need to be created
-		if(count($userList)) {
+		if(count($userList) || count($notifyUsers)) {
 			$wpUserData = Wp_user::whereIn('ID', $userList)->with('usermeta')->get();
 
 			$newUserData = [];
@@ -337,7 +343,7 @@ class InvoiceReview extends Controller {
 			User::insert($newUserData);
 
 			if(!$skip_notification) {
-				$newUserList = array_pluck($newUserData, 'id');
+				$newUserList = array_merge(array_pluck($newUserData, 'id'),$notifyUsers);
 				$newUsers = User::whereIn('id', $newUserList)->get();
 
 				foreach ($newUsers as $newUser) {
@@ -345,10 +351,11 @@ class InvoiceReview extends Controller {
 					$token = Password::getRepository()->create($newUser);
 					$newUser->notify(new UserCreated($token));
 				}
-				return '<br>' . count($userList) . " New Users Created.";
+				return count($userList) . " New Users Created, " . count($notifyUsers) . " Users Notified.";
 			}
+			return count($userList) . " New Users Created, " . count($notifyUsers) . " Unique Users Scanned.";
 		}
-		return '<br>No new users created';
+		return 'No new users created';
 	}
 
     // Make a flat, local copy of the wordpress schools table

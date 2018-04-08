@@ -58,5 +58,9 @@ class User extends Authenticatable
 	public function video_scores() {
 		return $this->hasMany('App\Models\Video_scores', 'judge_id', 'id');
 	}
+
+	public function password_resets() {
+		return $this->hasOne('App\Models\PasswordResets', 'email','email');
+	}
     
 }
