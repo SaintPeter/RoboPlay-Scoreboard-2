@@ -101,8 +101,8 @@
 	<p>Issues?<br />
 		<ol>
 			<li>Read the Teacher Guides above.</li>
-			<li>Technical Problems?<br /> E-mail <a href="mailto:rex.schrader@gmail.com?subject=RoboPlay 2017 - Scoreboard Question&cc=sbmisewich@ucdavis.edu">rex.schrader@gmail.com</a></li>
-			<li>Invoice Problems?<br /> E-mail <a href="mailto:sbmisewich@ucdavis.edu?subject=RoboPlay 2017 - Scoreboard Question">sbmisewich@ucdavis.edu</a></li>
+			<li>Technical Problems?<br /> E-mail <a href="mailto:rex.schrader@gmail.com?subject=RoboPlay 2018 - Scoreboard Question&cc=sbmisewich@ucdavis.edu">rex.schrader@gmail.com</a></li>
+			<li>Invoice Problems?<br /> E-mail <a href="mailto:arlaborete@ucdavis.edu?subject=RoboPlay 2018 - Scoreboard Question">arlaborete@ucdavis.edu</a></li>
 		</ol>
 	</p>
 @endif
