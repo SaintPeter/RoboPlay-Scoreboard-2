@@ -214,6 +214,22 @@ try {
 		$bc->push('Graphs', route('video_scores.manage.graphs', [$year]));
 	});
 	
+// Video Divisions
+	Breadcrumbs::register('vid_divisions.index', function (BreadcrumbsGenerator $bc) {
+		$bc->parent('home');
+		$bc->push('Video Divisions', route('vid_divisions.index'));
+	});
+
+	Breadcrumbs::register('vid_divisions.create', function (BreadcrumbsGenerator $bc) {
+		$bc->parent('vid_divisions.index');
+		$bc->push('Add Video Division', route('vid_divisions.create'));
+	});
+
+	Breadcrumbs::register('vid_divisions.edit', function (BreadcrumbsGenerator $bc, $video_id) {
+		$bc->parent('vid_divisions.index');
+		$bc->push('Edit Video Division', route('vid_divisions.edit', [$video_id]));
+	});
+	
 // Team Management
 	Breadcrumbs::register('teams.index', function (BreadcrumbsGenerator $bc) {
 		$bc->parent('home');

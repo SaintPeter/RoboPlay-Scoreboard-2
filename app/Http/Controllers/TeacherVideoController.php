@@ -287,12 +287,15 @@ class TeacherVideoController extends Controller {
 
 	public function validate_video(Request $req, $video_id) {
 		try {
-			list($status, $results) = $this->check_video_files($video_id);
+			list($status, $results) = $this->check_video_files($video_id, true);
 		} catch (\Exception $e) {
 			return response('Cannot Find Video', 404 );
 		}
 
-		return View::make('teacher.videos.partial.file_status')->with(compact('results'));
+		$include_javascript = true;
+
+		return View::make('teacher.videos.partial.file_status')
+			->with(compact('results', 'video_id', 'status', 'include_javascript'));
 	}
 
 
@@ -302,10 +305,10 @@ class TeacherVideoController extends Controller {
 	 * @param $video_id
 	 * @return (\App\Enums\VideoCheckStatus, array)
 	 */
-	public function check_video_files($video_id) {
+	public static function check_video_files($video_id, $write_results = false) {
 		// Get the video and associated files
-		$video = Video::findOrFail($video_id)->with('files', 'files.filetype')->get();
-		$files = $video->files();
+		$video = Video::with('files', 'files.filetype')->findOrFail($video_id);
+		$files = $video->files;
 
 		$counts = [
 			'video' => 0,
@@ -327,7 +330,7 @@ class TeacherVideoController extends Controller {
 			switch($file->filetype->type) {
 				case 'doc':
 					// Look for scripts
-					if (preg_match("/script/gi", $file->filename)) {
+					if (preg_match_all("/script/i", $file->filename)) {
 						$counts['script']++;
 					}
 					break;
@@ -335,7 +338,7 @@ class TeacherVideoController extends Controller {
 					// Scan the code files
 					try {
 						$codeFile = file_get_contents($file->full_path());
-						if (preg_match("/File|" .
+						if (preg_match_all("/File|" .
 							"Video Title|" .
 							"Scene #|" .
 							"Teacher Advisors|" .
@@ -343,12 +346,12 @@ class TeacherVideoController extends Controller {
 							"School District|" .
 							"Code Written by|" .
 							"Student Names|" .
-							"Purpose/gi",
+							"Purpose/i",
 							$codeFile, $matches)) {
-							if (count($matches) < 7) {
+							if (count($matches[0]) < 5) {
 								$code_results[] = [
 									'filename' => $file->filename,
-									'message' => 'Required header not found'
+									'message' => 'Required header missing or incomplete'
 								];
 							}
 						}
@@ -428,7 +431,7 @@ class TeacherVideoController extends Controller {
 			$results[] = [
 				'status' => 'WARNING',
 				'message' => 'Script File Missing',
-				'note' => 'No document file was found with string "script" in the filename found. ' .
+				'note' => 'No document file was found with string "script" in the filename. ' .
 					'If your video contains no dialog and/or stage direction (such as a music video), a script is not required. ' .
 					'If dialog or stage direction are present, the video will be disqualified.'
 			];
@@ -450,6 +453,11 @@ class TeacherVideoController extends Controller {
 					'files' => $code_results
 				];
 				$fail = true;
+			} else {
+				$results[] = [
+					'status' => 'PASS',
+					'message' => $counts['code'] . ' of ' . $counts['code'] . ' code files have proper headers',
+				];
 			}
 		} else {
 			$results[] = [
@@ -460,12 +468,19 @@ class TeacherVideoController extends Controller {
 		}
 
 		if($fail) {
-			return [VideoCheckStatus::Fail, $results];
+			$status = VideoCheckStatus::Fail;
 		} elseif($warning) {
-			return [VideoCheckStatus::Warnings, $results];
+			$status = VideoCheckStatus::Warnings;
 		} else {
-			return [VideoCheckStatus::Pass, $results];
+			$status = VideoCheckStatus::Pass;
 		}
+
+		if($write_results) {
+			$video->status = $status;
+			$video->save();
+		}
+
+		return [$status, $results];
 	}
 
 

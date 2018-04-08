@@ -10,30 +10,30 @@
 </div>
 @endif
 
-{!! Form::model($vid_division, array('method' => 'PATCH', 'route' => array('vid_divisions.update', $vid_division->id), 'class' => 'col-md-6'))  !!}
+{!! Form::model($vid_division, array('method' => 'PATCH', 'route' => array('vid_divisions.update', $vid_division->id), 'class' => 'col-md-4'))  !!}
 	<div class="form-group">
 		{!! Form::label('name', 'Name:')  !!}
-		{!! Form::text('name')  !!}
+		{!! Form::text('name',null , ['class' => 'form-control'])  !!}
 	</div>
 
 	<div class="form-group">
 		{!! Form::label('description', 'Description:')  !!}
-		{!! Form::text('description')  !!}
+		{!! Form::text('description', null, ['class' => 'form-control'])  !!}
 	</div>
 
 	<div class="form-group">
 		{!! Form::label('display_order', 'Display Order:')  !!}
-		{!! Form::input('number', 'display_order')  !!}
+		{!! Form::input('number', 'display_order', null, ['class' => 'form-control'])  !!}
 	</div>
 
 	<div class="form-group">
 		{!! Form::label('competition_id', 'Video Competition:')  !!}
-		{!! Form::select('competition_id', $competitions, $vid_division->competition_id)  !!}
+		{!! Form::select('competition_id', $competitions, $vid_division->competition_id, ['class' => 'form-control'])  !!}
 	</div>
 
 	<div class="form-group">
 		{!! Form::submit('Update', array('class' => 'btn btn-info'))  !!}
-		{{ link_to_route('vid_divisions.show', 'Cancel', $vid_division->id, array('class' => 'btn')) }}
+		{{ link_to_route('vid_divisions.show', 'Cancel', $vid_division->id, array('class' => 'btn btn-default')) }}
 	</div>
 {!! Form::close()  !!}
 @endsection

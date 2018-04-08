@@ -26,12 +26,30 @@
 
 .clear { clear: both; }
 
+.validation_note {
+    padding-left: 5em;
+    font-style: italic;
+    display: block;
+    color: blueviolet;
+}
+.validation_status {
+    vertical-align: top;
+}
+
+.validation_table td {
+    border-top: 1px solid darkgray;
+}
+
+.validation_table th {
+    border-bottom: 2px solid darkgray;
+}
 @endsection
 
 @section('script')
 <script>
 	var delete_id = 0;
-	$(function() {
+
+    $(function() {
 	    $("#tshirt").on('change', function(e) {
 	        $.post('{{ route('teacher.save_tshirt') }}', { 'tshirt': $(this).val(), '_token': '{{csrf_token()}}' }, function(data) {
                 // Flash the tshirt field to show it has been written
@@ -86,6 +104,15 @@
 				}
 			}
 		});
+
+        $('.validate_video').click(function(e) {
+            e.preventDefault();
+            var video_id = $(this).data('id');
+            $.get('/validate_video/' + video_id, function(data) {
+                $('#validation_results_' + video_id).remove();
+                $('#video_row_' + video_id).after('<tr id="validation_results_' + video_id + '"><td colspan="7">' + data + "</td></tr>");
+            });
+        });
 	});
 </script>
 @endsection
@@ -100,7 +127,7 @@
 				<tr>
 					<th>County/District/School</th>
 					<th>Teams (Paid For)</th>
-					<th>Status</th>
+					<th>Validation</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -203,7 +230,7 @@
 				<th>YouTube</th>
 				<th>Custom Parts</th>
 				<th>Files</th>
-				<th>Uploads</th>
+				<th>Status</th>
 				<th class="narrow">Actions</th>
 			</tr>
 		</thead>
@@ -211,34 +238,30 @@
 		<tbody>
 			@if ($videos->count())
 				@foreach ($videos as $video)
-					<tr>
+					<tr id="video_row_{{ $video->id }}">
 						<td>{{{ $video->name }}}<br />{{{ $video->vid_division->longname() }}}</td>
 						<td>{{ join('<br />', $video->student_list()) }}</td>
 						<td><a href="http://youtube.com/watch?v={{{ $video->yt_code }}}" target="_new">YouTube</a></td>
 						<td>{{{ $video->has_custom==1 ? 'Yes' : 'No' }}}</td>
 						<td>{{ count($video->files) }}</td>
-						<td class="{{ ($video->has_vid==1 && $video->has_code==1) ? 'confirmed' : 'unconfirmed' }}">
-							@if($video->has_vid==1)
-                                <span class="btn btn-success btn-xs btn-margin">Has Video</span>
-                            @else
-                                <span class="btn btn-danger btn-xs btn-margin">No Video</span>
-                            @endif
-                            <br>
-							@if($video->has_code==1)
-                                <span class="btn btn-info btn-xs btn-margin">Has Code</span>
-                            @else
-                                <span class="btn btn-danger btn-xs btn-margin">No Code</span>
-                            @endif
+						<td class="{{ ($video->status==VideoStatus::Pass || $video->status == VideoStatus::Warnings) ? 'confirmed' : 'unconfirmed'  }} text-center">
+							<span id="video_result_{{ $video->id }}" class="{{ VideoStatus::toClasses($video->status) }}">
+                                {{ VideoStatus::getDescription($video->status) }}
+                            </span>
 						</td>
 						<td>
-							{{ link_to_route('teacher.videos.show', 'Preview', array($video->id), array('class' => 'btn btn-primary')) }}
+							{{ link_to_route('teacher.videos.show', 'Preview', [$video->id], ['class' => 'btn btn-sm btn-primary']) }}
 							&nbsp;
-		                    {{ link_to_route('teacher.videos.edit', 'Edit', array($video->id), array('class' => 'btn btn-info')) }}
+		                    {{ link_to_route('teacher.videos.edit', 'Edit', [$video->id], ['class' => 'btn btn-sm btn-info']) }}
 		                    &nbsp;
-		                    {{ link_to_route('uploader.index', 'Upload', array($video->id), array('class' => 'btn btn-success')) }}
+		                    {{ link_to_route('uploader.index', 'Upload', [$video->id], ['class' => 'btn btn-sm btn-success']) }}
 		                    &nbsp;
-		                    {!! Form::open(array('method' => 'DELETE', 'route' => array('teacher.videos.destroy', $video->id), 'id' => 'video_delete_form_' . $video->id, 'style' => 'display: inline-block;'))  !!}
-		                        {!! Form::submit('Delete', array('class' => 'btn btn-danger video_delete_button', 'delete_id' => $video->id))  !!}
+                            <button data-id="{{ $video->id }}" class="validate_video btn btn-sm btn-warning" title="Validate">
+                                Validate
+                            </button>
+
+		                    {!! Form::open(['method' => 'DELETE', 'route' => ['teacher.videos.destroy', $video->id], 'id' => 'video_delete_form_' . $video->id, 'style' => 'display: inline-block;'])  !!}
+		                        {!! Form::submit('Delete', ['class' => 'btn btn-sm btn-danger video_delete_button', 'delete_id' => $video->id])  !!}
 		                    {!! Form::close()  !!}
 	                	</td>
 					</tr>

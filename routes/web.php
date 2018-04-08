@@ -384,6 +384,7 @@ Route::middleware([ 'auth' ])->group( function() {
 
         Route::post('teacher/save_tshirt', [ 'as' => 'teacher.save_tshirt', 'uses' => 'TeacherController@save_tshirt' ]);
 
+        Route::get('validate_video/{video_id}', ['as' => 'validate_video', 'uses' => 'TeacherVideoController@validate_video']);
 
         Route::resource('students', 'StudentsController');
     });

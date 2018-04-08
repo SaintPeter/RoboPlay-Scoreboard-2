@@ -32,4 +32,20 @@ final class VideoCheckStatus extends Enum
                 return self::getKey($value);
         }
     }
+
+	public static function toClasses(int $value): string
+	{
+		switch ($value) {
+			case self::Untested:
+				return "text-default";
+			case self::Pass:
+				return "text-success";
+			case self::Warnings:
+				return "text-warning";
+			case self::Fail:
+				return "text-danger";
+			default:
+				return "text-default";
+		}
+	}
 }

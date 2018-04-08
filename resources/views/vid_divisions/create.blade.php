@@ -10,25 +10,25 @@
 </div>
 @endif
 
-{!! Form::open(array('route' => 'vid_divisions.store', 'class' => 'col-md-8'))  !!}
+{!! Form::open(array('route' => 'vid_divisions.store', 'class' => 'col-md-4'))  !!}
 	<div class="form-group">
 		{!! Form::label('name', 'Name:')  !!}
-		{!! Form::text('name')  !!}
+		{!! Form::text('name',null, ['class' => 'form-control col-md-4'])  !!}
 	</div>
 
 	<div class="form-group">
 		{!! Form::label('description', 'Description:')  !!}
-		{!! Form::text('description')  !!}
+		{!! Form::text('description',null, ['class' => 'form-control col-md-4'])  !!}
 	</div>
 
 	<div class="form-group">
 		{!! Form::label('display_order', 'Display Order:')  !!}
-		{!! Form::input('number', 'display_order')  !!}
+		{!! Form::input('number', 'display_order', null, ['class' => 'form-control col-md-4'])  !!}
 	</div>
 
 	<div class="form-group">
 		{!! Form::label('competition_id', 'Video Competition:')  !!}
-		{!! Form::select('competition_id', $competitions)  !!}
+		{!! Form::select('competition_id', $competitions, null, ['class' => 'form-control col-md-4'])  !!}
 	</div>
 
 	<div class="form-group">

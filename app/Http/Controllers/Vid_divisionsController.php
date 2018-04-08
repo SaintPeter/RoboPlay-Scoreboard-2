@@ -90,7 +90,7 @@ class Vid_divisionsController extends Controller {
 		View::share('title', 'Show Division');
 		$vid_division = $this->vid_division->findOrFail($id);
 
-		return View::make('vid_divisions.show', compact('vid_division'));
+		return View::make('vid_divisions.index', compact('vid_division'));
 	}
 
 	/**
