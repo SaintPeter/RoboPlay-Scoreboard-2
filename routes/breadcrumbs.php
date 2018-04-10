@@ -103,7 +103,16 @@ try {
 		$bc->parent('home');
 		$bc->push('Data Export', route('data_export'));
 	});
-	
+
+	Breadcrumbs::register('create_user', function (BreadcrumbsGenerator $bc) {
+		$bc->parent('list_users');
+		$bc->push('Add User', route('create_user'));
+	});
+
+	Breadcrumbs::register('edit_user', function (BreadcrumbsGenerator $bc, $user_id) {
+		$bc->parent('list_users');
+		$bc->push('Edit User', route('edit_user', [$user_id]));
+	});
 
 // Display Controller
 	Breadcrumbs::register('display.teamscore', function (BreadcrumbsGenerator $bc) {

@@ -53,6 +53,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public static $rules = [
+        'name' => 'required',
+	    'email' => 'required|email|unique:users,email',
+	    'password' => 'confirmed|min:6'
+    ];
     
     // Relationships
 	public function video_scores() {

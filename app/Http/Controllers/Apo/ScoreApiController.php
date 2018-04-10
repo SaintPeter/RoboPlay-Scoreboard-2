@@ -32,15 +32,18 @@ class ScoreApiController extends Controller
 				->first();
 
 			return $compyear->divisions->first()->challenges->map(function($challenge) {
-					return $challenge
-						->only([ 'id',
-								 'display_name',
-								 'display_order',
-								 'rules',
-								 'points',
-							     'randoms',
-								 'score_elements',
-								 'random_lists']);
+					$display_order = $challenge->pivot->display_order;
+
+					return ['display_order' => $display_order] +
+						$challenge->only([
+							'id',
+							 'display_name',
+							 'rules',
+							 'points',
+						     'randoms',
+							 'score_elements',
+							 'random_lists'
+						]);
 				});
 
 		});
