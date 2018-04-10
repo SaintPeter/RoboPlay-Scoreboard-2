@@ -15,6 +15,7 @@
 @inject('userTypes',"App\Enums\UserTypes")
 
 @section('main')
+{{ link_to_route('add_user',"Add User", null,[ 'class' => 'btn btn-primary pull-right' ]) }}
 <table class="table table-striped table-bordered" id="user_table">
 	<thead>
 		<tr>
@@ -49,7 +50,11 @@
             </td>
 			<td>{{ $user->id }}</td>
 			<td>{{ join(',',$userTypes::getAllDescriptions($user->roles)) }}</td>
-			<td>{{ link_to_route('switch_user', 'Switch To', [ $user->id ], [ 'class' => 'btn btn-primary' ]) }}</td>
+			<td>
+                <a href="{{ route('switch_user', [ $user->id ])}}" class="btn btn-primary" title="Switch to User">
+                    <i class="fa fa-sign-out"></i>
+                </a>
+            </td>
 		</tr>
 		@endforeach
 	</tbody>

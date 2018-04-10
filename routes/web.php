@@ -192,6 +192,11 @@ Route::middleware([ 'auth' ])->group( function() {
         // Admin Stuff
 	    Route::get('list_users',							[ 'as' => 'list_users', 	'uses' => 'AdminController@list_users']);
 	    Route::get('switch_user/{user_id}',					[ 'as' => 'switch_user',  	'uses' => 'AdminController@switch_user']);
+	    Route::get('admin/create_user',                     [ 'as' => 'create_user',    'uses' => 'AdminController@create_user']);
+	    Route::post('admin/store_user',                     [ 'as' => 'store_user',     'uses' => 'AdminController@store_user']);
+	    Route::get('admin/edit_user/{$user_id}',            [ 'as' => 'edit_user',      'uses' => 'AdminController@edit_user']);
+	    Route::post('admin/update_user',                    [ 'as' => 'update_user',    'uses' => 'AdminController@update_user']);
+	    Route::get('admin/delete_user/{$user_id}',          [ 'as' => 'delete_user',    'uses' => 'AdminController@delete_user']);
 
         // Invoice Review
         Route::get('invoice_review/toggle_video/{id?}',     [ 'as' => 'invoice_review.toggle_video', 'uses' => 'InvoiceReview@toggle_video' ]);

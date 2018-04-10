@@ -12,6 +12,15 @@ final class UserTypes extends Enum
     const Judge = 4;
     const Admin = 8;
     const SuperAdmin = 256;
+    
+    public static $RoleList = [
+        self::NoRoles    =>  'No Roles',
+		self::Guest      =>  'Guest',
+		self::Teacher    =>  'Teacher',
+		self::Judge      =>  'Judge',
+		self::Admin      =>  'Admin',
+		self::SuperAdmin =>  'SuperAdmin'
+    ];
 
     /**
      * Get the description for an enum value
