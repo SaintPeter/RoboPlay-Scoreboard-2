@@ -28,7 +28,8 @@
 
 @section('main')
 {!! Form::model($team, array('method' => 'PATCH', 'route' => array('teacher.teams.update', $team->id), 'role'=>"form", 'class' => 'col-md-8'))  !!}
-		<div class="form-group">
+    {!! Form::hidden('invoice_id', $invoice->id) !!}
+        <div class="form-group">
 			{!! Form::label('name', 'Team Name:')  !!}
 			{!! Form::text('name',$team->name, array('class'=>'form-control col-md-4'))  !!}
 		</div>

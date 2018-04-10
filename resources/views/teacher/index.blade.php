@@ -194,7 +194,7 @@
 			@foreach ($teams as $team)
 				<tr>
 					<td>{{{ $team->name }}}</td>
-					<td>{{ join('<br />', $team->student_list()) }}</td>
+					<td>{!! join('<br />', $team->student_list()) !!}</td>
 					<td>{{ $team->division->longname() }}</td>
 	                <td>{{ link_to_route('teacher.teams.edit', 'Edit', array($team->id), array('class' => 'btn btn-info')) }}
 	                	&nbsp;
@@ -240,7 +240,7 @@
 				@foreach ($videos as $video)
 					<tr id="video_row_{{ $video->id }}">
 						<td>{{{ $video->name }}}<br />{{{ $video->vid_division->longname() }}}</td>
-						<td>{{ join('<br />', $video->student_list()) }}</td>
+						<td>{!!  join('<br />', $video->student_list()) !!}</td>
 						<td><a href="http://youtube.com/watch?v={{{ $video->yt_code }}}" target="_new">YouTube</a></td>
 						<td>{{{ $video->has_custom==1 ? 'Yes' : 'No' }}}</td>
 						<td>{{ count($video->files) }}</td>

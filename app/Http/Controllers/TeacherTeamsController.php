@@ -150,6 +150,11 @@ class TeacherTeamsController extends Controller {
 									}, 'divisions.competition'])
 							->first();
 
+		$invoice = Invoices::where('year', $comp_year->year)
+			->where('user_id', Auth::user()->id)
+			->with('school')
+			->first();
+
         $division_list[0] = "- Select Division -";
         foreach($comp_year->divisions as $division) {
             $division_list[$division->competition->name][$division->id] = $division->name;
@@ -174,8 +179,9 @@ class TeacherTeamsController extends Controller {
 
 		$divisions = Division::longname_array();
 
-		return View::make('teacher.teams.edit', compact('team','students', 'division_list', 'ethnicity_list', 'index'))
-				   ->with('divisions', $divisions);
+		return View::make('teacher.teams.edit')
+					->with(compact('team','students', 'division_list', 'ethnicity_list', 'index', 'invoice'))
+				    ->with('divisions', $divisions);
 	}
 
 	/**
