@@ -15,7 +15,7 @@
 @inject('userTypes',"App\Enums\UserTypes")
 
 @section('main')
-{{ link_to_route('add_user',"Add User", null,[ 'class' => 'btn btn-primary pull-right' ]) }}
+{{ link_to_route('create_user',"Add User", null,[ 'class' => 'btn btn-primary pull-right' ]) }}
 <table class="table table-striped table-bordered" id="user_table">
 	<thead>
 		<tr>
