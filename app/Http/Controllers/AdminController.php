@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use DB;
 use Auth;
+use Password;
 use Validator;
 use App\Helpers\Roles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
+use App\Notifications\AdminResetPassword;
 
 use App\Models\ {
 	User
@@ -80,23 +82,67 @@ class AdminController extends Controller
 				$token = Password::getRepository()->create($user);
 				$user->notify(new UserCreated($token));
 			}
-			return redirect('list_users');
+			return redirect()->route('list_users');
 
 		} else {
-			return redirect('create_user')->withErrors($userErrors)->withInput($input);
+			return redirect()->route('create_user')->withErrors($userErrors)->withInput($input);
 		}
 	}
 
-	public function edit_user(Request $req, User $user) {
+	public function edit_user(User $user) {
+		View::share('title', 'Edit User');
 
+		return View::make('admin.user.edit')
+			->with(['tshirt_sizes' => $this->tshirt_sizes])
+			->with(compact('user'));
 	}
 
-	public function update_user(Request $req) {
+	public function update_user(User $user) {
+		$input = request()->except(['roles']);
+		$roles = request()->input('roles');
+
+		$trigger_notification = false;
+		if($user->email != request('email')) {
+			$trigger_notification = true;
+		}
+
+		$newRole = 0;
+		foreach($roles as $role) {
+			$newRole |= $role;
+		}
+		$input['roles'] = $newRole;
+
+		$rules = User::$rules;
+		$rules['email'] .= "," . $user->id;
+
+		$userErrors = Validator::make($input, $rules);
+
+		if ($userErrors->passes()) {
+			$user->update($input);
+
+			$message = [];
+			if($trigger_notification == true) {
+				$token = Password::getRepository()->create($user);
+				$user->notify(new AdminResetPassword($token));
+				$message = [ 'message', "Password Reset sent to {$user->name} &lt;{$user->email}&gt;" ];
+			}
+			return redirect()->route('list_users',[ $user ])->with($message);
+
+		} else {
+			return redirect()->route('edit_user', [ $user ])->withErrors($userErrors)->withInput($input);
+		}
 
 	}
 
 	public function delete_user(Request $req, $user_id) {
 
+	}
+
+	public function reset_password(User $user) {
+		$token = Password::getRepository()->create($user);
+		$user->notify(new AdminResetPassword($token));
+		return redirect()->route('list_users')
+			->with('message', "Password Reset sent to {$user->name} &lt;{$user->email}&gt;");
 	}
 
 }

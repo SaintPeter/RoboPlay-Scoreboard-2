@@ -55,11 +55,11 @@ class User extends Authenticatable
     ];
 
     public static $rules = [
-        'name' => 'required',
+        'name' => 'required|min:6',
 	    'email' => 'required|email|unique:users,email',
 	    'password' => 'confirmed|min:6'
     ];
-    
+
     // Relationships
 	public function video_scores() {
 		return $this->hasMany('App\Models\Video_scores', 'judge_id', 'id');

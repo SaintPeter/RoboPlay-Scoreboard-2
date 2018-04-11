@@ -51,7 +51,13 @@
 			<td>{{ $user->id }}</td>
 			<td>{{ join(',',$userTypes::getAllDescriptions($user->roles)) }}</td>
 			<td>
-                <a href="{{ route('switch_user', [ $user->id ])}}" class="btn btn-primary" title="Switch to User">
+                <a href="{{ route('edit_user', [ $user->id ])}}" class="btn btn-sm btn-success" title="Switch to User">
+                    <i class="fa fa-edit"></i>
+                </a>
+                <a href="{{ route('admin_reset_password', [ $user->id ])}}" class="btn btn-sm btn-info" title="Send Password Reset E-mail">
+                    <i class="fa fa-envelope"></i>
+                </a>
+                <a href="{{ route('switch_user', [ $user->id ])}}" class="btn btn-sm btn-primary" title="Switch to User">
                     <i class="fa fa-sign-out"></i>
                 </a>
             </td>

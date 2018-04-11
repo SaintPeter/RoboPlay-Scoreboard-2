@@ -19,7 +19,6 @@
     .indent {
         margin-left: 20px;
     }
-
 @endsection
 
 @section('main')
@@ -82,4 +81,13 @@
 
 
 {!! Form::close() !!}
+
+@if ($errors->any())
+    <div class="col-md-4">
+        <h3>Validation Errors</h3>
+        <ul>
+            {!! implode($errors->all('<li class="error">:message</li>')) !!}
+        </ul>
+    </div>
+@endif
 @endsection
