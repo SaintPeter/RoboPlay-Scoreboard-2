@@ -19,11 +19,14 @@ class Score_elementsController extends Controller {
 	 * @var Score_element
 	 */
 	protected $score_element;
-	public $input_types = [ 'noyes' => 'No/Yes',
-							'yesno' => 'Yes/No',
-							'low_slider' => 'Low->High Slider',
-							'high_slider' => 'High->Low Slider',
-							'score_slider' => 'Score Slider' ];
+	public $input_types = [
+		'noyes' => 'No/Yes',
+		'yesno' => 'Yes/No',
+		'low_slider' => 'Low->High Slider',
+		'high_slider' => 'High->Low Slider',
+		'score_slider' => 'Score Slider',
+		'timer' => 'Timer'
+	];
 
 	public function __construct(Score_element $score_element)
 	{
@@ -171,21 +174,24 @@ class Score_elementsController extends Controller {
 	 */
 	public function update(Request $req, $id)
 	{
-		$score_map = $req->input('score_map');
+		if($req->has_score_map) {
+			$score_map = $req->input('score_map');
 
-		// Sort by 'i' value
-		usort($score_map,function($a, $b) {
-			return $a['i'] <=> $b['i'];
-		});
+			// Sort by 'i' value
+			usort($score_map, function ($a, $b) {
+				return $a['i'] <=> $b['i'];
+			});
 
-		// Remove Duplicate 'i' values
-		for($i = 0; $i < count($score_map) - 2; $i++) {
-			if($score_map[$i]['i'] == $score_map[$i + 1]['i']) {
-				array_splice($score_map, $i,1);
+			// Remove Duplicate 'i' values
+			for ($i = 0; $i < count($score_map) - 2; $i++) {
+				if ($score_map[$i]['i'] == $score_map[$i + 1]['i']) {
+					array_splice($score_map, $i, 1);
+				}
 			}
+			$req->merge(['score_map' => $score_map]);
+		} else {
+			$req->merge(['score_map' => [] ]);
 		}
-
-		$req->merge(['score_map' => $score_map]);
 
 		$validation = Validator::make($req->all(), Score_element::$rules);
 		$validation->sometimes('score_map.*.i', 'required|integer', function($input) {

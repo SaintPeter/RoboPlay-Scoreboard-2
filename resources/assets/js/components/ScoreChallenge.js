@@ -8,6 +8,7 @@ import RandomListPopup from "./Popups/RandomListPopup";
 import UIButton from "./UIButton";
 import YesNo from "./ScoreElements/YesNo";
 import Slider from "./ScoreElements/Slider";
+import Timer from "./ScoreElements/Timer";
 import ScoreElement from "./ScoreElements/ScoreElement";
 import SubmitConfirmPopup from "./Popups/SubmitConfirmPopup";
 import AbortConfirmPopup from "./Popups/AbortConfirmPopup";
@@ -107,6 +108,8 @@ class ScoreChallengeApp extends Component {
                 return <Slider type="high"  compInfo={this.state} key={item.id} {...item} />;
             case 'score_slider':
                 return <Slider type="score"  compInfo={this.state} key={item.id} {...item} />;
+            case 'timer':
+                return <Timer type="timer" compInfo={this.state} key={item.id} {...item} />;
         }
         return <li>Unknown Type: {type}</li>;
     };
