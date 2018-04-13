@@ -59,13 +59,16 @@ class TeacherController extends Controller {
 			                             "E-mail us this error message and your wordpress username at <a href='mailto:cday@c-stem.ucdavis.edu?subject=C-STEM Day $year - User Data Error'>cday@c-stem.ucdavis.edu</a> for support."]);
 		}
 
-		$tshirt_sizes = [ 0 => '- Pick T-shirt Size -',
-                         'XS' => 'XS - Extra Small',
-                         'S' => 'S - Small',
-                         'M' => 'M - Medium',
-                         'L' => 'L - Large',
-                         'XL' => 'XL - Extra Large',
-                         'XXL' => 'XXL - Extra, Extra Large' ];
+		$tshirt_sizes = [
+			0 => '- Pick T-shirt Size -',
+	        'XS' => 'XS - Extra Small',
+	        'S' => 'S - Small',
+	        'M' => 'M - Medium',
+	        'L' => 'L - Large',
+	        'XL' => 'XL - Extra Large',
+	        'XXL' => 'XXL - Extra, Extra Large',
+			'3XL' => '3XL - Triple Extra Large'
+		];
 
 		$school = $invoice->school;
 		$paid = $invoice->paid==1 ? 'Paid' : 'Unpaid';

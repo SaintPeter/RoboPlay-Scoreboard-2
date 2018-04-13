@@ -50,7 +50,7 @@
 		    {!! Form::select("students[$index][math_level_id]", $math_level::getList(), $student->math_level_id, [ 'class' => 'form-control' ] )  !!}
 		</div>
 		<div class="form-group">
-			{!! Form::select("students[$index][tshirt]", [ 0 => '- Pick T-shirt Size -', 'XS' => 'XS - Extra Small', 'S' => 'S - Small', 'M' => 'M - Medium', 'L' => 'L - Large', 'XL' => 'XL - Extra Large', 'XXL' => 'XXL - Extra, Extra Large' ], $student->tshirt, [ 'class' => 'form-control' ] )  !!}
+			{!! Form::select("students[$index][tshirt]", [ 0 => '- Pick T-shirt Size -', 'XS' => 'XS - Extra Small', 'S' => 'S - Small', 'M' => 'M - Medium', 'L' => 'L - Large', 'XL' => 'XL - Extra Large', 'XXL' => 'XXL - Extra, Extra Large', '3XL' => '3XL - Triple Extra Large' ], $student->tshirt, [ 'class' => 'form-control' ] )  !!}
 		</div>
 	</div>
 	<div class="col-md-1 text-center">

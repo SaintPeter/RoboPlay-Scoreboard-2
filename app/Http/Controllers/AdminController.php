@@ -24,7 +24,8 @@ class AdminController extends Controller
 		'M' => 'M - Medium',
 		'L' => 'L - Large',
 		'XL' => 'XL - Extra Large',
-		'XXL' => 'XXL - Extra, Extra Large'
+		'XXL' => 'XXL - Extra, Extra Large',
+		'3XL' => '3XL - Triple Extra Large'
 	];
 
 	// Switch to a different user
