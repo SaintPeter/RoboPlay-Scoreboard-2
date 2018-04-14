@@ -42,7 +42,7 @@ class Rubric extends \Eloquent {
 
 	public function vid_score_type()
 	{
-		return $this->hasOne('App\Models\Vid_score_type');
+		return $this->belongsTo('App\Models\Vid_score_type','vid_score_type_id', 'id');
 	}
 
 	public function competition() {

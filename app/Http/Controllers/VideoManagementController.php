@@ -16,13 +16,8 @@ use App\Enums\ {
 	UserTypes
 };
 
-use App\Models\ {
-    User,
-    Video,
-    Video_comment,
-    Video_scores,
-    Vid_score_type,
-    Vid_competition
+use App\Models\{
+	Rubric, User, Video, Video_comment, Video_scores, Vid_score_type, Vid_competition
 };
 
 class VideoManagementController extends Controller {
@@ -68,9 +63,9 @@ class VideoManagementController extends Controller {
 
 		// Videos with score count
 		if($year) {
-			$videos = Video::with('scores')->where(DB::raw("year(created_at)"), $year)->get();
+			$videos = Video::with('scores', 'vid_division', 'vid_division.competition')->where(DB::raw("year(created_at)"), $year)->get();
 		} else {
-			$videos = Video::with('scores')->get();
+			$videos = Video::with('scores', 'vid_division', 'vid_division.competition')->get();
 		}
 
 		foreach($videos as $video) {
@@ -514,4 +509,38 @@ class VideoManagementController extends Controller {
 
 	    return View::make('video_scores.manage.graphs', compact('year'));
 	}
+
+	public function rubric($competition_id = null, $edit = null) {
+		View::share('title', 'Rubric Management');
+
+		$vid_competitions = [ '0' => '-- Select Competition --']
+			+ Vid_competition::orderBy('id', 'desc')->pluck('name', 'id')->all();
+
+		$rubric = [];
+		if($competition_id) {
+			$rubric = Rubric::where('vid_competition_id', $competition_id)
+				->with('vid_score_type')
+				->get();
+		}
+
+		return View::make('admin.rubric.index')
+			->with(compact('competition_id','edit', 'vid_competitions','rubric'));
+	}
+
+	public function rubric_view($competition_id) {
+		$rubric = Rubric::where('vid_competition_id', $competition_id)
+			->with('vid_score_type')
+			->get();
+
+		return View::make('admin.rubric.partial.view',compact('rubric', 'competition_id'));
+	}
+
+	public function rubric_edit($competition_id) {
+		$rubric = Rubric::where('vid_competition_id', $competition_id)
+			->with('vid_score_type')
+			->get();
+
+		return View::make('admin.rubric.partial.edit',compact('rubric', 'competition_id'));
+	}
+
 }

@@ -283,6 +283,14 @@ Route::middleware([ 'auth' ])->group( function() {
         Route::get('schedule', [ 'as' => 'schedule.index', 'uses' => 'ScheduleController@index' ]);
         Route::post('schedule', [ 'as' => 'schedule.update', 'uses' => 'ScheduleController@update' ]);
 
+        // Rubric Editing
+	    Route::get('rubric',                         [ 'as' => 'rubric.index', 'uses' => 'VideoManagementController@rubric']);
+	    Route::get('rubric/{competition_id}',        [ 'as' => 'rubric.view', 'uses' => 'VideoManagementController@rubric']);
+	    Route::get('rubric/{competition_id}/{edit)', [ 'as' => 'rubric.edit', 'uses' => 'VideoManagementController@rubric']);
+
+	    Route::get('ajax/rubric_view/{competition_id?}',   [ 'as' => 'ajax.rubric.view', 'uses' => 'VideoManagementController@rubric_view']);
+	    Route::get('ajax/rubric_edit/{competition_id?}',   [ 'as' => 'ajax.rubric.edit', 'uses' => 'VideoManagementController@rubric_edit']);
+
     });
 
     /* -----------------------------------------------------------------------------

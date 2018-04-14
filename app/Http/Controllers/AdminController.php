@@ -108,6 +108,7 @@ class AdminController extends Controller
 		// Break the 'details' into rows for each user
 		$userRows = preg_split('/[\r\n]+/', $req->input('details',[]));
 		$input['users'] = array_map(function($row) {
+			// https://stackoverflow.com/a/1530902/1420506 for regex
 			$splitRow = preg_split('/\s+(?=\S*+$)/', trim($row));
 			if(count($splitRow) == 2) {
 				return [

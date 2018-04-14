@@ -119,6 +119,11 @@ try {
 		$bc->push('Mass Add Users', route('create_users'));
 	});
 
+	Breadcrumbs::register('rubric.index', function (BreadcrumbsGenerator $bc) {
+		$bc->parent('home');
+		$bc->push('Rubric Management', route('rubric.index'));
+	});
+
 // Display Controller
 	Breadcrumbs::register('display.teamscore', function (BreadcrumbsGenerator $bc) {
 		$bc->parent('home');
