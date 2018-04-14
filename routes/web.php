@@ -197,6 +197,8 @@ Route::middleware([ 'auth' ])->group( function() {
 	    Route::get('admin/edit_user/{user}',                [ 'as' => 'edit_user',      'uses' => 'AdminController@edit_user']);
 	    Route::post('admin/update_user/{user}',             [ 'as' => 'update_user',    'uses' => 'AdminController@update_user']);
 	    Route::get('admin/delete_user/{user_id}',           [ 'as' => 'delete_user',    'uses' => 'AdminController@delete_user']);
+	    Route::get('admin/create_users',                    [ 'as' => 'create_users',   'uses' => 'AdminController@create_users']);
+	    Route::post('admin/store_users',                    [ 'as' => 'store_users',    'uses' => 'AdminController@store_users']);;
 
 	    Route::get('admin/reset_password/{user}',           [ 'as' => 'admin_reset_password',    'uses' => 'AdminController@reset_password']);
 

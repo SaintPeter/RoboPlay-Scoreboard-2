@@ -114,6 +114,11 @@ try {
 		$bc->push('Edit User', route('edit_user', [$user_id]));
 	});
 
+	Breadcrumbs::register('create_users', function (BreadcrumbsGenerator $bc) {
+		$bc->parent('list_users');
+		$bc->push('Mass Add Users', route('create_users'));
+	});
+
 // Display Controller
 	Breadcrumbs::register('display.teamscore', function (BreadcrumbsGenerator $bc) {
 		$bc->parent('home');
