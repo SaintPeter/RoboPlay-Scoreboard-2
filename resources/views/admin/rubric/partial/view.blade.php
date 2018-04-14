@@ -5,10 +5,12 @@ $section = 0;
 @foreach($rubric as $rubric_row)
     @if($rubric_row->vid_score_type->id != $section)
         <div class="rubric_section_header row">
-            <div class="col-md-2">{{ $rubric_row->vid_score_type->display_name }}</div>
+            <div class="section_title">{{ $rubric_row->vid_score_type->display_name }}</div>
+            <div class="number_holder">
             @for($i=0;$i<5;$i++)
-                <div class="col-md-2 text-center">{{ $i }}</div>
+                <div class="text-center">{{ $i }}</div>
             @endfor
+            </div>
         </div>
 
         @php

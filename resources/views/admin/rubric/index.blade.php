@@ -33,10 +33,25 @@
 @section('style')
 <style>
     .rubric_section_header {
+        display: flex;
         color: white;
         background-color: #428BCA;
         font-weight: bold;
         border-radius: 5px;
+        line-height: 1.5em;
+    }
+
+    .section_title {
+        width: 20%;
+        padding-left: 10px;
+    }
+
+    .number_holder {
+        display: flex;
+        width: 80%;
+    }
+    .number_holder div {
+        width: 20%;
     }
 
     .rubric_row {
@@ -46,12 +61,14 @@
         border-top: 2px solid darkgrey;
         padding: 5px;
     }
-
+    .rubric_section_header + .rubric_row {
+        border: none;
+    }
     .rubric_row div {
         width: 16.66%;
         border: 1px solid darkgrey;
-        bottom: 0px;
-        padding: 2px;
+        bottom: 0;
+        padding: 5px;
         margin: 2px;
     }
 
@@ -77,9 +94,9 @@
 <div id="rubric_container">
 @if($competition_id)
     @if($edit)
-        @include('admin.rubric.partial.view', compact('rubric'))
-    @else
         @include('admin.rubric.partial.edit', compact('rubric'))
+    @else
+        @include('admin.rubric.partial.view', compact('rubric'))
     @endif
 @endif
 </div>

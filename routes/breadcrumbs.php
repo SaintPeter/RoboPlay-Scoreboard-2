@@ -124,6 +124,11 @@ try {
 		$bc->push('Rubric Management', route('rubric.index'));
 	});
 
+	Breadcrumbs::register('rubric.view', function (BreadcrumbsGenerator $bc, $competition_id) {
+		$bc->parent('rubric.index');
+		$bc->push('View Rubric', route('rubric.view', [$competition_id]));
+	});
+
 // Display Controller
 	Breadcrumbs::register('display.teamscore', function (BreadcrumbsGenerator $bc) {
 		$bc->parent('home');
