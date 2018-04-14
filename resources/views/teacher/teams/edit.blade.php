@@ -5,6 +5,7 @@
 @endsection
 
 @section('style')
+<style>
 /* Fix margins for nested inline forms */
 .form-inline .form-group{
 	margin-left: 0;
@@ -22,6 +23,7 @@
 	height: 100%;
 	float: none;
 }
+</style>
 @endsection
 
 @include('students.partial.js', [ 'type' => 'teams' ])

@@ -3,9 +3,11 @@
 @section('header', 'Score')
 
 @section('style')
+<style>
 	.ui-li-static {
 		white-space: normal; !important
 	}
+</style>
 @endsection
 
 @section('main')

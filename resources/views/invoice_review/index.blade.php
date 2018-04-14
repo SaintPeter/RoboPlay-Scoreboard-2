@@ -243,6 +243,7 @@ function division_change(e) {
 @endsection
 
 @section('style')
+<style>
     .video_section {
         display: none;
     }
@@ -252,6 +253,7 @@ function division_change(e) {
     .team_section {
         display: none;
     }
+</style>
 @endsection
 
 @section('main')

@@ -112,6 +112,7 @@
 @endsection
 
 @section('style')
+<style>
 	.bold_row > td {
 		font-weight: bold;
 	}
@@ -150,6 +151,7 @@
 	    clear: both;
 	}
 
+</style>
 @endsection
 
 <?php View::share( [ 'skip_title' => true, 'skip_breadcrumbs' => true ] ); ?>

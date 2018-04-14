@@ -31,6 +31,7 @@
 @endsection
 
 @section('style')
+<style>
     .rubric_section_header {
         color: white;
         background-color: #428BCA;
@@ -59,6 +60,7 @@
         border: none;
         padding-right: 10px;
     }
+</style>
 @endsection
 
 

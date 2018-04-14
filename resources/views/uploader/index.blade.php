@@ -99,9 +99,11 @@
 @endsection
 
 @section('style')
+<style>
 .filetypes {
 	margin: 10px 15px;
 }
+</style>
 @endsection
 
 @section('main')

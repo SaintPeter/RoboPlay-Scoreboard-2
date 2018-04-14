@@ -61,6 +61,7 @@
 @endsection
 
 @section('style')
+<style>
 	.bold_row > td {
 		font-weight: bold;
 	}
@@ -81,6 +82,7 @@
 	#slick_container {
 		font-size: {{ $settings['font-size'] }};
 	}
+</style>
 @endsection
 
 <?php View::share( [ 'skip_title' => true, 'skip_breadcrumbs' => true ] ); ?>

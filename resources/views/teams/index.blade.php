@@ -5,10 +5,12 @@
 @endsection
 
 @section('style')
+<style>
 .ui-widget-overlay {
     background: url('http://code.jquery.com/ui/1.10.4/themes/smoothness/images/ui-bg_flat_0_aaaaaa_40x100.png') repeat-x scroll 100% 100% #AAA;
     opacity: 0.3;
 }
+</style>
 @endsection
 
 @section('script')

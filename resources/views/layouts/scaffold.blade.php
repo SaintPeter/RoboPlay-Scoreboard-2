@@ -43,8 +43,8 @@
 			.table-nonfluid {
                width: auto !important;
             }
-			@yield('style')
 		</style>
+        @yield('style')
 
 	    @yield('script')
 	</head>

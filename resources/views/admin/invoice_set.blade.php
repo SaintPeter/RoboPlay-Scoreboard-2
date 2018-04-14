@@ -1,20 +1,23 @@
 @extends('layouts.scaffold')
 
 @section('style')
-tr.done td{
-	background-color: SkyBlue !important;
-}
-tr.done2 td{
-	background-color: LightBlue !important;
-}
+<style>
+    tr.done td {
+        background-color: SkyBlue !important;
+    }
 
-td.bg-success {
-	background-color: #DFF0D8 !important;
-}
-td.bg-warning {
-	background-color: #FCF8E3 !important;
-}
+    tr.done2 td {
+        background-color: LightBlue !important;
+    }
 
+    td.bg-success {
+        background-color: #DFF0D8 !important;
+    }
+
+    td.bg-warning {
+        background-color: #FCF8E3 !important;
+    }
+</style>
 @endsection
 
 @section('script')

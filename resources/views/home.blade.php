@@ -21,19 +21,24 @@
 @endsection
 
 @section('style')
-.ui-li-static.ui-collapsible > .ui-collapsible-heading {
-    margin: 0;
-}
-.ui-li-static.ui-collapsible {
-    padding: 0;
-}
-.ui-li-static.ui-collapsible > .ui-collapsible-heading > .ui-btn {
-    border-top-width: 0;
-}
-.ui-li-static.ui-collapsible > .ui-collapsible-heading.ui-collapsible-heading-collapsed > .ui-btn,
-.ui-li-static.ui-collapsible > .ui-collapsible-content {
-    border-bottom-width: 0;
-}
+<style>
+    .ui-li-static.ui-collapsible > .ui-collapsible-heading {
+        margin: 0;
+    }
+
+    .ui-li-static.ui-collapsible {
+        padding: 0;
+    }
+
+    .ui-li-static.ui-collapsible > .ui-collapsible-heading > .ui-btn {
+        border-top-width: 0;
+    }
+
+    .ui-li-static.ui-collapsible > .ui-collapsible-heading.ui-collapsible-heading-collapsed > .ui-btn,
+    .ui-li-static.ui-collapsible > .ui-collapsible-content {
+        border-bottom-width: 0;
+    }
+</style>
 @endsection
 
 @section('main')

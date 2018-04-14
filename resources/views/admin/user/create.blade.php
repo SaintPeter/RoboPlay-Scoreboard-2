@@ -16,9 +16,11 @@
 @endsection
 
 @section('style')
+<style>
     .indent {
         margin-left: 20px;
     }
+</style>
 @endsection
 
 @section('main')

@@ -6,6 +6,7 @@
 @endsection
 
 @section('style')
+<style>
 .comment {
 	background-image: url(/css/images/comment_mark.png);
 	background-position: top right;
@@ -87,6 +88,7 @@
 td.score:nth-child(odd) {
 	background-color: rgb(245, 245, 245);
 }
+</style>
 @endsection
 
 @section('script')

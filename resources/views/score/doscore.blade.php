@@ -3,6 +3,7 @@
 @section('header', 'Score')
 
 @section('style')
+<style>
 	.ui-li-static {
 		white-space: normal; !important
 	}
@@ -15,6 +16,7 @@
 	#abortPopup-popup, #submitPopup-popup, #randomPopup-popup, #randomListPopup-popup {
 		width: 90%;
 	}
+</style>
 @endsection
 
 @section('navbar')

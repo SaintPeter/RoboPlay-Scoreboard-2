@@ -1,6 +1,7 @@
 @extends('layouts.scaffold')
 
 @section('style')
+<style>
     .video_section {
         display: none;
     }
@@ -10,6 +11,7 @@
     .team_section {
         display: none;
     }
+</style>
 @endsection
 
 @section('main')

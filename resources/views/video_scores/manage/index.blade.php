@@ -1,6 +1,7 @@
 @extends('layouts.scaffold')
 
 @section('style')
+<style>
 .comp_row td:first-child {
 	font-size: 1.1em;
 	padding: 3px;
@@ -42,6 +43,7 @@ tr.score_row:nth-child(odd){
 	width: 920px;
 }
 
+</style>
 @endsection
 
 @section('main')

@@ -6,6 +6,7 @@
 @endsection
 
 @section('style')
+<style>
 .score_col, .cb_col, .rubric_text {
 	width: 18%;
 }
@@ -52,6 +53,7 @@
 	border: 1px solid black;
 	vertical-align: top;
 }
+</style>
 @endsection
 
 @section('script')

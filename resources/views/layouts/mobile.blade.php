@@ -42,8 +42,9 @@
                 color: red;
                 font-style: italic;
             }
-			@yield('style')
 		</style>
+        @yield('style')
+
 		<link rel="icon" type="image/ico" href="https://scoreboard.c-stem.ucdavis.edu/favicon.ico"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     @yield('script')

@@ -1,6 +1,7 @@
 @extends('layouts.scaffold')
 
 @section('style')
+<style>
 .div_row th {
 	background-color: #428BCA !important;
 	color: white;
@@ -20,6 +21,7 @@
 	width: 60%;
 }
 
+</style>
 @endsection
 
 @section('script')

@@ -1,6 +1,7 @@
 @extends('layouts.scaffold')
 
 @section('style')
+<style>
 .Paid, .confirmed {
 	background-color: lightgreen !important;
 }
@@ -26,6 +27,7 @@
 
 .clear { clear: both; }
 
+</style>
 @endsection
 
 @section('script')

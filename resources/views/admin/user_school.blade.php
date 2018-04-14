@@ -5,6 +5,7 @@
 @endsection
 
 @section('style')
+<style>
 tr.highlighted td{
 	background-color: Yellow !important;
 }
@@ -12,6 +13,7 @@ tr.done td{
 	background-color: SkyBlue !important;
 }
 html, body { position: relative }
+</style>
 @endsection
 
 @section('script')

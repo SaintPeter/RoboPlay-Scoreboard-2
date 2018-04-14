@@ -7,10 +7,12 @@
 @endsection
 
 @section('style')
+<style>
     .timepicker {
         width: 120px;
     }
 
+</style>
 @endsection
 
 @section('script')

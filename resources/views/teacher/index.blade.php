@@ -1,6 +1,7 @@
 @extends('layouts.scaffold')
 
 @section('style')
+<style>
 .Paid, .confirmed {
 	background-color: lightgreen !important;
 }
@@ -43,6 +44,7 @@
 .validation_table th {
     border-bottom: 2px solid darkgray;
 }
+</style>
 @endsection
 
 @section('script')

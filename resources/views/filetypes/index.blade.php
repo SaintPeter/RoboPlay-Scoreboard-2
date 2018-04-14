@@ -66,10 +66,12 @@ function cancel_type(e) {
 @endsection
 
 @section('style')
+<style>
 tr.header td {
     background-color: darkgrey;
     color: white;
 }
+</style>
 @endsection
 
 @section('main')

@@ -6,6 +6,7 @@
 @endsection
 
 @section('style')
+<style>
 .video_container {
 	float: left;
 	width: 640;
@@ -13,6 +14,7 @@
 	padding-left: 15px;
 	padding-right: 15px;
 }
+</style>
 @endsection
 
 @section('script')

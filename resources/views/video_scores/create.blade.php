@@ -6,6 +6,7 @@
 @endsection
 
 @section('style')
+<style>
 .score_col, .cb_col, .rubric_text {
 	width: 18%;
 }
@@ -58,6 +59,7 @@
 	margin: 0px;
 	overflow: auto;
 }
+</style>
 @endsection
 
 @section('script')

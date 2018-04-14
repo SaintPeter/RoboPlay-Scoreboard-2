@@ -5,6 +5,7 @@
 @endsection
 
 @section('style')
+<style>
 .judges th {
 	background-color: #428BCA;
 	color: white;
@@ -38,6 +39,7 @@ tr.score_row:nth-child(even) td:last-child {
 	text-align: left !important;
 	padding-left: 12px;
 }
+</style>
 @endsection
 
 @section('script')

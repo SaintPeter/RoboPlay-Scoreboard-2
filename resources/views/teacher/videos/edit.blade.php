@@ -5,6 +5,7 @@
 @endsection
 
 @section('style')
+<style>
 /* Fix margins for nested inline forms */
 .form-inline .form-group{
 	margin-left: 0;
@@ -26,6 +27,7 @@
 .indent {
 	margin-left: 20px;
 }
+</style>
 @endsection
 
 @include('students.partial.js', [ 'type' => 'videos' ])

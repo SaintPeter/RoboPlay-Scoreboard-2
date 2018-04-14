@@ -1,6 +1,7 @@
 @extends('layouts.scaffold')
 
 @section('style')
+<style>
 .reported {
 	width: 1000px;
 }
@@ -29,6 +30,7 @@ tr.score_row:nth-child(odd){
 	text-align: left !important;
 	padding-left: 12px;
 }
+</style>
 @endsection
 
 

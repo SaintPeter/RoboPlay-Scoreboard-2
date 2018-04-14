@@ -1,6 +1,7 @@
 @extends('layouts.scaffold')
 
 @section('style')
+<style>
 	.bold_row > td {
 		font-weight: bold;
 	}
@@ -8,6 +9,7 @@
 		text-decoration: line-through;
 		color: darkgrey;
 	}
+</style>
 @endsection
 
 @section('script')
