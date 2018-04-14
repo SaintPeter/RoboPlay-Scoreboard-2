@@ -2,13 +2,23 @@
 
 @section('head')
 	{{ HTML::script('js/jquery.filtertable.min.js') }}
+    {{ HTML::script('js/jquery.tablesorter.min.js') }}
+    {{ HTML::style('css/tablesorter.css') }}
 @endsection
 
 @section('script')
 <script>
 	$(function() {
 		$("#user_table").filterTable();
+        $( "#user_table" ).tablesorter({textExtraction: myTextExtraction});
 	});
+
+    var myTextExtraction = function(node)
+    {
+        // extract data from markup and return it
+        return (node.innerHTML=='-') ? -1 : node.innerHTML ;
+    }
+
 </script>
 @endsection
 
