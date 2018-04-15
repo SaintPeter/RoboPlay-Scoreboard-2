@@ -1,28 +1,26 @@
 @php
 $section = 0;
 @endphp
-
-@foreach($rubric as $rubric_row)
-    @if($rubric_row->vid_score_type->id != $section)
+<h4>{{ $vid_score_type->first()->rubric->first()->competition->name }}</h4>
+@foreach( $vid_score_type as $category)
+    @if($category->rubric->count() > 0)
         <div class="rubric_section_header row">
-            <div class="section_title">{{ $rubric_row->vid_score_type->display_name }}</div>
+            <div class="section_title">{{ $category->display_name }}</div>
             <div class="number_holder">
-            @for($i=0;$i<5;$i++)
-                <div class="text-center">{{ $i }}</div>
-            @endfor
+                @for($i=0;$i<5;$i++)
+                    <div class="text-center">{{ $i }}</div>
+                @endfor
             </div>
         </div>
-
-        @php
-            $section = $rubric_row->vid_score_type->id
-        @endphp
+        @foreach($category->rubric as $rubric_row)
+            <div class="rubric_row row">
+                <div ><strong>{{ $rubric_row->element_name }}</strong></div>
+                <div >{{ $rubric_row->zero }}</div>
+                <div >{{ $rubric_row->one }}</div>
+                <div >{{ $rubric_row->two }}</div>
+                <div >{{ $rubric_row->three }}</div>
+                <div >{{ $rubric_row->four }}</div>
+            </div>
+        @endforeach
     @endif
-    <div class="rubric_row row">
-        <div ><strong>{{ $rubric_row->element_name }}</strong></div>
-        <div >{{ $rubric_row->zero }}</div>
-        <div >{{ $rubric_row->one }}</div>
-        <div >{{ $rubric_row->two }}</div>
-        <div >{{ $rubric_row->three }}</div>
-        <div >{{ $rubric_row->four }}</div>
-    </div>
 @endforeach

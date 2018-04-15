@@ -34,19 +34,30 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Rubric whereZero($value)
  * @mixin \Eloquent
  */
-class Rubric extends \Eloquent {
+class Rubric extends \Eloquent
+{
 	protected $table = 'rubric';
-	protected $guarded = [ 'id' ];
+	protected $fillable = [
+		'vid_score_type_id',
+		'element',
+		'element_name',
+		'order',
+		'zero',
+		'one',
+		'two',
+		'three',
+		'four',
+		'vid_competition_id'
+	];
 	public $timestamps = false;
-	
 
-	public function vid_score_type()
-	{
-		return $this->belongsTo('App\Models\Vid_score_type','vid_score_type_id', 'id');
+
+	public function vid_score_type() {
+		return $this->belongsTo('App\Models\Vid_score_type', 'vid_score_type_id', 'id');
 	}
 
 	public function competition() {
-		return $this->hasOne('App\Models\Vid_competition');
+		return $this->belongsTo('App\Models\Vid_competition', 'vid_competition_id', 'id');
 	}
 
 }

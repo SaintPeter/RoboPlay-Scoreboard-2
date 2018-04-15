@@ -513,34 +513,99 @@ class VideoManagementController extends Controller {
 	public function rubric($competition_id = null, $edit = null) {
 		View::share('title', 'Rubric Management');
 
-		$vid_competitions = [ '0' => '-- Select Competition --']
-			+ Vid_competition::orderBy('id', 'desc')->pluck('name', 'id')->all();
+		$hasScores = Vid_competition::has('scores')->where('id',$competition_id)->count();
 
-		$rubric = [];
+		$vid_competitions = [ '0' => '-- Select Competition --']
+			+ Vid_competition::has('rubric')
+				->orderBy('id', 'desc')
+				->pluck('name', 'id')
+				->all();
+
+		$dest_competitions = Vid_competition::doesntHave('rubric')->pluck('name', 'id')->all();
+
+		$vid_score_type = [];
 		if($competition_id) {
-			$rubric = Rubric::where('vid_competition_id', $competition_id)
-				->with('vid_score_type')
-				->get();
+			$vid_score_type = Vid_score_type::with(['rubric' => function($q) use ($competition_id) {
+				return $q->where('vid_competition_id', $competition_id);
+			}])->get();
 		}
 
 		return View::make('admin.rubric.index')
-			->with(compact('competition_id','edit', 'vid_competitions','rubric'));
+			->with(compact('competition_id','edit', 'vid_competitions','dest_competitions','vid_score_type','hasScores'));
 	}
 
 	public function rubric_view($competition_id) {
-		$rubric = Rubric::where('vid_competition_id', $competition_id)
-			->with('vid_score_type')
-			->get();
+		$vid_score_type = Vid_score_type::with(['rubric' => function($q) use ($competition_id) {
+			return $q->where('vid_competition_id', $competition_id);
+		}])->get();
 
-		return View::make('admin.rubric.partial.view',compact('rubric', 'competition_id'));
+		return View::make('admin.rubric.partial.view',compact('vid_score_type', 'competition_id'));
 	}
 
 	public function rubric_edit($competition_id) {
-		$rubric = Rubric::where('vid_competition_id', $competition_id)
-			->with('vid_score_type')
-			->get();
+		$hasScores = Vid_competition::has('scores')->where('id',$competition_id)->count();
 
-		return View::make('admin.rubric.partial.edit',compact('rubric', 'competition_id'));
+		$vid_score_type = Vid_score_type::with(['rubric' => function($q) use ($competition_id) {
+			return $q->where('vid_competition_id', $competition_id);
+		}])->get();
+
+		return View::make('admin.rubric.partial.edit',compact('vid_score_type', 'competition_id','hasScores'));
+	}
+
+	public function rubric_blank_row(Request $req, $competition_id, $vid_score_type_id, $rowId ) {
+		if(!$competition_id || !$vid_score_type_id || !$rowId) {
+			return response("Missing Parameter",400);
+		}
+
+		return View::make('admin.rubric.partial.blank_row', compact('competition_id','vid_score_type_id','rowId'));
+
+	}
+
+	public function rubric_save(Request $req, $competition_id) {
+		$rubrics = $req->rubric;
+		$newCount = 0;
+		$updateCount = 0;
+		$deleteCount = 0;
+		foreach($rubrics as $id => $rubric) {
+			if($rubric['delete']) {
+				Rubric::destroy($id);
+				$deleteCount++;
+			} else {
+				if ($rubric['delta']) {
+					$rubric['element'] = 's' . $rubric['order'];
+					if ($rubric['new']) {
+						Rubric::create($rubric);
+						$newCount++;
+					} else {
+						$updateRubric = Rubric::find($id);
+						$updateRubric->update($rubric);
+						$updateCount++;
+					}
+				}
+			}
+		}
+		return redirect()->route('rubric.view', [ $competition_id ])
+			->with(['message' => "$newCount Elements Created, $updateCount Elements Updated, $deleteCount Elements Deleted"]);
+	}
+
+	public function rubric_copy_to(Request $req, $comp_id, $dest_id) {
+		if($comp_id == $dest_id) {
+			return redirect()->route('rubric.index')
+				->with(['message' => 'Source and destination cannot be identical']);
+		}
+		$inputRubric = Rubric::where('vid_competition_id',$comp_id)->get()->except(['id'])->toArray();
+
+		$rowCount = 0;
+		$newRubric = array_map(function($row) use ($dest_id, &$rowCount) {
+			unset($row['id']);
+			$row['vid_competition_id'] = $dest_id;
+			$rowCount++;
+			return $row;
+		}, $inputRubric);
+
+		Rubric::insert($newRubric);
+
+		return redirect()->route('rubric.view', [ $dest_id ])->with(['message' => "$rowCount Rubric Elements Copied"]);
 	}
 
 }

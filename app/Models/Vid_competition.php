@@ -46,6 +46,14 @@ class Vid_competition extends Model {
 		return $this->morphToMany('App\Models\CompYear', 'yearable');
 	}
 
+	public function rubric() {
+		return $this->hasMany('App\Models\Rubric','vid_competition_id','id');
+	}
+
+	public function scores() {
+		return $this->hasManyThrough( 'App\Models\Video_Scores','App\Models\Vid_division', 'competition_id','vid_division_id','id', 'id' );
+	}
+
 	public function is_active() {
 		if(Carbon::now()->between($this->event_start, $this->event_end)) {
 			return true;

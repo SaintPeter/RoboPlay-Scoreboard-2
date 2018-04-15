@@ -286,10 +286,15 @@ Route::middleware([ 'auth' ])->group( function() {
         // Rubric Editing
 	    Route::get('rubric',                         [ 'as' => 'rubric.index', 'uses' => 'VideoManagementController@rubric']);
 	    Route::get('rubric/{competition_id}',        [ 'as' => 'rubric.view', 'uses' => 'VideoManagementController@rubric']);
-	    Route::get('rubric/{competition_id}/{edit)', [ 'as' => 'rubric.edit', 'uses' => 'VideoManagementController@rubric']);
+	    Route::get('rubric/{competition_id}/{edit}', [ 'as' => 'rubric.edit', 'uses' => 'VideoManagementController@rubric']);
+
+	    Route::post('rubric/{competition_id}/save',               [ 'as' => 'rubric.save', 'uses' => 'VideoManagementController@rubric_save']);
+	    Route::get('rubric/{competition_id}/export',              [ 'as' => 'rubric.export', 'uses' => 'VideoManagementController@rubric_export']);
+	    Route::get('rubric/{competition_id?}/copyto/{dest_id?}',  [ 'as' => 'rubric.copyto', 'uses' => 'VideoManagementController@rubric_copy_to']);
 
 	    Route::get('ajax/rubric_view/{competition_id?}',   [ 'as' => 'ajax.rubric.view', 'uses' => 'VideoManagementController@rubric_view']);
 	    Route::get('ajax/rubric_edit/{competition_id?}',   [ 'as' => 'ajax.rubric.edit', 'uses' => 'VideoManagementController@rubric_edit']);
+	    Route::get('ajax/rubric_blank_row/{competition_id?}/{type?}/{id?}',   [ 'as' => 'ajax.rubric.blank_row', 'uses' => 'VideoManagementController@rubric_blank_row']);
 
     });
 
