@@ -51,7 +51,7 @@ class Vid_competition extends Model {
 	}
 
 	public function scores() {
-		return $this->hasManyThrough( 'App\Models\Video_Scores','App\Models\Vid_division', 'competition_id','vid_division_id','id', 'id' );
+		return $this->hasManyThrough( 'App\Models\Video_scores','App\Models\Vid_division', 'competition_id','vid_division_id','id', 'id' );
 	}
 
 	public function is_active() {
