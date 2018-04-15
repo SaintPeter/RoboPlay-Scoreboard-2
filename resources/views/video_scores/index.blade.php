@@ -147,9 +147,9 @@ $(document).uitooltip({
 			Judges should have a background in mechanical design or robotics.</p>
 			<div class="text-center button_box">
 					@if($scored_count[$videotype::Custom] >= $total_count[$videotype::Custom] AND $total_count[$videotype::Custom] > 0)
-						<input id="judge_custom" name="judge_custom" disabled class="disabled" type="checkbox" data-toggle="toggle" data-onstyle="info" data-on="Will Judge" data-off="Won't Judge" {{ $user_custom }}>
+						<input id="judge_custom" name="judge_custom" disabled class="disabled" type="checkbox" data-toggle="toggle" data-onstyle="info" data-on="Will Judge" data-off="Won't Judge" {{ $judge_custom }}>
 					@else
-						<input id="judge_custom" name="judge_custom" type="checkbox" data-toggle="toggle" data-onstyle="info" data-on="Will Judge" data-off="Won't Judge" {{ $user_custom }}>
+						<input id="judge_custom" name="judge_custom" type="checkbox" data-toggle="toggle" data-onstyle="info" data-on="Will Judge" data-off="Won't Judge" {{ $judge_custom }}>
 					@endif
 				<p>Scored: {{ $scored_count[$videotype::Custom] }} of {{ $total_count[$videotype::Custom] }}</p>
 			</div>
@@ -165,9 +165,9 @@ $(document).uitooltip({
 			   Judges should have a background in reading source code.</p>
 			<div class="text-center button_box">
 					@if($scored_count[$videotype::Compute] >= $total_count[$videotype::Compute] AND $total_count[$videotype::Compute] > 0)
-						<input id="judge_compute" name="judge_compute" disabled class="disabled" type="checkbox" data-toggle="toggle" data-onstyle="success" data-on="Will Judge" data-off="Won't Judge" {{ $user_compute }}>
+						<input id="judge_compute" name="judge_compute" disabled class="disabled" type="checkbox" data-toggle="toggle" data-onstyle="success" data-on="Will Judge" data-off="Won't Judge" {{ $judge_compute }}>
 					@else
-						<input id="judge_compute" name="judge_compute" type="checkbox" data-toggle="toggle" data-onstyle="success" data-on="Will Judge" data-off="Won't Judge" {{ $user_compute }}>
+						<input id="judge_compute" name="judge_compute" type="checkbox" data-toggle="toggle" data-onstyle="success" data-on="Will Judge" data-off="Won't Judge" {{ $judge_compute }}>
 					@endif
 				<p>Scored: {{ $scored_count[$videotype::Compute] }} of {{ $total_count[$videotype::Compute] }}</p>
 			</div>

@@ -97,13 +97,17 @@ class VideoManagementController extends Controller {
 				}
 			} ] )->where('roles', '&', UserTypes::Judge)->get();
 
-		//dd(DB::getQueryLog());
+		// After 2017 there is a "theme" entry in general scores
+		$general_divisor = 3;
+		if($year > 2017) {
+			$general_divisor = 4;
+		}
 
 		$user_score_count = [];
 		foreach($user_list as $user) {
 			$user_score_count[$user->name] = [ 1 => 0, 2 => 0, 3 => 0, 'total' => 0 ];
 			if(count($user->video_scores)) {
-				$user_score_count[$user->name][1] = $user->video_scores->reduce(function($count, $score) { return ($score->score_group == 1) ? $count + 1 : $count; }, 0) / 3;
+				$user_score_count[$user->name][1] = $user->video_scores->reduce(function($count, $score) { return ($score->score_group == 1) ? $count + 1 : $count; }, 0) / $general_divisor;
 				$user_score_count[$user->name][2] = $user->video_scores->reduce(function($count, $score) { return ($score->score_group == 2) ? $count + 1 : $count; }, 0);
 				$user_score_count[$user->name][3] = $user->video_scores->reduce(function($count, $score) { return ($score->score_group == 3) ? $count + 1 : $count; }, 0);
 				$user_score_count[$user->name]['total'] = array_sum($user_score_count[$user->name]);
@@ -406,11 +410,19 @@ class VideoManagementController extends Controller {
 				}
 			} ] )->where('roles', '&', UserTypes::Judge)->get();
 
+		// After 2017 there is a "theme" entry in general scores
+		$general_divisor = 3;
+		if($year > 2017) {
+			$general_divisor = 4;
+		}
+
 		$user_score_count = [];
 		foreach($user_list as $user) {
 			if(count($user->video_scores)) {
-				$user_score_count[$user->id]['general'] = $user->video_scores->reduce(function($count, $score) { return ($score->score_group == 1) ? $count + 1 : $count; }, 0) / 3;
-				$user_score_count[$user->id]['code'] = $user->video_scores->reduce(function($count, $score) { return ($score->score_group == 3) ? $count + 1 : $count; }, 0);
+				$user_score_count[$user->id]['general'] = $user->video_scores->reduce(function($count, $score)
+					{ return ($score->score_group == 1) ? $count + 1 : $count; }, 0) / $general_divisor;
+				$user_score_count[$user->id]['code'] = $user->video_scores->reduce(function($count, $score)
+				{ return ($score->score_group == 3) ? $count + 1 : $count; }, 0);
 			}
 		}
 

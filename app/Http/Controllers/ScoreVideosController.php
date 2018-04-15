@@ -100,7 +100,12 @@ class ScoreVideosController extends Controller {
 		}
 
 		// Fix category count for VideoType::General
-		$scored_count[VideoType::General] /= 3;
+		// After 2017 there is a "theme" entry in general scores
+		$general_divisor = 3;
+		if($competiton->last()->event_start->year > 2017) {
+			$general_divisor = 4;
+		}
+		$scored_count[VideoType::General] /= $general_divisor;
 
 		if(count($div_list) > 0) {
 			$total_count[VideoType::General] = Video::whereIn('vid_division_id', $div_list)->where('flag', VideoFlag::Normal)->count();
@@ -113,13 +118,13 @@ class ScoreVideosController extends Controller {
 		}
 
 		// Setup toggle boxes based on cookie
-		$user_compute = Cookie::get('user_compute',0) ? 'checked="checked"' : '';
-		$user_custom = Cookie::get('user_custom',0) ? 'checked="checked"' : '';
+		$judge_compute = Cookie::get('judge_compute',0) ? 'checked="checked"' : '';
+		$judge_custom = Cookie::get('judge_custom',0) ? 'checked="checked"' : '';
 
 		//ddd($videos);
 
 		View::share('title', 'User Videos');
-		return View::make('video_scores.index', compact('videos', 'comp_list', 'types', 'total_count', 'scored_count', 'user_compute', 'user_custom'));
+		return View::make('video_scores.index', compact('videos', 'comp_list', 'types', 'total_count', 'scored_count', 'judge_compute', 'judge_custom'));
 	}
 
 	// Choose an appopriate video for judging
@@ -127,20 +132,20 @@ class ScoreVideosController extends Controller {
 	public function do_dispatch(Request $req)
 	{
 		// Get toggle statuses
-		if($req->has('user_compute')) {
-			Cookie::queue('user_compute', 1, 5 * 365 * 24 * 60 * 60);
-			$user_compute = true;
+		if($req->has('judge_compute')) {
+			Cookie::queue('judge_compute', 1, 5 * 365 * 24 * 60 * 60);
+			$judge_compute = true;
 		} else {
-			Cookie::queue('user_compute', null, -1);
-			$user_compute = false;
+			Cookie::queue('judge_compute', null, -1);
+			$judge_compute = false;
 		}
 
-		if($req->has('user_custom')) {
-			Cookie::queue('user_custom', 1, 5 * 365 * 24 * 60 * 60);
-			$user_custom = true;
+		if($req->has('judge_custom')) {
+			Cookie::queue('judge_custom', 1, 5 * 365 * 24 * 60 * 60);
+			$judge_custom = true;
 		} else {
-			Cookie::queue('user_custom', null, -1);
-			$user_custom = false;
+			Cookie::queue('judge_custom', null, -1);
+			$judge_custom = false;
 		}
 
 		// Get the accurate date
@@ -198,13 +203,13 @@ class ScoreVideosController extends Controller {
 		//   Top priority is custom parts.  Sort Descending.  Ignore if user doesn't score custom.
 		//   Second priority is code.  Sort Descending.  Ignore if user doesn't score code.
 		//   Third Priority is everything else.  Sort by count of scores, ascending.
-		$sorted = $filtered->sort( function ($a, $b) use ($user_compute, $user_custom){
+		$sorted = $filtered->sort( function ($a, $b) use ($judge_compute, $judge_custom){
 				// Has Custom?
 				$has_custom = $b->has_custom - $a->has_custom;
-				if($has_custom == 0 OR !$user_custom) {
+				if($has_custom == 0 OR !$judge_custom) {
 					// Custom is the same, check code
 					$has_code = $b->has_code - $a->has_code;
-					if($has_code == 0 OR !$user_compute) {
+					if($has_code == 0 OR !$judge_compute) {
 						// Code is the same, check count
 						return count($a->scores) - count($b->scores);
 					} else {
@@ -247,12 +252,12 @@ class ScoreVideosController extends Controller {
 		$video_types = [ VideoType::General ];
 
 		// User Custom Parts
-		if($req->hasCookie('user_custom')) {
+		if($req->hasCookie('judge_custom')) {
 			$video_types[] = VideoType::Custom;
 		}
 
 		// User Computational Thinking
-		if($req->hasCookie('user_compute')) {
+		if($req->hasCookie('judge_compute')) {
 			$video_types[] = VideoType::Compute;
 		}
 
