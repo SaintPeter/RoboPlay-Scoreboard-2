@@ -129,7 +129,7 @@
 				<tr>
 					<th>County/District/School</th>
 					<th>Teams (Paid For)</th>
-					<th>Validation</th>
+					<th>Invoice</th>
 				</tr>
 			</thead>
 			<tbody>
