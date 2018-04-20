@@ -132,20 +132,20 @@ class RandomListsController extends Controller {
     }
 
 
-    public function save_list_elements($random_list_id) {
+    public function save_list_elements(Request $req, $random_list_id) {
         $names = [ 'd1', 'd2', 'd3', 'd4', 'd5' ];
         $random_list = RandomList::findOrFail($random_list_id);
         RandomListElement::whereIn('id', $random_list->elements->pluck('id')->all())->delete();
 
         $element_lines = preg_split('/\s*\n\s*/', $req->input('elements'));
-        $save = [];
+        $save = array_combine($names, ['','','','','']);
         foreach($element_lines as $elements_raw) {
             $elements = preg_split('/\s*(;|\t)\s*/', $elements_raw);
             for($i = 0; $i < count($elements) AND $i < 5; $i++) {
                 if(!empty($elements[$i])) {
                     $save[$names[$i]] = $elements[$i];
                 } else {
-                    break;
+			break;
                 }
             }
             if(!empty($save)) {
@@ -153,7 +153,7 @@ class RandomListsController extends Controller {
                 $data[] = $save;
             }
         }
-        //ddd($data);
+        //dd($data);
         RandomListElement::insert($data);
 
         return  redirect()->route('list_elements.show', $random_list_id);
