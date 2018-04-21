@@ -125,7 +125,7 @@
             <td>
             	{{ link_to_route('videos.edit', 'Edit', array($video->id), array('class' => 'btn btn-info btn-margin')) }}
             	{{ link_to_route('videos.uploader', 'Upload', array($video->id), array('class' => 'btn btn-success btn-margin')) }}
-                <button data-id="{{ $video->id }}" class="validate_video btn btn-sm btn-warning btn-margin" title="Validate">
+                <button data-id="{{ $video->id }}" class="validate_video btn btn-warning btn-margin" title="Validate">
                     Validate
                 </button>
                 {!! Form::open(array('method' => 'DELETE', 'route' => array('videos.destroy', $video->id), 'id' => 'delete_form_' . $video->id, 'style' => 'display: inline-block;'))  !!}

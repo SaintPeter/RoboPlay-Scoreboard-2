@@ -258,7 +258,7 @@
 		                    &nbsp;
 		                    {{ link_to_route('uploader.index', 'Upload', [$video->id], ['class' => 'btn btn-sm btn-success']) }}
 		                    &nbsp;
-                            <button data-id="{{ $video->id }}" class="validate_video btn btn-sm btn-warning" title="Validate">
+                            <button data-id="{{ $video->id }}" class="validate_video btn btn-warning" title="Validate">
                                 Validate
                             </button>
 
