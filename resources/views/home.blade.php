@@ -99,7 +99,7 @@
 		</a>
 	</li>
 	<li><a href="http://c-stem.ucdavis.edu/wp-content/uploads/2017/01/2017_RoboPlayChallenge_TeacherInstructions.pdf" data-ajax="false" target="_blank"><i class="fa fa-users"></i>&nbsp;Teacher Guide &mdash; Challenge Teams</a></li>
-	<li><a href="http://c-stem.ucdavis.edu/wp-content/uploads/2017/02/2017_RoboPlayVideo_VideoSubmissionInstructions.pdf" data-ajax="false" target="_blank"><i class="fa fa-video-camera"></i>&nbsp;Teacher Guide &mdash; Video Teams</a></li>
+	<li><a href="http://c-stem.ucdavis.edu/wp-content/uploads/2018/04/2018_RoboPlayVideo_VideoSubmissionInstructions.pdf" data-ajax="false" target="_blank"><i class="fa fa-video-camera"></i>&nbsp;Teacher Guide &mdash; Video Submissions</a></li>
 
 
 </ul>
