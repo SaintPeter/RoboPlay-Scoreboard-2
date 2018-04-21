@@ -12,21 +12,25 @@ export default class ScoreElement extends Component {
 
     // Calculate the individual score for this element when it changes
     handleScoreChange = (value) => {
-      const baseScore = this.props.base_value + (value * this.multi);
-      let newScore = baseScore;
-      if(this.props.score_map.length) {
+        const baseScore = this.props.base_value + (value * this.multi);
+        let newScore = baseScore;
+        if(this.props.score_map.length) {
           for(let i = this.props.score_map.length - 1; i > -1; i--) {
               if(baseScore >= this.props.score_map[i].i) {
                   newScore = this.props.score_map[i].v * 1;
                   break;
               }
           }
-      }
-      // Update my state
-      this.setState({score: newScore});
+        }
 
-      // Send the change up to ScoreChallenge
-      this.props.scoreChange({[this.props.element_number]: newScore });
+        // Enforce min and max values
+        newScore = Math.min(this.props.max_entry, Math.max(this.props.min_entry, newScore));
+
+        // Update my state
+        this.setState({score: newScore});
+
+        // Send the change up to ScoreChallenge
+        this.props.scoreChange({[this.props.element_number]: newScore });
     };
 
     render() {

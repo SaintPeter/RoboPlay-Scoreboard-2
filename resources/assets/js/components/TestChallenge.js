@@ -61,6 +61,8 @@ class TestChallengeApp extends Component {
                         default:
                             acc[element.element_number] = element.base_value;
                     }
+                    // Enforce Min/Max
+                    acc[element.element_number] = Math.min(element.max_entry,Math.max(element.min_entry, acc[element.element_number]));
                     return acc;
                 },{})
         },
