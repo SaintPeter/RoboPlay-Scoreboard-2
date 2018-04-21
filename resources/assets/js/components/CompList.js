@@ -22,6 +22,7 @@ class CompListApp extends Component {
     componentDidMount() {
         document.getElementById('header').innerHTML = "Competition List";
         this.props.updateTitle('Choose Competition');
+        this.props.updateBack('', false);
     }
 
     render() {
@@ -52,7 +53,7 @@ function mapStateToProps(state) {
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
-        updateBack: (newURL) => dispatch(updateBackButton(newURL)),
+        updateBack: (newURL, show) => dispatch(updateBackButton(newURL, show)),
         updateTitle: (newTitle) => dispatch(updatePageTitle(newTitle))
     }
 }

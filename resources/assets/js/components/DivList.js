@@ -22,13 +22,15 @@ class DivListApp extends Component {
 
     componentDidMount() {
         this.props.updateTitle("Choose Division");
-        this.props.updateBack('/');
+        this.props.updateBack('/',true);
     }
 
     render() {
         return (
             <div className="ui-content">
-                <h4>Competition: {this.competitionName}</h4>
+                <div className="ui-body ui-body-a ui-corner-all">
+                    <strong>Competition:</strong> {this.competitionName}
+                </div>
                 <ul className="ui-listview listview-spacer">
                     {
                         this.divs.map(item => {
@@ -54,7 +56,7 @@ function mapStateToProps(state) {
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
-        updateBack: (newURL) => dispatch(updateBackButton(newURL)),
+        updateBack: (newURL,show) => dispatch(updateBackButton(newURL,show)),
         updateTitle: (newTitle) => dispatch(updatePageTitle(newTitle))
     }
 }

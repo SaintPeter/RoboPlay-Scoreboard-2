@@ -332,6 +332,7 @@ Route::middleware([ 'auth' ])->group( function() {
         // React Scoring
 	    Route::get('scorer/{path?}', [ 'as' => 'scorer', 'uses' => 'ScoreController@scorer' ] )
 	        ->where('path',".*");
+	    Route::get('scorer/test/{challenge_id}', [ 'as' => 'challenges.test', 'uses' => 'ScoreController@scorer']);
 
         // Video Judging
         Route::get('video/judge', [
@@ -361,6 +362,7 @@ Route::middleware([ 'auth' ])->group( function() {
 
         Route::prefix('/api/')->namespace('Api')->name('api.')->group(function() {
 	        Route::get('challenges/{year}/{level}', ['as' => 'challenges', 'uses' => 'ScoreApiController@challenges']);
+	        Route::get('challenge/{challenge_id}', ['as' => 'challenge', 'uses' => 'ScoreApiController@challenge']);
 	        Route::post('scorer/save_scores', ['as' => 'save_score', 'uses' => 'ScoreApiController@save_scores']);
 	        Route::get('scorer/runs/{team_id}', ['as' => 'team_runs', 'uses' => 'ScoreApiController@team_runs']);
         });

@@ -21,7 +21,7 @@ import {
 function generic(state = { backURL: '/', title: 'Choose Competition'}, action) {
     switch (action.type) {
         case UPDATE_BACK_BUTTON:
-            return Object.assign({}, state, { backURL: action.newURL });
+            return Object.assign({}, state, { backURL: action.newURL, backShow: action.show });
         case UPDATE_PAGE_TITLE:
             return Object.assign({}, state, {title: action.newTitle });
         default:

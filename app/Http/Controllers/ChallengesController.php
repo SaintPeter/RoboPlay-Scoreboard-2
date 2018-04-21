@@ -24,7 +24,6 @@ class ChallengesController extends Controller {
 	{
 		parent::__construct();
 		$this->challenge = $challenge;
-		//Breadcrumbs::addCrumb('Manage Challenges', route('challenges.index'));
 	}
 
 	/**

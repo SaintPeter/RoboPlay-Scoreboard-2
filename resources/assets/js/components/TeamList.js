@@ -16,6 +16,7 @@ class TeamListApp extends Component {
         const divisionList = compData[this.compId].divisions[this.divId];
         this.teamList = divisionList.teams;
         this.divisionName = divisionList.name;
+        this.competitionName = compData[this.compId].name;
         this.level =  divisionList.level;
 
         this.teams = Object.keys(this.teamList)
@@ -48,7 +49,7 @@ class TeamListApp extends Component {
 
     componentDidMount() {
         this.props.updateTitle("Choose Team");
-        this.props.updateBack(`/c/${this.compId}`);
+        this.props.updateBack(`/c/${this.compId}`, true);
 
         if(!this.props.challengeData[this.year] || !this.props.challengeData[this.year][this.level]) {
             loadChalData.load(this.year, this.level, this.props.doLoadChalData)
@@ -84,7 +85,11 @@ class TeamListApp extends Component {
         }
         return (
             <div className="ui-content">
-                <h4>{this.divisionName} Teams</h4>
+                <div className="ui-body ui-body-a ui-corner-all">
+                    <strong>Competition:</strong> {this.competitionName}<br />
+                    <strong>Division:</strong> {this.divisionName}
+                </div>
+
 
                 <div className="ui-filterable">
                     <div className="ui-input-search ui-shadow-inset ui-input-has-clear ui-body-inherit ui-corner-all">
@@ -158,7 +163,7 @@ function mapStateToProps(state) {
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
-        updateBack: (newURL) => dispatch(updateBackButton(newURL)),
+        updateBack: (newURL, show) => dispatch(updateBackButton(newURL, show)),
         updateTitle: (newTitle) => dispatch(updatePageTitle(newTitle)),
         doLoadChalData: (year,level,data) => dispatch(loadChallengeData(year,level,data)),
         saveFavorite: (id) => dispatch(saveFavorite(id)),

@@ -64,7 +64,7 @@
 				<tr>
 					<td>{{{ $challenge->internal_name }}}</td>
 					<td>{{{ $challenge->display_name }}}</td>
-					<td>{{ nl2br($challenge->rules) }}</td>
+					<td>{!! nl2br($challenge->rules) !!}</td>
 					<td>{{{ $challenge->points }}}</td>
 					<td>{{{ $challenge->score_elements->count() }}}</td>
 					<td>{{{ $challenge->level }}}</td>

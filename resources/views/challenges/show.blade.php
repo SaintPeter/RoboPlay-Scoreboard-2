@@ -263,9 +263,11 @@ function dialog_close_handler(event) {
 					<td>{{{ $challenge->points }}}</td>
 					<td>{{{ $challenge->level }}}</td>
                     <td>{{{ $challenge->year }}}</td>
-					<td>{{ link_to_route('challenges.edit', 'Edit', array($challenge->id), array('class' => 'btn btn-info btn-margin')) }}
-						{!! Form::open(array('method' => 'DELETE', 'route' => array('challenges.destroy', $challenge->id), 'style' => 'display: inline-block'))  !!}
-							{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-margin'))  !!}
+					<td>
+                        {{ link_to_route('challenges.edit', 'Edit', [$challenge->id], ['class' => 'btn btn-info btn-margin']) }}
+                        {{ link_to_route('challenges.test', 'Test', [$challenge->id], ['class' => 'btn btn-info btn-warning', 'target' => '_blank']) }}
+						{!! Form::open(array('method' => 'DELETE', 'route' => ['challenges.destroy', $challenge->id], 'style' => 'display: inline-block'))  !!}
+							{!! Form::submit('Delete', ['class' => 'btn btn-danger btn-margin'])  !!}
 						{!! Form::close()  !!}
 					</td>
 		</tr>
@@ -295,7 +297,7 @@ function dialog_close_handler(event) {
 		@foreach( $challenge->score_elements as $score_element)
 			<tr>
 				<td>{{{ $score_element->name }}}</td>
-						<td>{{ $score_element->display_text }}</td>
+						<td>{!! $score_element->display_text !!}</td>
 						<td>{{{ $score_element->element_number }}}</td>
 						<td>{{{ $score_element->base_value }}}</td>
 						<td>{{{ $score_element->multiplier }}}</td>

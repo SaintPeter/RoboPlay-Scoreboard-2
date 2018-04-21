@@ -7,6 +7,7 @@ import DivList from "./DivList";
 import TeamList from "./TeamList";
 import ChalList from "./ChalList";
 import ScoreChallenge from "./ScoreChallenge";
+import TestChallenge from "./TestChallenge";
 import {updateBackButton} from "../actions/Generic";
 import {submitScores, updateScoreSummary} from "../actions/ScoreChallenge";
 
@@ -45,15 +46,16 @@ class MasterApp extends Component {
                     <div className="ui-header ui-bar-inherit">
                         <h1 id="header" className="ui-title">{this.props.title}</h1>
                         <a href="/" className="ui-btn-left ui-link ui-btn ui-icon-home ui-btn-icon-notext ui-shadow ui-corner-all" data-icon="home" data-ajax="false" data-iconpos="notext" data-direction="reverse">Home</a>
-                        <Link to={this.props.backURL} id="back_button" className="ui-btn-right ui-link ui-btn ui-icon-back ui-btn-icon-notext ui-shadow ui-corner-all">Back</Link>
+                        { (this.props.backShow) ? <Link to={this.props.backURL} id="back_button" className="ui-btn-right ui-link ui-btn ui-icon-back ui-btn-icon-notext ui-shadow ui-corner-all">Back</Link> : '' }
                     </div>
 
                     <Switch>
                         <Route exact path="/" component={CompList} />
                         <Route exact path="/c/:compId" component={DivList} />
                         <Route exact path="/c/:compId/d/:divId" component={TeamList} />
-                        <Route exact path="/c/:compId/d/:divId/t/:teamId" component={ChalList} /> } />
-                        <Route exact path="/c/:compId/d/:divId/t/:teamId/h/:chalId" component={ScoreChallenge} /> } />
+                        <Route exact path="/c/:compId/d/:divId/t/:teamId" component={ChalList} />
+                        <Route exact path="/c/:compId/d/:divId/t/:teamId/h/:chalId" component={ScoreChallenge} />
+                        <Route exact path="/test/:chalId" component={TestChallenge} />
                     </Switch>
 
 
@@ -78,6 +80,7 @@ class MasterApp extends Component {
 function mapStateToProps(state) {
     return {
         backURL: state.generic.backURL,
+        backShow: state.generic.backShow,
         title: state.generic.title,
         teamScores: state.teamScores,
         scoreSummary: state.scoreSummary
@@ -87,7 +90,7 @@ function mapStateToProps(state) {
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
-        updateBack: (newURL) => dispatch(updateBackButton(newURL)),
+        updateBack: (newURL, show) => dispatch(updateBackButton(newURL, show)),
         updateScoreSummary: (teamScores) => dispatch(updateScoreSummary(teamScores)),
         submitScores: (teamScores) => dispatch(submitScores(teamScores))
     }

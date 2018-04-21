@@ -40,9 +40,10 @@ class ChalListApp extends Component {
         return (
             <div className="ui-content">
                 <div className="ui-body ui-body-a ui-corner-all">
-                    <strong>Judge: </strong>{judgeName}<br />
+                    <strong>Competition:</strong> {this.competitionName}<br />
                     <strong>Division: </strong>{this.divisionName}<br />
-                    <strong>Team: </strong>{this.teamName}
+                    <strong>Team: </strong>{this.teamName}<br />
+                    <strong>Judge: </strong>{judgeName}<br />
                 </div>
                 <ul className="ui-listview ui-listview-inset ui-corner-all ui-shadow">
                     {

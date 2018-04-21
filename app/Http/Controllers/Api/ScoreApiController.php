@@ -7,9 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
 use Auth;
-use App\Models\ {
-	CompYear,
-	Score_run
+use App\Models\{
+	Challenge, CompYear, Score_run
 };
 use Carbon\Carbon;
 
@@ -49,6 +48,22 @@ class ScoreApiController extends Controller
 		});
 
 		return response()->json($challenge_data);
+	}
+
+	public function challenge($challenge_id) {
+		$challenge = Challenge::findOrFail($challenge_id);
+
+		return response()->json($challenge->only(
+			[
+				'id',
+				'display_name',
+				'rules',
+				'points',
+				'randoms',
+				'score_elements',
+				'random_lists'
+			]
+		));
 	}
 
 	public function save_scores(Request $req) {
