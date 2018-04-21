@@ -3,7 +3,7 @@
 
 </style>
 <button id="close_results_button_{{ $video_id }}" class="btn btn-xs btn-info" style="float: right">Close</button>
-<table class="table-compact col-md-6 offset-md-3 validation_table">
+<table class="table-compact col-md-8 col-md-offset-1 validation_table">
     <thead>
     <tr>
         <th class="col-md-10">Item</th>
@@ -21,6 +21,11 @@
                      {{ $result[ 'note' ] }}
                     </span>
                 @endif
+                @if(isset($result['files']))
+                    @foreach($result['files'] as $file)
+                            <div style="margin-left: 2em;">{{ $file['filename'] }} &mdash; {{ $file['message'] }}</div>
+                    @endforeach
+                @endif
             </td>
             <td class="col-md-2 validation_status">
                 @switch($result['status'])
@@ -35,22 +40,7 @@
                 @endswitch
             </td>
         </tr>
-        @if(isset($result['files']))
-            <tr>
-                <td colspan="2">
-                    <table style="padding-left: 10em;">
-                        <tbody>
-                    @foreach($result['files'] as $file)
-                            <tr>
-                                <td>{{ $file['filename'] }}</td>
-                                <td>{{ $file['message'] }}</td>
-                            </tr>
-                    @endforeach
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-        @endif
+
     @endforeach
     </tbody>
 </table>

@@ -11,6 +11,13 @@ final class VideoCheckStatus extends Enum
     const Warnings = 2;
     const Fail = 99;
 
+    const list = [
+        self::Untested => 'Untested',
+	    self::Pass => 'Pass',
+	    self::Warnings => 'Warnings',
+	    self::Fail => 'Fail'
+    ];
+
     /**
      * Get the description for an enum value
      *

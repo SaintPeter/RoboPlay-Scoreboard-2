@@ -277,7 +277,7 @@ function division_change(e) {
 		<th>School</th>
 		<th>Teams</th>
 		<th>Videos</th>
-		<th>Students</th>
+		<th class="text-center">Students</th>
 		<th>Invoice</th>
 		<th>Paid</th>
 		<th class="text-center">Actions</th>
@@ -365,8 +365,8 @@ function division_change(e) {
     	        <thead>
     	            <th>Video</th>
     	            <th>Division</th>
-    	            <th colspan="3">Content</th>
-    	            <th>Students</th>
+    	            <th colspan="3">Validation</th>
+                    <th class="text-center">Students</th>
     	            <th>Status</th>
     	        </thead>
     	        <tbody>
@@ -379,9 +379,11 @@ function division_change(e) {
             			<td>
             			    {!! Form::select('vid_division', $vid_division_list, $video->vid_division_id, [ 'data-id' => $video->id, 'class' => 'vid_division' ])   !!}
             			</td>
-            			<td class="text-center">{!! $video->has_custom==1 ? '<span class="btn btn-warning btn-xs">Custom</span>' : '&nbsp;' !!}</td>
-            			<td class="text-center">{!! $video->has_vid==1 ? '<span class="btn btn-success btn-xs">Video File</span>' : '<span class="btn btn-danger btn-xs">No Video</span>' !!}</td>
-            			<td class="text-center">{!! $video->has_code==1 ? '<span class="btn btn-info btn-xs">Code</span>' : '<span class="btn btn-danger btn-xs">No Code</span>' !!} </td>
+                        <td class="text-center" colspan="3">
+                            <span id="video_result_{{ $video->id }}" class="{{ VideoStatus::toClasses($video->status) }}">
+                                {{ VideoStatus::getDescription($video->status) }}
+                            </span>
+                        </td>
             			<td class="text-center">{!! $video->students->count() !!}</td>
             			<td>
             			    @if($video->audit)

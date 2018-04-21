@@ -435,7 +435,7 @@ class TeacherVideoController extends Controller {
 					'If your video contains no dialog and/or stage direction (such as a music video), a script is not required. ' .
 					'If dialog or stage direction are present, the video will be disqualified.'
 			];
-			$fail = true;
+			$warning = true;
 		}
 
 		// Code File(s) Present

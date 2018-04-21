@@ -181,6 +181,11 @@
 	    {!! Form::select('audit', [ 0 => 'Unchecked', 1 => 'Checked' ], null, [ 'class' => 'form-control col-md-4' ])  !!}
 	</div>
 
+    <div class="form-group">
+        {!! Form::label('status', 'Validation Status:')  !!}
+        {!! Form::select('status', VideoStatus::list, $video->status, [ 'class' => 'form-control col-md-4' ])  !!}
+    </div>
+
 	<div class="form-group">
 		{!! Form::submit('Submit', array('class' => 'btn btn-primary'))  !!}
 		 		&nbsp;

@@ -28,7 +28,7 @@
 .clear { clear: both; }
 
 .validation_note {
-    padding-left: 5em;
+    padding-left: 2em;
     font-style: italic;
     display: block;
     color: blueviolet;

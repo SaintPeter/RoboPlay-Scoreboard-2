@@ -4,6 +4,31 @@
 	{{ HTML::script('js/jquery.filtertable.min.js') }}
 @endsection
 
+@section('style')
+    <style>
+
+        .validation_note {
+            padding-left: 2em;
+            font-style: italic;
+            display: block;
+            color: blueviolet;
+        }
+        .validation_status {
+            vertical-align: top;
+        }
+
+        .validation_table td {
+            border-top: 1px solid darkgray;
+        }
+
+        .validation_table th {
+            border-bottom: 2px solid darkgray;
+        }
+
+
+    </style>
+@endsection
+
 @section('script')
 <script>
 	var delete_id = 0;
@@ -32,6 +57,15 @@
 		});
 
 		$("#video_table").filterTable();
+
+        $('.validate_video').click(function(e) {
+            e.preventDefault();
+            var video_id = $(this).data('id');
+            $.get('/validate_video/' + video_id, function(data) {
+                $('#validation_results_' + video_id).remove();
+                $('#video_row_' + video_id).after('<tr id="validation_results_' + video_id + '"><td colspan="8">' + data + "</td></tr>");
+            });
+        });
 	});
 </script>
 @endsection
@@ -58,14 +92,14 @@
 	<tbody>
 	@if($videos->count())
 		@foreach ($videos as $video)
-			<tr>
+            <tr id="video_row_{{ $video->id }}">
 				<td>{{{ $video->name }}}</td>
 				<td>{!! join('<br />', $video->student_list()) !!}</td>
-				<td>
-					{!! $video->has_custom==1 ? '<span class="btn btn-warning btn-xs">Custom</span>' : '' !!} <br />
-					{!! $video->has_vid==1 ? '<span class="btn btn-success btn-xs">Video File</span>' : '<span class="btn btn-danger btn-xs">No Video</span>' !!} <br />
-					{!! $video->has_code==1 ? '<span class="btn btn-info btn-xs">Code</span>' : '<span class="btn btn-danger btn-xs">No Code</span>' !!} <br />
-				</td>
+                <td class="{{ ($video->status==VideoStatus::Pass || $video->status == VideoStatus::Warnings) ? 'confirmed' : 'unconfirmed'  }} text-center">
+                <span id="video_result_{{ $video->id }}" class="{{ VideoStatus::toClasses($video->status) }}">
+                    {{ VideoStatus::getDescription($video->status) }}
+                </span>
+                </td>
 				<td>
 					@if($video->teacher)
 						{{ $video->teacher->name }}<br />
@@ -95,6 +129,9 @@
                 	{{ link_to_route('videos.show', 'Show', array($video->id), array('class' => 'btn btn-default btn-margin')) }}
                 	{{ link_to_route('videos.edit', 'Edit', array($video->id), array('class' => 'btn btn-info btn-margin')) }}
 					{{ link_to_route('videos.uploader', 'Upload', array($video->id), array('class' => 'btn btn-success btn-margin')) }}
+                    <button data-id="{{ $video->id }}" class="validate_video btn btn-sm btn-warning btn-margin" title="Validate">
+                        Validate
+                    </button>
                     {!! Form::open(array('method' => 'DELETE', 'route' => array('videos.destroy', $video->id), 'id' => 'delete_form_' . $video->id, 'style' => 'display: inline-block;'))  !!}
                         {!! Form::submit('Delete', array('class' => 'btn btn-danger delete_button btn-margin', 'delete_id' => $video->id))  !!}
                     {!! Form::close()  !!}

@@ -9,10 +9,29 @@
 <style>
 .video_container {
 	float: left;
-	width: 640;
-	postition: relative;
+	width: 640px;
+	position: relative;
 	padding-left: 15px;
 	padding-right: 15px;
+}
+
+.validation_note {
+    padding-left: 2em;
+    font-style: italic;
+    display: block;
+    color: blueviolet;
+}
+
+.validation_status {
+    vertical-align: top;
+}
+
+.validation_table td {
+    border-top: 1px solid darkgray;
+}
+
+.validation_table th {
+    border-bottom: 2px solid darkgray;
 }
 </style>
 @endsection
@@ -43,6 +62,15 @@
 				}
 			}
 		});
+
+        $('.validate_video').click(function(e) {
+            e.preventDefault();
+            var video_id = $(this).data('id');
+            $.get('/validate_video/' + video_id, function(data) {
+                $('#validation_results_' + video_id).remove();
+                $('#video_row_' + video_id).after('<tr id="validation_results_' + video_id + '"><td colspan="8">' + data + "</td></tr>");
+            });
+        });
 	});
 </script>
 @endsection
@@ -57,30 +85,20 @@
 			<th>Status</th>
 			<th>County/District/School</th>
 			<th>Challenge/Division</th>
-			@if(isset($video->awards))
-			    <th>Awards</th>
-			@endif
+            <th>Awards</th>
 			<th>Actions</th>
 		</tr>
 	</thead>
 
 	<tbody>
-		<tr>
+        <tr id="video_row_{{ $video->id }}">
 			<td>{{{ $video->name }}}</td>
 			<td>{{{ $video->yt_code }}}</td>
 			<td>{!! join('<br />', $video->student_list()) !!}</td>
-			<td>
-                @if($video->has_vid==1)
-                    <span class="btn btn-success btn-xs btn-margin">Has Video</span>
-                @else
-                    <span class="btn btn-danger btn-xs btn-margin">No Video</span>
-                @endif
-                <br>
-                @if($video->has_code==1)
-                    <span class="btn btn-info btn-xs btn-margin">Has Code</span>
-                @else
-                    <span class="btn btn-danger btn-xs btn-margin">No Code</span>
-                @endif
+            <td class="{{ ($video->status==VideoStatus::Pass || $video->status == VideoStatus::Warnings) ? 'confirmed' : 'unconfirmed'  }} text-center">
+                <span id="video_result_{{ $video->id }}" class="{{ VideoStatus::toClasses($video->status) }}">
+                    {{ VideoStatus::getDescription($video->status) }}
+                </span>
             </td>
             <td>
 				@if(isset($video->school))
@@ -99,16 +117,17 @@
 					No Division Set
 				@endif
 			</td>
-			@if(isset($video->awards))
 			<td>
 			    @foreach($video->awards as $award)
 			        <p style="white-space: nowrap">{{ $award->name }}</p>
 			    @endforeach
 			</td>
-			@endif
             <td>
             	{{ link_to_route('videos.edit', 'Edit', array($video->id), array('class' => 'btn btn-info btn-margin')) }}
             	{{ link_to_route('videos.uploader', 'Upload', array($video->id), array('class' => 'btn btn-success btn-margin')) }}
+                <button data-id="{{ $video->id }}" class="validate_video btn btn-sm btn-warning btn-margin" title="Validate">
+                    Validate
+                </button>
                 {!! Form::open(array('method' => 'DELETE', 'route' => array('videos.destroy', $video->id), 'id' => 'delete_form_' . $video->id, 'style' => 'display: inline-block;'))  !!}
                     {!! Form::submit('Delete', array('class' => 'btn btn-danger delete_button btn-margin', 'delete_id' => $video->id))  !!}
                 {!! Form::close()  !!}
