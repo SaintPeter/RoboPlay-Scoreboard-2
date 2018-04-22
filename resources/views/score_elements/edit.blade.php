@@ -8,46 +8,63 @@
 @endif
 {!! Form::model($score_element, array('method' => 'PATCH', 'route' => array('score_elements.update', $score_element->id), 'id' => 'se_form'))  !!}
 <div id="maincol" class="{{ ($has_score_map) ? 'col-lg-8':'col-lg-12'}}">
-    <div class="form-group">
-        {!! Form::label('name', 'Name', [ 'class' => 'form-label' ])  !!}
-        {!! Form::text('name', null, [ 'class' => 'form-control' ])  !!}
+    <div class="form-group row">
+        <div class="col-xs-3" style="padding-left: 0;padding-right: 5px">
+            {!! Form::label('element_number', 'Order', [ 'class' => 'form-label' ])  !!}
+            {!! Form::text( 'element_number', null, [ 'class' => 'form-control numeric' ])  !!}
+        </div>
+        <div class="col-xs-9" style="padding-right: 0; padding-left: 5px;">
+            {!! Form::label('name', 'Name', [ 'class' => 'form-label' ])  !!}
+            {!! Form::text('name', null, [ 'class' => 'form-control' ])  !!}
+        </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group row">
         {!! Form::label('display_text', 'Display Text', [ 'class' => 'form-label' ])  !!}
         {!! Form::textarea('display_text', null, [ 'class' => 'form-control', 'rows' => 3 ])  !!}
     </div>
 
-    <div class="form-group clearfix">
-        <div class="col-md-6" style="padding-left:0px">
-            {!! Form::label('element_number', 'Display Order', [ 'class' => 'form-label' ])  !!}
-            {!! Form::text( 'element_number', null, [ 'class' => 'form-control numeric' ])  !!}
-        </div>
-        <div class="col-md-6" style="padding:0px">
+    <div class="form-group row">
+        <div class="col-xs-6" style="padding-left: 0;">
             {!! Form::label('type', 'Input Type', [ 'class' => 'form-label' ])  !!}
             {!! Form::select('type', $input_types, null, [ 'class' => 'form-control' ])  !!}
         </div>
-    </div>
-
-    <div class="form-group clearfix">
-         <div class="col-md-6" style="padding-left:0px">
-        {!! Form::label('multiplier', 'Multiplier', [ 'class' => 'form-label' ])  !!}
-        {!! Form::input('number', 'multiplier', null, [ 'class' => 'form-control numeric' ])  !!}
-        </div>
-        <div class="col-md-6" style="padding:0px">
-        {!! Form::label('base_value', 'Base Value', [ 'class' => 'form-label' ])  !!}
-        {!! Form::input('number', 'base_value', null, [ 'class' => 'form-control numeric' ])  !!}
+        <div class="col-xs-6" style="padding-right: 0;">
+            {!! Form::label('base_value', 'Base Value', [ 'class' => 'form-label' ])  !!}
+            {!! Form::input('number', 'base_value', null, [ 'class' => 'form-control numeric' ])  !!}
         </div>
     </div>
 
-    <div class="form-group clearfix">
-        <div class="col-md-6" style="padding-left:0px">
+
+    <div class="form-group row">
+        <div class="col-xs-6" style="padding-left: 0;">
+            {!! Form::label('multiplier', 'Multiplier 1', [ 'class' => 'form-label' ])  !!}
+            {!! Form::input('number', 'multiplier', null, [ 'class' => 'form-control decimal', 'step' => 'any' ])  !!}
+        </div>
+        <div class="col-xs-6" style="padding-right: 0;">
+            {!! Form::label('multiplier', 'Multiplier 2', [ 'class' => 'form-label' ])  !!}
+            {!! Form::input('number', 'multiplier2', null, [ 'class' => 'form-control decimal', 'step' => 'any' ])  !!}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-xs-6" style="padding-left: 0;">
             {!! Form::label('min_entry', 'Minimum Value', [ 'class' => 'form-label' ])  !!}
             {!! Form::text( 'min_entry', null, [ 'class' => 'form-control numeric' ])  !!}
         </div>
-        <div class="col-md-6" style="padding:0px">
+        <div class="col-xs-6" style="padding-right: 0;">
             {!! Form::label('max_entry', 'Maximum Value', [ 'class' => 'form-label' ])  !!}
             {!! Form::text( 'max_entry', null, [ 'class' => 'form-control numeric' ])  !!}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="checkbox">
+            {!! Form::hidden('enforce_limits',0) !!}
+            <label>
+                {!! Form::checkbox('enforce_limits',1, $score_element->enforce_limits) !!}
+                Enforce Min/Max Limits
+            </label>
         </div>
     </div>
 

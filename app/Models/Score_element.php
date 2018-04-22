@@ -41,8 +41,10 @@ class Score_element extends Model {
 		'element_number',
 		'base_value',
 		'multiplier',
+		'multiplier2',
 		'min_entry',
 		'max_entry',
+		'enforce_limits',
 		'type',
 		'challenge_id',
 		'score_map'
@@ -53,8 +55,10 @@ class Score_element extends Model {
 		'element_number' => 'required',
 		'base_value' => 'required',
 		'multiplier' => 'required',
+		'multiplier2' => 'required',
 		'min_entry' => 'required',
 		'max_entry' => 'required',
+		'enforce_limits' => 'required|boolean',
 		'type' => 'required',
 		'challenge_id' => 'required'
 	];

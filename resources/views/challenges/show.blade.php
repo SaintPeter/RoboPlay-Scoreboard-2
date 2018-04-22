@@ -94,6 +94,7 @@ $(function() {
 
 function setup_form_handler() {
 	jQuery( ".numeric" ).spinner();
+	jQuery( ".decimal" ).spinner({numberFormat: "n", step: 1});
 	jQuery( "#se_form" ).on( "submit", function( event ) {
 		event.preventDefault();
 		jQuery.post( jQuery(this).attr('action'), jQuery( this ).serialize(), function(data) {
@@ -138,12 +139,12 @@ function edit_map_handler() {
         dialog.dialog("option", "minWidth", WIDTH_WIDE );
         dialog.dialog("option", "width", WIDTH_WIDE );
         hasScoreMap.val(1);
-        button.attr('value','Remove Map');
+        button.html('Remove Map');
     } else {
         dialog.dialog("option", "minWidth", WIDTH_NARROW );
         dialog.dialog("option", "width", WIDTH_NARROW );
         hasScoreMap.val(0);
-        button.attr('value','Create Map');
+        button.html('Create Map');
     }
 }
 
@@ -281,7 +282,8 @@ function dialog_close_handler(event) {
 				<th>Display Text</th>
 				<th>Order</th>
 				<th>Base</th>
-				<th>Multiplier</th>
+				<th>Multi 1</th>
+                <th>Multi 2</th>
 				<th>Min</th>
 				<th>Max</th>
                 <th>Map</th>
@@ -292,25 +294,26 @@ function dialog_close_handler(event) {
 
 	<tbody>
 		@if( $challenge->score_elements->count() == 0 )
-			<tr><td colspan="9" class="text-center">No Score Elements</td></tr>
+			<tr><td colspan="10" class="text-center">No Score Elements</td></tr>
 		@else
 		@foreach( $challenge->score_elements as $score_element)
 			<tr>
 				<td>{{{ $score_element->name }}}</td>
-						<td>{!! $score_element->display_text !!}</td>
-						<td>{{{ $score_element->element_number }}}</td>
-						<td>{{{ $score_element->base_value }}}</td>
-						<td>{{{ $score_element->multiplier }}}</td>
-						<td>{{{ $score_element->min_entry }}}</td>
-						<td>{{{ $score_element->max_entry }}}</td>
-                        <td>{{  count($score_element->score_map) ?: 'None' }}</td>
-						<td>{{{ $score_element->type }}}</td>
-						<td>{{ link_to_route('score_elements.edit', 'Edit', array($score_element->id), array('class' => 'btn btn-info btn_se_edit')) }}
-							&nbsp;
-							{!! Form::open(['method' => 'DELETE', 'route' => ['score_elements.destroy', $score_element->id], 'style' => 'display: inline-block'])  !!}
-								{!! Form::submit('Delete', array('class' => 'btn btn-danger'))  !!}
-							{!! Form::close()  !!}
-						</td>
+                <td>{!! $score_element->display_text !!}</td>
+                <td>{{{ $score_element->element_number }}}</td>
+                <td>{{{ $score_element->base_value }}}</td>
+                <td>{{{ sprintf("%g",$score_element->multiplier) }}}</td>
+                <td>{{{ sprintf("%g",$score_element->multiplier2) }}}</td>
+                <td>{{{ $score_element->min_entry }}}</td>
+                <td>{{{ $score_element->max_entry }}}</td>
+                <td>{{  count($score_element->score_map) ?: 'None' }}</td>
+                <td>{{{ $score_element->type }}}</td>
+                <td>{{ link_to_route('score_elements.edit', 'Edit', array($score_element->id), array('class' => 'btn btn-info btn_se_edit')) }}
+                    &nbsp;
+                    {!! Form::open(['method' => 'DELETE', 'route' => ['score_elements.destroy', $score_element->id], 'style' => 'display: inline-block'])  !!}
+                        {!! Form::submit('Delete', array('class' => 'btn btn-danger'))  !!}
+                    {!! Form::close()  !!}
+                </td>
 			</tr>
 		@endforeach
 		@endif

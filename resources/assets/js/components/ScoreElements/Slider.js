@@ -8,6 +8,25 @@ export default class Slider extends Component {
         this.sendScore()
     }
 
+    componentWillReceiveProps(nextProps) {
+        if(this.props.min_entry !== nextProps.min_entry ) {
+            this.$node.attr('min', nextProps.min_entry).slider("refresh");
+        }
+        if(this.props.max_entry !== nextProps.max_entry ) {
+            this.$node.attr('max', nextProps.max_entry).slider("refresh");
+        }
+        if(this.props.type !== nextProps.type) {
+            this.$node.attr('step', (nextProps.type ==='score_slider') ? nextProps.multiplier : 1).slider("refresh");
+            this.$node.attr('defaultValue', (nextProps.type === 'high_slider') ? nextProps.max_entry : 0).slider("refresh");
+        }
+        if(this.$node.val() < nextProps.min_entry) {
+            this.$node.val(nextProps.min_entry);
+        }
+        if(this.$node.val() > nextProps.max_entry) {
+            this.$node.val(nextProps.max_entry);
+        }
+    }
+
     shouldComponentUpdate() {
         return false;
     }
@@ -26,7 +45,7 @@ export default class Slider extends Component {
             step: (this.props.type==='score_slider') ? this.props.multiplier : 1,
             min: this.props.min_entry,
             max: this.props.max_entry,
-            defaultValue: (this.props.type === 'high_slider') ? this.props.max_entry : 0,
+            defaultValue: (this.props.type === 'high_slider') ? this.props.max_entry : Math.max(this.props.min_entry, this.props.base_value),
         };
 
         return (

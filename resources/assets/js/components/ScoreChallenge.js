@@ -69,10 +69,12 @@ class ScoreChallengeApp extends Component {
                             acc[element.element_number] = element.max_entry * element.multiplier;
                             break;
                         default:
-                            acc[element.element_number] = element.base_value;
+                            acc[element.element_number] = Math.max(element.min_entry, element.base_value);
                     }
                     // Enforce Min/Max
-                    acc[element.element_number] = Math.min(element.max_entry,Math.max(element.min_entry, acc[element.element_number]));
+                    if(element.enforce_limits) {
+                        acc[element.element_number] = Math.min(element.max_entry, Math.max(element.min_entry, acc[element.element_number]));
+                    }
                     return acc;
                 },{})
         },

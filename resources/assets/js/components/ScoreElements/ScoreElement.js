@@ -6,13 +6,13 @@ export default class ScoreElement extends Component {
 
         this.multi = (props.type==='score_slider') ? 1 : props.multiplier;
         this.state = {
-            score: 0,
+            score: Math.max(this.props.min_entry, this.props.base_value),
         }
     }
 
     // Calculate the individual score for this element when it changes
     handleScoreChange = (value) => {
-        const baseScore = this.props.base_value + (value * this.multi);
+        const baseScore = this.props.base_value + (value * this.multi) + (Math.pow(value,2) * this.props.multiplier2);
         let newScore = baseScore;
         if(this.props.score_map.length) {
           for(let i = this.props.score_map.length - 1; i > -1; i--) {
@@ -24,7 +24,9 @@ export default class ScoreElement extends Component {
         }
 
         // Enforce min and max values
-        newScore = Math.min(this.props.max_entry, Math.max(this.props.min_entry, newScore));
+        if(this.props.enforce_limits) {
+            newScore = Math.min(this.props.max_entry, Math.max(this.props.min_entry, newScore));
+        }
 
         // Update my state
         this.setState({score: newScore});
