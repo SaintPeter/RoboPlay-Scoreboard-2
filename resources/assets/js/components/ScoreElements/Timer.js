@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {updateBackButton, updatePageTitle} from "../../actions/Generic";
 import {abortChallenge, loadChallengeData, scoreChallenge, updateScoreSummary} from "../../actions/ScoreChallenge";
+import UIButton from "../UIButton";
 
 // Thanks to Kurt Johnson (@pompan129) for the code!
 
@@ -11,25 +12,37 @@ const playButtonStyle = { width: "5em", padding: "5px", marginLeft: "5px" };
 const timeDivStyle = {
     width: "5em",
     border: "1px solid #ddd",
-    padding: "5px"
+    padding: "5px",
+    alignSelf: "flex-end",
+    textAlign: "center"
+
 };
 
 const addButtonStyle = {
-    width: "3em",
+    width: "2.5em",
+    fontWeight: 'bold',
     padding: "5px",
-    borderRadius: ".3125em 0 0 .3125em "
+    borderRadius: ".3125em 0 0 .3125em ",
+    height:"40px",
+    alignSelf: "flex-end"
 };
 
 const minusButtonStyle = {
-    width: "3em",
+    width: "2.5em",
+    fontWeight: 'bold',
     padding: "5px",
-    borderRadius: "0 .3125em .3125em 0"
+    borderRadius: "0 .3125em .3125em 0",
+    height: "40px",
+    alignSelf: "flex-end"
 };
 
 const containerStyle = {
     display: "flex",
     justifyContent: "center",
-    alignItems: "baseline"
+    alignItems: "baseline",
+    alignContent: "baseline",
+    lineHeight: 1.7,
+    height: 50
 };
 
 
@@ -81,39 +94,50 @@ export default class Timer extends Component {
         }
     }
 
-    reset() {
+    reset = () => {
+        this.stop();
         this.setState({
             seconds: 0.0
         },this.sendScore.bind(this));
-    }
+    };
 
     sendScore = seconds => {
         this.props.onChange(Math.floor(Number(this.state.seconds)));
     };
 
+    togglePlay = () => {
+        if(this.state.playing) {
+            this.stop();
+        } else {
+            this.play();
+        }
+    };
+
     render() {
         return (
-            <div style={containerStyle}>
-                <button onClick={() => this.add()} style={addButtonStyle}>
-                    +
-                </button>
-                <div style={timeDivStyle}>
-                    <span>{this.state.seconds} sec</span>
+            <fieldset className="ui-grid-b">
+                <div className="ui-block-b" style={containerStyle}>
+                    <button onClick={() => this.subtract()} style={addButtonStyle}>
+                        -
+                    </button>
+                    <div style={timeDivStyle}>
+                        <span>{this.state.seconds} sec</span>
+                    </div>
+                    <button onClick={() => this.add()} style={minusButtonStyle}>
+                        +
+                    </button>
                 </div>
-                <button onClick={() => this.subtract()} style={minusButtonStyle}>
-                    -
-                </button>
-
-                <button
-                    onClick={this.state.playing ? () => this.stop() : () => this.play()}
-                    className="ui-btn ui-input-btn ui-corner-all ui-shadow"
-                >
-                    {this.state.playing ? "Stop" : "Start"}
-                </button>
-                <button onClick={() => this.reset()} className="ui-btn ui-input-btn ui-corner-all ui-shadow">
-                    Reset
-                </button>
-            </div>
+                <div className="ui-block-b">
+                    <UIButton onClick={this.togglePlay}>
+                        {this.state.playing ? "Stop" : "Start"}
+                    </UIButton>
+                </div>
+                <div className="ui-block-b">
+                    <UIButton onClick={this.reset}>
+                        Reset
+                    </UIButton>
+                </div>
+            </fieldset>
         );
     }
 }
