@@ -12,6 +12,12 @@ export default class UIButton extends  Component {
         return false;
     }
 
+    componentWillReceiveProps(nextProps) {
+        if(this.props.children !== nextProps.children) {
+            this.$node.html(nextProps.children);
+        }
+    }
+
     componentWillUnmount() {
         this.$node.remove();
     }
