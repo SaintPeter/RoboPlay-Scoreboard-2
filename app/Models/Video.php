@@ -61,7 +61,7 @@ class Video extends Model {
 		'name', 'yt_code', 'has_custom', 'vid_division_id',
 		'school_id', 'teacher_id', 'has_code', 'has_story',
 		'has_choreo', 'has_task', 'has_vid', 'year', 'flag',
-		'audit', 'notes', 'created_at', 'updated_at'
+		'audit', 'status', 'notes', 'created_at', 'updated_at'
 	];
 
 	public static $rules = array(
