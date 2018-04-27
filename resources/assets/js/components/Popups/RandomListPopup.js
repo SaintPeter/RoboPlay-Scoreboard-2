@@ -6,14 +6,20 @@ export default class RandomListPopup extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            chosenIndexs: props.random_lists.map(this.chooseRandom)
+        };
+
         this.randomLists =  props.random_lists.map(this.formatRandomList);
         this.randomListPopups = props.random_lists.map(this.formatRandomListPopup);
     }
 
-    formatRandomList = (randomList) => {
-        let chosen = rn({min: 0, max: randomList.elements.length - 1, integer: true});
+    chooseRandom = (randomList) => {
+        return rn({min: 0, max: randomList.elements.length - 1, integer: true});
+    };
 
-        let formatted = this.formatElements(randomList.elements[chosen], randomList);
+    formatRandomList = (randomList,index) => {
+        let formatted = this.formatElements(randomList.elements[this.state.chosenIndexs[index]], randomList);
 
         let html = Object.keys(formatted).reduce(function(acc, format){
             let re = new RegExp(format,"g");
@@ -23,10 +29,8 @@ export default class RandomListPopup extends Component {
         return <span key={randomList.id} dangerouslySetInnerHTML={{__html: html}} />;
     };
 
-    formatRandomListPopup = (randomList) => {
-        let chosen = rn({min: 0, max: randomList.elements.length - 1, integer: true});
-
-        let formatted = this.formatElements(randomList.elements[chosen], randomList);
+    formatRandomListPopup = (randomList,index) => {
+        let formatted = this.formatElements(randomList.elements[this.state.chosenIndexs[index]], randomList);
 
         let html = Object.keys(formatted).reduce(function(acc, format){
             let re = new RegExp(format,"g");
