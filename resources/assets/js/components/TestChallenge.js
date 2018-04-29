@@ -12,7 +12,7 @@ import Timer from "./ScoreElements/Timer";
 import ScoreElement from "./ScoreElements/ScoreElement";
 import SubmitConfirmPopup from "./Popups/SubmitConfirmPopup";
 import AbortConfirmPopup from "./Popups/AbortConfirmPopup";
-import {abortChallenge, loadChallengeData, scoreChallenge, updateScoreSummary} from "../actions/ScoreChallenge";
+import {abortChallenge, scoreChallenge, updateScoreSummary} from "../actions/ScoreChallenge";
 import {updateBackButton, updatePageTitle} from "../actions/Generic";
 
 class TestChallengeApp extends Component {

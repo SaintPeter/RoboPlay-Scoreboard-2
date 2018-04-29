@@ -1,16 +1,8 @@
-export const LOAD_CHALLENGE_DATA =        'LOAD_CHALLENGE_DATA';
 export const SCORE_CHALLENGE =            'SCORE_CHALLENGE';
 export const ABORT_CHALLENGE =            'ABORT_CHALLENGE';
 export const UPDATE_SCORE_SUMMARY =       'UPDATE_SCORE_SUMMARY';
 export const SUBMIT_SCORES =              'SUBMIT_SCORES';
 export const UPDATE_SCORES_SAVED_STATUS = 'UPDATE_SCORES_SAVED_STATUS';
-
-export function loadChallengeData(year, level, data) {
-    return {
-        type: LOAD_CHALLENGE_DATA,
-        year, level, data
-    }
-}
 
 export const scoreChallenge = (teamId, chalId, divId, scores) =>
     (dispatch, getState) => {

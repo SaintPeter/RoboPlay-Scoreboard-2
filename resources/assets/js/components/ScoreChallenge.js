@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from "react-redux";
-import loadChalData from "../utils/loadChalData";
 
 import RandomsPopup from "./Popups/RandomsPopup";
 import RandomListPopup from "./Popups/RandomListPopup";
@@ -12,8 +11,10 @@ import Timer from "./ScoreElements/Timer";
 import ScoreElement from "./ScoreElements/ScoreElement";
 import SubmitConfirmPopup from "./Popups/SubmitConfirmPopup";
 import AbortConfirmPopup from "./Popups/AbortConfirmPopup";
-import {abortChallenge, loadChallengeData, scoreChallenge, updateScoreSummary} from "../actions/ScoreChallenge";
+import {abortChallenge, scoreChallenge, updateScoreSummary} from "../actions/ScoreChallenge";
 import {updateBackButton, updatePageTitle} from "../actions/Generic";
+import { addRun, addAbort } from "../actions/Runs";
+import {loadChallengeData} from "../actions/ChallengeData";
 
 class ScoreChallengeApp extends Component {
     constructor(props) {
@@ -46,16 +47,15 @@ class ScoreChallengeApp extends Component {
         this.props.updateTitle("Score");
         this.props.updateBack(this.backURL);
 
-        if(!this.props.challengeData[this.year] || !this.props.challengeData[this.year][this.level]) {
-            loadChalData.load(this.year, this.level, this.props.doLoadChalData)
+            this.props.doLoadChalData(this.year, this.level)
                 .then((result) => {
-                    console.log("Dispatch Result: ", result);
+                    console.log("Challenge Data Loaded: ", result);
                     this.prePopulateStateScores();
-                })
-        } else {
-            console.log("ScoreChallenge - No need to load Challenge Data");
-            this.prePopulateStateScores();
-        }
+                });
+    }
+
+    componentDidMount() {
+
     }
 
     prePopulateStateScores = () => {
@@ -126,6 +126,7 @@ class ScoreChallengeApp extends Component {
         this.setState({ submitConfirmVisible: false });
         this.props.submitScore(this.teamId, this.chalId, this.divId, this.state.scores);
         this.props.history.push(this.backURL);
+        this.props.addRun(this.teamId, this.chalId);
     };
 
     abortConfirmCanceled = () => {
@@ -140,6 +141,7 @@ class ScoreChallengeApp extends Component {
             this.divId,
             this.props.challengeData[this.year][this.level][this.chalNum].score_elements.length
         );
+        this.props.addAbort(this.teamId, this.chalId);
         this.props.history.push(this.backURL);
     };
 
@@ -230,13 +232,16 @@ function mapStateToProps(state) {
     return {
         teamScores: state.teamScores,
         challengeData: state.challengeData,
-        backURL: state.generic.backURL
+        backURL: state.generic.backURL,
+        runs: state.runs
     }
 }
 
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
+        addRun: (teamId, chalId) => dispatch(addRun(teamId,chalId)),
+        addAbort: (teamId, chalId) => dispatch(addAbort(teamId,chalId)),
         updateBack: (newURL) => dispatch(updateBackButton(newURL)),
         updateTitle: (newTitle) => dispatch(updatePageTitle(newTitle)),
         doLoadChalData: (year,level,data) => dispatch(loadChallengeData(year,level,data)),

@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import {connect} from "react-redux";
-import loadChalData from "../utils/loadChalData";
+
 import {updateBackButton, updatePageTitle} from "../actions/Generic";
-import {loadChallengeData} from "../actions/ScoreChallenge";
+import {loadChallengeData} from "../actions/ChallengeData";
 import {deleteFavorite, saveFavorite} from "../actions/TeamList";
+
 
 class TeamListApp extends Component {
     constructor(props) {
@@ -51,11 +52,7 @@ class TeamListApp extends Component {
         this.props.updateTitle("Choose Team");
         this.props.updateBack(`/c/${this.compId}`, true);
 
-        if(!this.props.challengeData[this.year] || !this.props.challengeData[this.year][this.level]) {
-            loadChalData.load(this.year, this.level, this.props.doLoadChalData)
-        } else {
-            console.log("TeamList - No need to load Challenge Data");
-        }
+        this.props.doLoadChalData(this.year, this.level);
     }
 
     inputUpdate = (e) => {

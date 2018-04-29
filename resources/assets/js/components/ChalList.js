@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import {connect} from "react-redux";
-import loadChalData from "../utils/loadChalData";
-import {loadChallengeData} from "../actions/ScoreChallenge";
+import {loadChallengeData} from "../actions/ChallengeData";
 import {updateBackButton, updatePageTitle} from "../actions/Generic";
+import {loadRuns} from "../actions/Runs";
 
 class ChalListApp extends Component {
     constructor(props) {
@@ -22,17 +22,12 @@ class ChalListApp extends Component {
         this.props.updateTitle("Select Challenge");
         this.props.updateBack(`/c/${this.compId}/d/${this.divId}`);
 
-        if(!this.props.challengeData[this.year] || !this.props.challengeData[this.year][this.level]) {
-            loadChalData.load(this.year, this.level, this.props.doLoadChalData)
-                .then((result) => {
-                    console.log("Dispatch Result: ", result);
-                })
-        } else {
-            console.log("ChalList - No need to load Challenge Data");
-        }
+        this.props.doLoadChalData(this.year, this.level);
     }
 
-
+    componentDidMount() {
+        this.props.loadRuns(this.teamId);
+    }
 
     render() {
         let challenges = (this.props.challengeData[this.year] && this.props.challengeData[this.year][this.level]) ?
@@ -48,11 +43,14 @@ class ChalListApp extends Component {
                 <ul className="ui-listview ui-listview-inset ui-corner-all ui-shadow">
                     {
                         (challenges) ? challenges.map((item,num) => {
+                            const rkey = `${this.teamId}_${item.id}_`;
                             return <Challenge
                                 compId={this.compId}
                                 divId={this.divId}
                                 teamId={this.teamId}
                                 key={item.id}
+                                runs={(this.props.runs[rkey + 'runs']) ? this.props.runs[rkey + 'runs'] : 0 }
+                                aborts={(this.props.runs[rkey + 'aborts']) ? this.props.runs[rkey + 'aborts'] : 0 }
                                 number={num} {...item} />}) :
                             <li>No Data</li>
                     }
@@ -70,6 +68,7 @@ class Challenge extends  Component {
                 to={`/c/${this.props.compId}/d/${this.props.divId}/t/${this.props.teamId}/h/${this.props.number}`}
                 className="ui-btn ui-btn-icon-right ui-icon-carat-r">
                 {this.props.number + 1}. {this.props.display_name} ({this.props.points} Points Possible)
+                <span className="ui-li-count">{ this.props.runs } / { this.props.aborts}</span>
             </Link>
         </li>
         )
@@ -80,13 +79,15 @@ class Challenge extends  Component {
 function mapStateToProps(state) {
     return {
         challengeData: state.challengeData,
-        backURL: state.backURL
+        backURL: state.backURL,
+        runs: state.runs
     }
 }
 
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
+        loadRuns: (teamId) => dispatch(loadRuns(teamId)),
         updateBack: (newURL) => dispatch(updateBackButton(newURL)),
         updateTitle: (newTitle) => dispatch(updatePageTitle(newTitle)),
         doLoadChalData: (year,level,data) => dispatch(loadChallengeData(year,level,data))

@@ -107,7 +107,7 @@ class ScoreApiController extends Controller
 
 	public function team_runs(Request $req, $team_id) {
 		$runs = DB::select(
-			'SELECT team_id, challenge_id, COUNT(*) AS runs, SUM(abort = 1) AS aborts ' .
+			'SELECT CONCAT(team_id,"_", challenge_id,"_") as rkey, COUNT(*) AS runs, SUM(abort = 1) AS aborts ' .
 			'FROM scoreboard2.score_runs ' .
 			'WHERE team_id = ? ' .
 			'GROUP BY team_id , challenge_id'

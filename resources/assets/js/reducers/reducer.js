@@ -12,11 +12,22 @@ import {
 } from '../actions/TeamList';
 
 import {
-    LOAD_CHALLENGE_DATA,
+    SAVE_CHALLENGE_DATA,
+    CLEAR_CHALLENGE_DATA,
+} from '../actions/ChallengeData';
+
+import {
     SCORE_CHALLENGE,
     ABORT_CHALLENGE, UPDATE_SCORE_SUMMARY, SUBMIT_SCORES,
     UPDATE_SCORES_SAVED_STATUS
 } from '../actions/ScoreChallenge';
+
+import {
+    ADD_RUN,
+    ADD_ABORT,
+    CLEAR_RUNS,
+    SAVE_LOADED_RUNS
+} from '../actions/Runs';
 
 function generic(state = { backURL: '/', title: 'Choose Competition'}, action) {
     switch (action.type) {
@@ -48,11 +59,14 @@ function teamList(state = { teamFavorites: {} }, action) {
 
 function challengeData(state = {} , action) {
     switch (action.type) {
-        case LOAD_CHALLENGE_DATA:
+        case SAVE_CHALLENGE_DATA:
+            console.log("Challenge Data Saved");
             let temp = {};
-            temp[action.year] = {};
-            temp[action.year][action.level] = action.data;
-            return Object.assign({}, state, temp);
+            temp[action.year] = { $set: {[action.level]: action.data }};
+            return update(state, temp);
+        case CLEAR_CHALLENGE_DATA:
+            console.log("Challenge Data Cleared");
+            return {};
         default:
             return state;
     }
@@ -136,12 +150,37 @@ function scoreSummary(state = { s: 0, u: 0 }, action) {
     }
 }
 
+function runs(state = {}, action) {
+    switch(action.type) {
+        case SAVE_LOADED_RUNS:
+            return Object.assign({}, state, action.data);
+        case ADD_RUN:
+            const rkey = `${action.teamId}_${action.chalId}_runs`;
+            return Object.assign({}, state, {
+                [rkey]: (state[rkey]) ? state[rkey] + 1 : 1                
+            });
+        case ADD_ABORT:
+            const akey = `${action.teamId}_${action.chalId}_aborts`;
+            return Object.assign({}, state, {
+                [akey]: (state[akey]) ? state[akey] + 1 : 1
+            });
+        case CLEAR_RUNS:
+            console.log("Runs Data Cleared");
+            return {};
+        default:
+            return state;
+    }
+}
+
+
+
 const reducer = combineReducers({
     generic,
     teamList,
     challengeData,
     teamScores,
-    scoreSummary
+    scoreSummary,
+    runs,
 });
 
 export default reducer;

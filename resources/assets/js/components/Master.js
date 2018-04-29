@@ -9,13 +9,19 @@ import ChalList from "./ChalList";
 import ScoreChallenge from "./ScoreChallenge";
 import TestChallenge from "./TestChallenge";
 import {updateBackButton} from "../actions/Generic";
+import {clearRuns} from "../actions/Runs";
 import {submitScores, updateScoreSummary} from "../actions/ScoreChallenge";
+import {clearChallengeData} from "../actions/ChallengeData";
+import SettingsPopup from "./Popups/SettingsPopup";
 
 
 class MasterApp extends Component {
     constructor(props) {
         super(props);
         document.title = "Choose Competition";
+        this.state = {
+            settingsVisible: false
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -38,6 +44,16 @@ class MasterApp extends Component {
         console.log("Submitting Scores");
         this.props.submitScores(this.props.teamScores)
     }
+
+    toggleSettings = (e) => {
+        e.preventDefault();
+        this.setState({settingsVisible: !this.state.settingsVisible});
+    };
+
+    // Settings Popup Hanlders
+    settingsClosed = (e) => {
+        this.setState({settingsVisible: false});
+    };
 
     render(){
         return (
@@ -66,12 +82,21 @@ class MasterApp extends Component {
                                     Saved: {this.props.scoreSummary.s} &nbsp;
                                     Unsaved: {this.props.scoreSummary.u}
                                 </span>
+                                <span onClick={this.toggleSettings}
+                                    className="ui-btn-right ui-btn ui-icon-gear ui-btn-icon-notext ui-shadow ui-corner-all">
+                                </span>
                             </div>
                         </h4>
-
                     </div>
+                    <SettingsPopup
+                        onCancel={this.settingsClosed}
+                        clearChallengeDataClick={this.props.clearChallengeData}
+                        clearRunsClick={this.props.clearRuns}
+                        visible={this.state.settingsVisible}
+                    />
                 </div>
             </BrowserRouter>
+
         )
     }
 }
@@ -92,7 +117,9 @@ function mapDispatchToProps(dispatch) {
     return {
         updateBack: (newURL, show) => dispatch(updateBackButton(newURL, show)),
         updateScoreSummary: (teamScores) => dispatch(updateScoreSummary(teamScores)),
-        submitScores: (teamScores) => dispatch(submitScores(teamScores))
+        submitScores: (teamScores) => dispatch(submitScores(teamScores)),
+        clearChallengeData: () => dispatch(clearChallengeData()),
+        clearRuns: () => dispatch(clearRuns())
     }
 }
 
