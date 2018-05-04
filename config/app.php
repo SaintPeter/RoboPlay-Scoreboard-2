@@ -231,6 +231,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
 	    'UserTypes' => App\Enums\UserTypes::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
+	    'VideoFlag' => App\Enums\VideoFlag::class,
 	    'VideoStatus' => App\Enums\VideoCheckStatus::class,
         'View' => Illuminate\Support\Facades\View::class,
 

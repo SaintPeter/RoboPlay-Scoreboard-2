@@ -25,7 +25,9 @@
             border-bottom: 2px solid darkgray;
         }
 
-
+        .video-dq td {
+            background-color: lightpink !important;
+        }
     </style>
 @endsection
 
@@ -92,11 +94,12 @@
 	<tbody>
 	@if($videos->count())
 		@foreach ($videos as $video)
-            <tr id="video_row_{{ $video->id }}">
+            <tr id="video_row_{{ $video->id }}" class="{{ $video->flag == VideoFlag::Disqualified ? 'video-dq' : ''  }}">
 				<td>{{{ $video->name }}}</td>
 				<td>{!! join('<br />', $video->student_list()) !!}</td>
                 <td class="{{ ($video->status==VideoStatus::Pass || $video->status == VideoStatus::Warnings) ? 'confirmed' : 'unconfirmed'  }} text-center">
                 <span id="video_result_{{ $video->id }}" class="{{ VideoStatus::toClasses($video->status) }}">
+                    {{ VideoFlag::getDescription($video->flag) }} <br />
                     {{ VideoStatus::getDescription($video->status) }}
                 </span>
                 </td>

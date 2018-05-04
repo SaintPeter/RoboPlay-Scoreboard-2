@@ -11,6 +11,12 @@ final class VideoFlag extends Enum
     const Review = 1;
     const Disqualified = 2;
 
+    const list = [
+    	self::Normal => "Normal",
+	    self::Review => "Review",
+	    self::Disqualified => "Disqualified"
+    ];
+
     /**
      * Get the description for an enum value
      *

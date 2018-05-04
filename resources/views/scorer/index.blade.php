@@ -101,6 +101,16 @@
             font-size: 10px;
             cursor: pointer;
         }
+
+        .list-text {
+            width: 85%;
+            font-size: 14px;
+        }
+        .points_possible {
+            font-size: 12px;
+            margin-left: 1em;
+        }
+
     </style>
 
 </head>
