@@ -14,6 +14,11 @@ try {
 		$bc->push('Video List', route('display.video_list', $competition));
 	});
 
+	Breadcrumbs::register('display.show_video', function(BreadcrumbsGenerator $bc, $comp, $video_id) {
+		$bc->parent('display.video_list',$comp);
+		$bc->push('Show Video', route('display.show_video', [$comp, $video_id]));
+	});
+
 // ChallengesController.php  (4 usages found)
 	Breadcrumbs::register('challenges.index', function (BreadcrumbsGenerator $bc) {
 		$bc->parent('home');
