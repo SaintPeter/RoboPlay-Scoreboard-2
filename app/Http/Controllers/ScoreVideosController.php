@@ -102,7 +102,7 @@ class ScoreVideosController extends Controller {
 		// Fix category count for VideoType::General
 		// After 2017 there is a "theme" entry in general scores
 		$general_divisor = 3;
-		if($competiton->last()->event_start->year > 2017) {
+		if($competiton->last() && $competiton->last()->event_start->year > 2017) {
 			$general_divisor = 4;
 		}
 		$scored_count[VideoType::General] /= $general_divisor;
