@@ -161,6 +161,11 @@ try {
 		$bc->push('Edit Video Score', route('video.judge.edit', [$video_id]));
 	});
 
+	Breadcrumbs::register('video.judge.show', function (BreadcrumbsGenerator $bc, $video_id) {
+		$bc->parent('video.judge.index');
+		$bc->push('Judge - Show Video', route('video.judge.show', [$video_id]));
+	});
+
 // Video Competitions
 	Breadcrumbs::register('vid_competitions.index', function (BreadcrumbsGenerator $bc) {
 		$bc->parent('home');
