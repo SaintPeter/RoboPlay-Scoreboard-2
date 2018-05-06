@@ -102,13 +102,12 @@
             cursor: pointer;
         }
 
-        .list-text {
+        .title-line {
             width: 85%;
             font-size: 14px;
         }
-        .points_possible {
+        .second-line {
             font-size: 12px;
-            margin-left: 1em;
         }
 
     </style>

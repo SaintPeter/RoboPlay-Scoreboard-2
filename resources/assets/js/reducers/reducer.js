@@ -160,9 +160,10 @@ function runs(state = {}, action) {
                 [rkey]: (state[rkey]) ? state[rkey] + 1 : 1                
             });
         case ADD_ABORT:
-            const akey = `${action.teamId}_${action.chalId}_aborts`;
+            const key = `${action.teamId}_${action.chalId}_`;
             return Object.assign({}, state, {
-                [akey]: (state[akey]) ? state[akey] + 1 : 1
+                [key + 'runs']: (state[key + 'runs']) ? state[key + 'runs'] + 1 : 1,
+                [key + 'aborts']: (state[key + 'aborts']) ? state[key + 'aborts'] + 1 : 1
             });
         case CLEAR_RUNS:
             console.log("Runs Data Cleared");

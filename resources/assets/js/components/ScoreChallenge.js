@@ -30,9 +30,9 @@ class ScoreChallengeApp extends Component {
         this.teamName = compData[this.compId].divisions[this.divId].teams[this.teamId];
 
         this.backURL = `/c/${this.compId}/d/${this.divId}/t/${this.teamId}`;
-        
-        // TODO:  Import Run Number
-        this.runNumber = 0;
+
+        let key = `${this.teamId}_${this.chalId}_runs`;
+        this.runNumber = (this.props.runs[key]) ? this.props.runs[key] : 1;
         
         this.state = {
             total: 0,

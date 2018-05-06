@@ -38,7 +38,9 @@ class ChalListApp extends Component {
                     <strong>Competition:</strong> {this.competitionName}<br />
                     <strong>Division: </strong>{this.divisionName}<br />
                     <strong>Team: </strong>{this.teamName}<br />
-                    <strong>Judge: </strong>{judgeName}<br />
+                    <strong>Judge: </strong>{judgeName}
+                    <span style={{ top: "inherit", bottom: "5px", backgroundColor: "white"}}
+                          className="ui-li-count">Total Runs / Aborts</span>
                 </div>
                 <ul className="ui-listview ui-listview-inset ui-corner-all ui-shadow">
                     {
@@ -67,8 +69,13 @@ class Challenge extends  Component {
             <Link
                 to={`/c/${this.props.compId}/d/${this.props.divId}/t/${this.props.teamId}/h/${this.props.number}`}
                 className="ui-btn ui-btn-icon-right ui-icon-carat-r">
-                {this.props.number + 1}. {this.props.display_name} ({this.props.points} Points Possible)
-                <span className="ui-li-count">{ this.props.runs } / { this.props.aborts}</span>
+                <div className="title-line">
+                    {this.props.number + 1}. {this.props.display_name}
+                </div>
+                <div className="second-line" style={{marginLeft: "1.2em"}}>
+                    {this.props.points} Points Possible
+                </div>
+                <span style={{ backgroundColor: "white"}} className="ui-li-count">{ this.props.runs } / { this.props.aborts}</span>
             </Link>
         </li>
         )

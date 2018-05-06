@@ -131,12 +131,21 @@ class Team extends  Component {
         let childType = this.props.firstItem ? 'ui-first-child' : '';
         childType += this.props.lastItem ? 'ui-last-child' : '';
 
+        let match = this.props.name.match(/^(.+?)\s*\(([^\)]+)\)/);
+        let teamName = match[1];
+        let schoolName = match[2];
+
         return (
             <li className={childType}>
                 <Link
                     to={`/c/${this.props.compId}/d/${this.props.divId}/t/${this.props.teamId}`}
                     className='ui-btn ui-btn-icon-right ui-icon-carat-r'>
-                    {this.props.name}
+                    <div className="title-line">
+                        {teamName}
+                    </div>
+                    <div className="second-line">
+                        {schoolName}
+                    </div>
                 </Link>
                 <button onClick={this.doToggleFavorite}
                     title={(this.props.isFavorite) ? 'Remove from Favorites' : 'Add to Favorites'}

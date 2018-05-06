@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-const h4Style = {
+const chalTextStyle = {
   width: "90%",
   whiteSpace: "normal"
 };
@@ -44,7 +44,7 @@ export default class ScoreElement extends Component {
         return (
             <li className="ui-field-contain ui-li-static ui-body-inherit">
                 <span className="ui-li-count score_display">{ this.state.score }</span>
-                <h4 style={h4Style} dangerouslySetInnerHTML={{ __html: this.props.display_text }} />
+                <div style={chalTextStyle} dangerouslySetInnerHTML={{ __html: this.props.display_text }} />
                 {React.cloneElement(this.props.children, { onChange: this.handleScoreChange })}
             </li>
         );
