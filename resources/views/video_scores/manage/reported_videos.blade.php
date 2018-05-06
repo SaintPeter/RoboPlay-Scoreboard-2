@@ -55,7 +55,7 @@ tr.score_row:nth-child(odd){
 				<td>{{ link_to_route('video.judge.show', $comment->video->name, [ $comment->video->id ]) }}</td>
 				<td>{{ $comment->user->name }}</td>
 				<td>{{ $comment->comment }}</td>
-				<td>{!! Form::textarea('resolution', $comment->resolution, [ 'cols' => 40, 'rows' => 4 ])  !!}</td>
+				<td>{!! Form::textarea('resolution_' . $comment->id, $comment->resolution, [ 'cols' => 40, 'rows' => 4 ])  !!}</td>
 				<td class="text-center">
 					{!! Form::button('Absolve', [ 'type' => 'submit', 'name'=> 'absolve', 'value' => $comment->id ,'class' => 'btn btn-success' ])  !!}
 					{!! Form::button('Disqualify', [ 'type' => 'submit', 'name'=> 'dq',  'value' => $comment->id ,'class' => 'btn btn-danger' ])  !!}</td>

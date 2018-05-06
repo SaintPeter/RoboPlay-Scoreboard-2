@@ -267,13 +267,13 @@ class VideoManagementController extends Controller {
 	public function process_report(Request $req) {
 		if($req->has('absolve')) {
 			$comment = Video_comment::with('video')->find($req->input('absolve'));
-			$comment->resolution = $req->input('resolution', 'No Resolution Given');
+			$comment->resolution = $req->input('resolution_' . $req->absolve, 'No Resolution Given');
 			$comment->save();
 			$comment->video->flag = VideoFlag::Normal;
 			$comment->video->save();
 		} elseif ($req->has('dq')) {
 			$comment = Video_comment::with('video')->find($req->input('dq'));
-			$comment->resolution = $req->input('resolution', 'No Resolution Given');
+			$comment->resolution = $req->input('resolution_' . $req->dq, 'No Resolution Given');
 			$comment->save();
 			$comment->video->flag = VideoFlag::Disqualified;
 			$comment->video->save();
