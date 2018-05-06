@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>@if(isset($title)){{ $title . ' | ' }}RoboPlay Scoreboard @endif</title>
-		<link rel="icon" type="image/ico" href="http://cstem.ucdavis.edu/scoreboard/favicon.ico"/>
+		<link rel="icon" type="image/ico" href="https://scoreboard.c-stem.ucdavis.edu/favicon.ico"/>
 		{{ HTML::style('//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css') }}
 		{{ HTML::style('//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css') }}
 		{{-- HTML::style('/css/custom-theme/jquery-ui-1.12.0.custom.css') --}}
