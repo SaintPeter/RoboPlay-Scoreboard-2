@@ -162,7 +162,10 @@ class ScoreVideosController extends Controller {
 		}
 
 		// Get all the videos and their scores were the video is not flagged for review or disqualified
-		$all_videos = Video::with('scores')->where('flag',VideoFlag::Normal)->whereIn('vid_division_id', $divs)->get();
+		$all_videos = Video::with('scores')
+			->where('flag',VideoFlag::Normal)
+			->whereIn('vid_division_id', $divs)
+			->get();
 
 		//dd(DB::getQueryLog());
 //		echo "<pre>";
@@ -178,7 +181,7 @@ class ScoreVideosController extends Controller {
 				return true;
 			} else {
 				foreach($video->scores as $score) {
-					if($score->user_id == Auth::user()->id) {
+					if($score->judge_id == Auth::user()->id) {
 						return false;
 					}
 				}
@@ -194,7 +197,7 @@ class ScoreVideosController extends Controller {
 
 		// No videes left in filteres means they've scored all active videos (or there are no videos to score)
 		if(count($filtered) == 0) {
-			return redirect()->route('video.judge.index')->with('message', 'You cannot user any more videos.');
+			return redirect()->route('video.judge.index')->with('message', 'You cannot judge any more videos.');
 		}
 
 		// Sort videos to determine which one gets scored next
