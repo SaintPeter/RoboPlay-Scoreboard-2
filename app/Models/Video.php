@@ -170,6 +170,10 @@ class Video extends Model {
 		return $student_list;
 	}
 
+	public function getYearAttribute() {
+		return $this->created_at->year;
+	}
+
 	public function general_scores_count()
 	{
 		$count = $this->scores->reduce(function($acc, $score) {
@@ -178,7 +182,11 @@ class Video extends Model {
 			}
 		    return $acc;
 		}, 0);
-		$count /= 3;
+		if($this->year > 2017) {
+			$count /= 4;
+		} else {
+			$count /= 3;
+		}
 		return $count;
 	}
 
