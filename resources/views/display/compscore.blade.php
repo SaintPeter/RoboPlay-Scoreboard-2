@@ -70,11 +70,11 @@
 	}
 	.timing {
 		margin-left: 35px;
-		margin-right: 0px
-		whitespace: nobreak;
+		margin-right: 0;
+		white-space: nowrap;
 	}
 	.timing h1:first-child {
-		margin-top: 0px;
+		margin-top: 0;
 	}
 	.header_container {
 		margin: 5px 15px;
@@ -117,7 +117,7 @@
 					<td>#</td>
 					<td>Team</td>
 					<td>School</td>
-					<td>Score (Runs)</td>
+					<td>Score (Runs/Aborts)</td>
 				</tr>
 				<?php $rowcount += 2; ?>
 				@foreach($score_list[$division->id] as $team_id => $score)
@@ -131,7 +131,7 @@
 							{{ $division->teams->find($team_id) ? $division->teams->find($team_id)->school->name : 'Not Found' }}
 						</td>
 						<td>
-							{{ $score['total'] }} ({{ $score['runs'] }})
+							{{ $score['total'] }} ({{ $score['runs'] }}/{{ $score['aborts'] }})
 						</td>
 					</tr>
 					@if($rowcount >  $settings['rows'])
@@ -147,7 +147,7 @@
 							<td>#</td>
 							<td>Team</td>
 							<td>School</td>
-							<td>Score (Runs)</td>
+							<td>Score (Runs/Aborts)</td>
 						</tr>
 						<?php $rowcount = 2; ?>
 					@endif

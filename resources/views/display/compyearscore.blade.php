@@ -120,7 +120,7 @@
 					@if($top)
 					    <td>Site</td>
 					@endif
-					<td>Score (Runs)</td>
+					<td>Score (Runs/Aborts)</td>
 				</tr>
 				<?php $rowcount += 2; ?>
 				@foreach($scores as $team_id => $score)
@@ -137,7 +137,7 @@
 						    <td>{{ $teams->find($team_id)->division->competition->location }}</td>
 						@endif
 						<td>
-							{{ $score['total'] }} ({{ $score['runs'] }})
+							{{ $score['total'] }} ({{ $score['runs'] }}/{{$score['aborts']}})
 						</td>
 					</tr>
 					@if($rowcount > $settings['rows'])
@@ -156,7 +156,7 @@
 							@if($top)
         					    <td>Site</td>
         					@endif
-							<td>Score (Runs)</td>
+							<td>Score (Runs/Aborts)</td>
 						</tr>
 						<?php $rowcount = 2; ?>
 					@endif

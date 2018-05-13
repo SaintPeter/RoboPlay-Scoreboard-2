@@ -7,6 +7,7 @@ use View;
 use Auth;
 use Cache;
 use Session;
+use Response;
 use App\Helpers\Roles;
 use App\Enums\VideoFlag;
 use Illuminate\Http\Request;
@@ -109,6 +110,28 @@ class DisplayController extends Controller {
 		return View::make('display.teamscore', compact('team','challenge_list', 'grand_total', 'show_users'));
 	}
 
+	/**
+	 * Sort Function for scores
+	 *   Sorts by Score, Runs, then Aborts
+	 * @param $a
+	 * @param $b
+	 * @return mixed
+	 */
+	public static function score_sort($a, $b) {
+		// Sort by score first:
+		if($a['total'] == $b['total']) {
+			// Then by runs
+			if($a['runs'] == $b['runs']) {
+				// Then by aborts
+				return $a['aborts'] - $b['aborts'];
+			} else {
+				return $a['runs'] - $b['runs'];
+			}
+		} else {
+			return $b['total'] - $a['total'];
+		}
+	}
+
     public function compscore_top(Request $req, $competition_id, $csv = null)
     {
         return $this->compscore_actual($req, $competition_id, $csv, true);
@@ -121,7 +144,7 @@ class DisplayController extends Controller {
 
 	public function compscore_actual(Request $req, $competition_id, $csv = null, $top = null)
 	{
-		$comp = Competition::with('divisions', 'divisions.teams', 'divisions.challenges')->find($competition_id);
+		$comp = Competition::with('divisions', 'divisions.teams', 'divisions.teams.school', 'divisions.challenges')->find($competition_id);
 		$divisions = $comp->divisions;
 
         $timer = $this->init_timer();
@@ -143,7 +166,10 @@ class DisplayController extends Controller {
 
 			// Calculate the max score for each team and challenge
 			$scores = DB::table('score_runs')
-					->select('team_id', 'challenge_id', DB::raw('max(total) as chal_score'), DB::raw('count(total) as chal_runs'))
+					->select('team_id', 'challenge_id',
+						DB::raw('max(total) as chal_score'),
+						DB::raw('count(total) as chal_runs'),
+						DB::raw('sum(abort = 1) as aborts'))
 					->groupBy('team_id', 'challenge_id')
 					->orderBy('team_id', 'challenge_id')
 					->where('division_id', $division->id)
@@ -163,20 +189,24 @@ class DisplayController extends Controller {
 			// Sum up all of the scores by team
 			foreach($scores as $score)
 			{
-				// Initalize the storage location for each team
+				// Initialize the storage location for each team
 				if(!array_key_exists($score->team_id, $score_list[$division->id])) {
-					$score_list[$division->id][$score->team_id]['total'] = 0;
-					$score_list[$division->id][$score->team_id]['runs'] = 0;
+					$score_list[$division->id][$score->team_id] = [
+						'total'=> 0,
+						'runs' => 0,
+						'aborts' => 0
+						];
 				}
 				$score_list[$division->id][$score->team_id]['total'] += $score->chal_score;
 				$score_list[$division->id][$score->team_id]['runs'] += $score->chal_runs;
+				$score_list[$division->id][$score->team_id]['aborts'] += $score->aborts;
 			}
 
 
 			// Find all of the teams with no scores yet and add them to the end of the list
 			$team_list = $division->teams->pluck('id')->all();
 			$missing_list = array_diff($team_list, array_keys($score_list[$division->id]));
-			$score_list[$division->id] = $score_list[$division->id] + array_fill_keys($missing_list, [ 'total' => 0, 'runs' => 0 ] );
+			$score_list[$division->id] = $score_list[$division->id] + array_fill_keys($missing_list, [ 'total' => 0, 'runs' => 0, 'aborts' => 0 ] );
 
 			// Descending sort by score
 			//arsort($score_list[$division->id]);
@@ -184,14 +214,7 @@ class DisplayController extends Controller {
 			// Sort descening by Score, runs
 			//    minus is a standin for the <=> operator
 			//    a - b roughly equals a <=> b
-			uasort($score_list[$division->id], function($a, $b) {
-				// Sort by score first:
-				if($a['total'] == $b['total']) {
-					return $a['runs'] - $b['runs'];
-				} else {
-					return $b['total'] - $a['total'];
-				}
-			});
+			uasort($score_list[$division->id], 'self::score_sort');
 
 			// Populate Places
 			$place = 1;
@@ -214,7 +237,7 @@ class DisplayController extends Controller {
 
 		// CSV Output
 		if($csv) {
-			$output = "Division,Place,Team,School,Score,Runs\n";
+			$output = "Division,Place,Team,School,Score,Runs,Aborts\n";
 
 			foreach($divisions as $division) {
 				foreach($score_list[$division->id] as $team_id => $score) {
@@ -224,7 +247,8 @@ class DisplayController extends Controller {
 						$division->teams->find($team_id)->name,
 						$division->teams->find($team_id)->school->name,
 						$score['total'],
-						$score['runs']
+						$score['runs'],
+						$score['aborts']
 					]) . "\"\n";
 				}
 			}
@@ -277,7 +301,7 @@ class DisplayController extends Controller {
 	{
 		//Breadcrumbs::addCrumb('Statewide Score', 'compyearscore');
 
-		$compyear = CompYear::with('competitions', 'divisions', 'divisions.teams', 'divisions.challenges')->find($compyear_id);
+		$compyear = CompYear::with('competitions', 'divisions', 'divisions.teams', 'divisions.teams.school', 'divisions.challenges')->find($compyear_id);
 		$divisions = $compyear->divisions;
 
 		// Frozen Calculation
@@ -312,12 +336,15 @@ class DisplayController extends Controller {
 
 			// Calculate the max score for each team and challenge
 			$scores = DB::table('score_runs')
-					->select('team_id', 'challenge_id', DB::raw('max(total) as chal_score'), DB::raw('count(total) as chal_runs'))
-					->groupBy('team_id', 'challenge_id')
-					->orderBy('team_id', 'challenge_id')
-					->where('division_id', $division->id)
-					->whereNull('deleted_at')
-					->whereIn('challenge_id', $challenge_list);  // Limit to currently attached challenges
+				->select('team_id', 'challenge_id',
+					DB::raw('max(total) as chal_score'),
+					DB::raw('count(total) as chal_runs'),
+					DB::raw('sum(abort = 1) as aborts'))
+				->groupBy('team_id', 'challenge_id')
+				->orderBy('team_id', 'challenge_id')
+				->where('division_id', $division->id)
+				->whereNull('deleted_at')
+				->whereIn('challenge_id', $challenge_list);  // Limit to currently attached challenges
 
 			// If we're frozen, limit scores we count by the freeze time
 			if($frozen) {
@@ -329,32 +356,31 @@ class DisplayController extends Controller {
 			// Sum up all of the scores by team
 			foreach($scores as $score)
 			{
-				// Initalize the storage location for each team
+				// Initialize the storage location for each team
 				if(!array_key_exists($score->team_id, $score_list[$division->level])) {
-					$score_list[$division->level][$score->team_id]['total'] = 0;
-					$score_list[$division->level][$score->team_id]['runs'] = 0;
+					$score_list[$division->level][$score->team_id] = [
+						'total'=> 0,
+						'runs' => 0,
+						'aborts' => 0
+					];
 				}
 				$score_list[$division->level][$score->team_id]['total'] += $score->chal_score;
 				$score_list[$division->level][$score->team_id]['runs'] += $score->chal_runs;
+				$score_list[$division->level][$score->team_id]['aborts'] += $score->aborts;
 			}
 
 
 			// Find all of the teams with no scores yet and add them to the end of the list
 			$team_list = $division->teams->pluck('id')->all();
 			$missing_list = array_diff($team_list, array_keys($score_list[$division->level]));
-			$score_list[$division->level] = $score_list[$division->level] + array_fill_keys($missing_list, [ 'total' => 0, 'runs' => 0 ] );
+			$score_list[$division->level] =
+				$score_list[$division->level] +
+				array_fill_keys($missing_list, [ 'total' => 0, 'runs' => 0, 'aborts' => 0 ] );
 
 			// Sort descening by Score, runs
 			//    minus is a standin for the <=> operator
 			//    a - b roughly equals a <=> b
-			uasort($score_list[$division->level], function($a, $b) {
-				// Sort by score first:
-				if($a['total'] == $b['total']) {
-					return $a['runs'] - $b['runs'];
-				} else {
-					return $b['total'] - $a['total'];
-				}
-			});
+			uasort($score_list[$division->level], 'self::score_sort');
 
 			// Populate Places
 			$place = 1;
@@ -377,7 +403,7 @@ class DisplayController extends Controller {
 
 		// CSV Output
 		if($csv) {
-			$output = "Division,Place,Team,School,Score,Runs\n";
+			$output = "Division,Place,Team,School,Score,Runs,Aborts\n";
 
 			foreach($score_list as $level => $scores) {
 				foreach($scores as $team_id => $score) {
@@ -387,7 +413,8 @@ class DisplayController extends Controller {
 						$teams->find($team_id)->name,
 						$teams->find($team_id)->school->name,
 						$score['total'],
-						$score['runs']
+						$score['runs'],
+						$score['aborts']
 					]) . "\"\n";
 				}
 			}
@@ -464,12 +491,15 @@ class DisplayController extends Controller {
 
 				// Calculate the max score for each team and challenge
 				$scores = DB::table('score_runs')
-						->select('team_id', 'challenge_id', DB::raw('max(total) as chal_score'), DB::raw('count(total) as chal_runs'))
-						->groupBy('team_id', 'challenge_id')
-						->orderBy('team_id', 'challenge_id')
-						->where('division_id', $division->id)
-						->whereNull('deleted_at')
-						->whereIn('challenge_id', $challenge_list);  // Limit to currently attached challenges
+					->select('team_id', 'challenge_id',
+						DB::raw('max(total) as chal_score'),
+						DB::raw('count(total) as chal_runs'),
+						DB::raw('sum(abort = 1) as aborts'))
+					->groupBy('team_id', 'challenge_id')
+					->orderBy('team_id', 'challenge_id')
+					->where('division_id', $division->id)
+					->whereNull('deleted_at')
+					->whereIn('challenge_id', $challenge_list);  // Limit to currently attached challenges
 
 				// If we're frozen, limit scores we count by the freeze time
 				if($frozen) {
@@ -485,13 +515,17 @@ class DisplayController extends Controller {
 
 					// Initalize the storage location for each team
 					if(!array_key_exists($team->id, $score_list)) {
-						$score_list[$team->id]['school'] = $team->school->name;
-						$score_list[$team->id]['name'] = $team->name;
-						$score_list[$team->id]['total'] = 0;
-						$score_list[$team->id]['runs'] = 0;
+						$score_list[$team->id] = [
+							'school' => $team->school->name,
+							'name' => $team->name,
+							'total' => 0,
+							'runs' => 0,
+							'aborts' => 0
+						];
 					}
 					$score_list[$team->id]['total'] += $score->chal_score;
 					$score_list[$team->id]['runs'] += $score->chal_runs;
+					$score_list[$team->id]['aborts'] += $score->aborts;
 				}
 
 
@@ -500,22 +534,18 @@ class DisplayController extends Controller {
 				$missing_list = array_diff($team_list, array_keys($score_list));
 				foreach($missing_list as $missing_team) {
 				    $team = $teams->find($missing_team);
-					$score_list[$team->id]['school'] = $team->school->name;
-					$score_list[$team->id]['name'] = $team->name;
-					$score_list[$team->id]['total'] = 0;
-					$score_list[$team->id]['runs'] = 0;
+					$score_list[$team->id] = [
+						'school' => $team->school->name,
+						'name' => $team->name,
+						'total' => 0,
+						'runs' => 0,
+						'aborts' => 0
+					];
 			    }
 			}
 
 			// Sort by school name, then by team name
-			uasort($score_list, function($a, $b) {
-				// Sort by score first:
-				if(strcmp($a['school'], $b['school']) == 0) {
-					return strcmp($a['name'], $b['name']);
-				} else {
-					return strcmp($a['school'], $b['school']);
-				}
-			});
+			uasort($score_list, 'self::score_sort');
 			return $score_list;
 		});
 

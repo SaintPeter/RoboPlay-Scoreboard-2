@@ -110,7 +110,7 @@
 			<tr class="info">
 				<td>School</td>
 				<td>Team</td>
-				<td>Score (Runs)</td>
+				<td>Score (Runs/Aborts)</td>
 			</tr>
 			<?php $rowcount = 1; ?>
 			@foreach($score_list as $team_id => $score)
@@ -123,7 +123,7 @@
 						{{ link_to_route('display.teamscore', $score['name'], $team_id) }}
 					</td>
 					<td>
-						{{ $score['total'] }} ({{ $score['runs'] }})
+						{{ $score['total'] }} ({{ $score['runs'] }}/ {{ $score['aborts'] }})
 					</td>
 				</tr>
 				@if($rowcount > $settings['rows'])
@@ -134,7 +134,7 @@
 					<tr class="info">
     					<td>School</td>
     					<td>Team</td>
-    					<td>Score (Runs)</td>
+    					<td>Score (Runs/Aborts)</td>
     				</tr>
     				<?php $rowcount = 1; ?>
 				@endif
