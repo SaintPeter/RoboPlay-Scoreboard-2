@@ -98,7 +98,7 @@ class ScoreVideosController extends Controller {
 			}
 
 			// Only count videos which are not under review/disqualified
-			if($score->video->status == VideoFlag::Normal) {
+			if($score->video->flag == VideoFlag::Normal) {
 				$scored_count[$score->score_group]++;
 			}
 		}
