@@ -96,7 +96,11 @@ class ScoreVideosController extends Controller {
 			} else {
 			    $videos[$score->division->longname()][$score->video->name]['comments'] = '';
 			}
-			$scored_count[$score->score_group]++;
+
+			// Only count videos which are not under review/disqualified
+			if($score->video->flag == VideoFlag::Normal) {
+				$scored_count[$score->score_group]++;
+			}
 		}
 
 		// Fix category count for VideoType::General
