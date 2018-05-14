@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {loadChallengeData} from "../actions/ChallengeData";
 import {updateBackButton, updatePageTitle} from "../actions/Generic";
 import {loadRuns} from "../actions/Runs";
+import UIButton from "./UIButton";
 
 class ChalListApp extends Component {
     constructor(props) {
@@ -28,6 +29,11 @@ class ChalListApp extends Component {
     componentDidMount() {
         this.props.loadRuns(this.teamId);
     }
+
+    showTeamScoreClick = () => {
+        this.props.history.push(`/c/${this.compId}/d/${this.divId}/t/${this.teamId}/scores`);
+    };
+
 
     render() {
         let challenges = (this.props.challengeData[this.year] && this.props.challengeData[this.year][this.level]) ?
@@ -57,6 +63,11 @@ class ChalListApp extends Component {
                             <li>No Data</li>
                     }
                 </ul>
+                <div className="ui-body ui-body-a ui-corner-all">
+                    <UIButton onClick={ this.showTeamScoreClick }>
+                        Show Team Score
+                    </UIButton>
+                </div>
             </div>
         )
     }
