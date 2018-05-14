@@ -13,6 +13,7 @@ import {clearRuns} from "../actions/Runs";
 import {submitScores, updateScoreSummary} from "../actions/ScoreChallenge";
 import {clearChallengeData} from "../actions/ChallengeData";
 import SettingsPopup from "./Popups/SettingsPopup";
+import TeamView from "./TeamView";
 
 
 class MasterApp extends Component {
@@ -71,6 +72,7 @@ class MasterApp extends Component {
                         <Route exact path="/c/:compId/d/:divId" component={TeamList} />
                         <Route exact path="/c/:compId/d/:divId/t/:teamId" component={ChalList} />
                         <Route exact path="/c/:compId/d/:divId/t/:teamId/h/:chalId" component={ScoreChallenge} />
+                        <Route exact path="/c/:compId/d/:divId/t/:teamId/scores" component={TeamView} />
                         <Route exact path="/test/:chalId" component={TestChallenge} />
                     </Switch>
 

@@ -6,8 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Laravel</title>
+    <link media="all" type="text/css" rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
     <script>
         $(document).on("mobileinit", function() {
             $.mobile.ajaxEnabled = false;
@@ -15,7 +17,6 @@
             //$.mobile.linkBindingEnabled = false;
         });
     </script>
-    <script src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
     {{ HTML::style('//maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css') }}
 
     <script type="application/javascript">
@@ -108,6 +109,21 @@
         }
         .second-line {
             font-size: 12px;
+        }
+
+        .ui-collapsible-content {
+            padding:0;
+        }
+
+        .score-table tr th {
+            text-align: center;
+            padding: 0 4px;
+            font-size: .8em;
+        }
+
+        .score-table tbody tr td {
+            vertical-align: middle;
+            padding: 0 4px;
         }
 
     </style>

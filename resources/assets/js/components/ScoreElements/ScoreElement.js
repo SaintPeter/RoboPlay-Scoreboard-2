@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 const chalTextStyle = {
-  width: "90%",
+  width: "85%",
   whiteSpace: "normal"
 };
 
