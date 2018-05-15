@@ -189,7 +189,9 @@ class VideoManagementController extends Controller {
 	}
 
 	public function scores_csv($year = null) {
-		$video_scores = Video_scores::with('division', 'division.competition', 'user', 'video', 'video.school')
+		$video_scores = Video_scores::with('division', 'division.competition', 'user')
+							->with([ 'video', 'video.school' ])
+							->whereHas('video', function($q) { return $q->where('flag', VideoFlag::Normal); })
 							->orderBy('total', 'desc');
 		if($year) {
 			$video_scores = $video_scores->where(DB::raw("year(created_at)"), intval($year))->get();
