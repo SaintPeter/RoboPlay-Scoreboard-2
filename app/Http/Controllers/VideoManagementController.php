@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use DB;
-use JpGraph\JpGraph;
 use URL;
 use View;
 use Session;
+use Response;
 use Carbon\Carbon;
-//use JpGraph\JpGraph;
+use JpGraph\JpGraph;
 use Illuminate\Http\Request;
 
 use App\Enums\ {
@@ -189,7 +189,7 @@ class VideoManagementController extends Controller {
 	}
 
 	public function scores_csv($year = null) {
-		$video_scores = Video_scores::with('division', 'division.competition', 'user')
+		$video_scores = Video_scores::with('division', 'division.competition', 'user', 'video', 'video.school')
 							->orderBy('total', 'desc');
 		if($year) {
 			$video_scores = $video_scores->where(DB::raw("year(created_at)"), intval($year))->get();
@@ -205,13 +205,14 @@ class VideoManagementController extends Controller {
 			$videos[$score->division->longname()][$score->video->name][$score->user->name] = $blank;
 			$videos[$score->division->longname()][$score->video->name][$score->user->name]['video_id'] = $score->video_id;
 			$videos[$score->division->longname()][$score->video->name][$score->user->name]['user_id'] = $score->user_id;
+			$videos[$score->division->longname()][$score->video->name][$score->user->name]['school'] = $score->video->school->name;
 		}
 
 		foreach($video_scores as $score) {
 			$videos[$score->division->longname()][$score->video->name][$score->user->name][$score->vid_score_type_id] = $score->total;
 		}
 
-		$content = 'Division,Video Name,ID,User Name,' . join(',', $types) . "\n";
+		$content = 'Division,Video Name,School,ID,User Name,' . join(',', $types) . "\n";
 
 		$line = [];
 		foreach($videos as $video_division => $video_list) {
@@ -219,6 +220,7 @@ class VideoManagementController extends Controller {
 				foreach($user_list as $user_name => $scores) {
 					$line[] = $video_division;
 					$line[] = $video_name;
+					$line[] = $scores['school'];
 					$line[] = $scores['video_id'];
 					$line[] = $user_name;
 					foreach($types as $index => $type) {
@@ -235,7 +237,7 @@ class VideoManagementController extends Controller {
 		// return an string as a file to the user
 		return Response::make($content, '200', array(
 			'Content-Type' => 'application/octet-stream',
-			'Content-Disposition' => 'attachment; filename="video_scores.csv'
+			'Content-Disposition' => "attachment; filename=\"video_scores_$year.csv\""
 		));
 	}
 
