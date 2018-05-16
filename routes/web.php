@@ -362,9 +362,10 @@ Route::middleware([ 'auth' ])->group( function() {
 
         Route::prefix('/api/')->namespace('Api')->name('api.')->group(function() {
 	        Route::get('challenges/{year}/{level}', ['as' => 'challenges', 'uses' => 'ScoreApiController@challenges']);
-	        Route::get('challenge/{challenge_id}', ['as' => 'challenge', 'uses' => 'ScoreApiController@challenge']);
-	        Route::post('scorer/save_scores', ['as' => 'save_score', 'uses' => 'ScoreApiController@save_scores']);
-	        Route::get('scorer/runs/{team_id}', ['as' => 'team_runs', 'uses' => 'ScoreApiController@team_runs']);
+	        Route::get('challenge/{challenge_id}',  ['as' => 'challenge', 'uses' => 'ScoreApiController@challenge']);
+	        Route::post('scorer/save_scores',       ['as' => 'save_score', 'uses' => 'ScoreApiController@save_scores']);
+	        Route::get('scorer/runs/{team_id}',     ['as' => 'team_runs', 'uses' => 'ScoreApiController@team_runs']);
+	        Route::get('scorer/scores/{team_id}',   ['as' => 'team_scores', 'uses' => 'ScoreApiController@team_scores']);
         });
 
     });

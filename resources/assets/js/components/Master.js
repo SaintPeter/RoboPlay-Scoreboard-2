@@ -10,7 +10,7 @@ import ScoreChallenge from "./ScoreChallenge";
 import TestChallenge from "./TestChallenge";
 import {updateBackButton} from "../actions/Generic";
 import {clearRuns} from "../actions/Runs";
-import {submitScores, updateScoreSummary} from "../actions/ScoreChallenge";
+import {submitScores, updateScoreSummary, clearAllScores} from "../actions/ScoreChallenge";
 import {clearChallengeData} from "../actions/ChallengeData";
 import SettingsPopup from "./Popups/SettingsPopup";
 import TeamView from "./TeamView";
@@ -94,6 +94,7 @@ class MasterApp extends Component {
                         onCancel={this.settingsClosed}
                         clearChallengeDataClick={this.props.clearChallengeData}
                         clearRunsClick={this.props.clearRuns}
+                        clearScoresClick={this.props.clearAllScores}
                         visible={this.state.settingsVisible}
                     />
                 </div>
@@ -121,7 +122,8 @@ function mapDispatchToProps(dispatch) {
         updateScoreSummary: (teamScores) => dispatch(updateScoreSummary(teamScores)),
         submitScores: (teamScores) => dispatch(submitScores(teamScores)),
         clearChallengeData: () => dispatch(clearChallengeData()),
-        clearRuns: () => dispatch(clearRuns())
+        clearRuns: () => dispatch(clearRuns()),
+        clearAllScores: () => dispatch(clearAllScores())
     }
 }
 

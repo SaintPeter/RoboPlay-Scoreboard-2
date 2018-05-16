@@ -114,4 +114,37 @@ class ScoreApiController extends Controller
 		, [ $team_id ]);
 		return \Response::json($runs);
 	}
+
+	public function team_scores(Request $req, $team_id) {
+		$scores = Score_run::where('team_id', $team_id)
+					->orderBy('run_number')->get();
+		$output = [];
+		$output[$team_id] = [];
+		foreach($scores as $run) {
+			if($run->abort) {
+				$output[$team_id][] =
+					[
+						'teamId' => $team_id,
+						'chalId' => $run->challenge_id,
+						'divId' => $run->division_id,
+						'timestamp' => $run->run_number,
+						'abort' => true,
+						'saved' => true,
+						'elementCount' => count(array_keys($run->scores,'A'))
+					];
+			} else {
+				$output[$team_id][] =
+					[
+						'teamId' => $team_id,
+						'chalId' => $run->challenge_id,
+						'divId' => $run->division_id,
+						'timestamp' => $run->run_number,
+						'abort' => false,
+						'saved' => true,
+						'scores' => array_filter($run->scores,function($score) { return $score === intval($score); })
+					];
+			}
+		}
+		return \Response::json($output);
+	}
 }

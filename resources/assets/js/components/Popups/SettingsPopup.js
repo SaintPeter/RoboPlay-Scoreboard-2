@@ -47,6 +47,9 @@ export default class SettingsPopup extends Component {
                     <UIButton onClick={this.props.clearRunsClick}>
                         Clear All Runs Data
                     </UIButton>
+                    <UIButton onClick={this.props.clearScoresClick}>
+                        Clear All Stored Scores
+                    </UIButton>
                 </div>
             </div>               
         )
