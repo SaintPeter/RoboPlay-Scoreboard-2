@@ -1,7 +1,8 @@
 export const SCORE_CHALLENGE =            'SCORE_CHALLENGE';
 export const ABORT_CHALLENGE =            'ABORT_CHALLENGE';
+export const CLEAR_SCORES =               'CLEAR_SCORES';
+export const CLEAR_SCORE_SUMMARY =        'CLEAR_SCORE_SUMMARY';
 export const UPDATE_SCORE_SUMMARY =       'UPDATE_SCORE_SUMMARY';
-export const SUBMIT_SCORES =              'SUBMIT_SCORES';
 export const UPDATE_SCORES_SAVED_STATUS = 'UPDATE_SCORES_SAVED_STATUS';
 
 export const scoreChallenge = (teamId, chalId, divId, scores) =>
@@ -28,6 +29,18 @@ export function updateScoreSummary(teamScores) {
     return {
         type: UPDATE_SCORE_SUMMARY,
         teamScores
+    }
+}
+
+export function clearScores() {
+    return {
+        type: CLEAR_SCORES
+    }
+}
+
+export function clearScoreSummary() {
+    return {
+        type: CLEAR_SCORE_SUMMARY
     }
 }
 
@@ -67,6 +80,13 @@ export function submitScores(teamScores) {
             console.log("No Scores to Send");
             return Promise.resolve();
         }
+    }
+}
+
+export function clearAllScores() {
+    return (dispatch) => {
+        dispatch(clearScores());
+        dispatch(clearScoreSummary());
     }
 }
 

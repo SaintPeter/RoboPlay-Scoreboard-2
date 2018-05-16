@@ -18,8 +18,8 @@ import {
 
 import {
     SCORE_CHALLENGE,
-    ABORT_CHALLENGE, UPDATE_SCORE_SUMMARY, SUBMIT_SCORES,
-    UPDATE_SCORES_SAVED_STATUS
+    ABORT_CHALLENGE, UPDATE_SCORE_SUMMARY,
+    UPDATE_SCORES_SAVED_STATUS, CLEAR_SCORES, CLEAR_SCORE_SUMMARY
 } from '../actions/ScoreChallenge';
 
 import {
@@ -124,6 +124,8 @@ function teamScores(state = {}, action) {
                 return update(state,scoreUpdates);
             }
             return state;
+        case CLEAR_SCORES:
+            return {};
         default:
             return state;
     }
@@ -145,6 +147,8 @@ function scoreSummary(state = { s: 0, u: 0 }, action) {
                 }, scoreSummary );
             }
             return scoreSummary;
+        case CLEAR_SCORE_SUMMARY:
+            return { s: 0, u: 0 };
         default:
             return state;
     }
