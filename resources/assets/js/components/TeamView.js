@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ChallengeSection from "./ChallengeSection";
 import {updateBackButton, updatePageTitle} from "../actions/Generic";
+import {loadScores} from "../actions/ScoreChallenge";
 import {connect} from "react-redux";
 import UIButton from "./UIButton";
 
@@ -44,6 +45,12 @@ class TeamViewApp extends Component {
       $('.ui-collapsible-set').unbind('collapsibleexpand');
   }
 
+  componentWillReceiveProps(nextProps) {
+      if(this.props.teamScores[this.teamId] !== nextProps.teamScores[this.teamId]) {
+          this.scores = (nextProps.teamScores[this.teamId]) ? nextProps.teamScores[this.teamId] : [];
+      }
+  }
+
   expandAll() {
     const accordians = this.state.accordians;
     const showOrHide = this.state.expanded ? "collapse" : "expand";
@@ -55,6 +62,10 @@ class TeamViewApp extends Component {
     }
     this.setState({ expanded: !this.state.expanded });
   }
+
+  loadScores = () => {
+      this.props.loadScores(this.teamId);
+  };
 
   render() {
     const scores = this.scores;
@@ -84,6 +95,9 @@ class TeamViewApp extends Component {
               );
             })}
         </div>
+          <UIButton onClick={this.loadScores}>
+              Force Reload Scores
+          </UIButton>
       </div>
     );
   }
@@ -101,7 +115,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         updateBack: (newURL, show) => dispatch(updateBackButton(newURL, show)),
-        updateTitle: (newTitle) => dispatch(updatePageTitle(newTitle))
+        updateTitle: (newTitle) => dispatch(updatePageTitle(newTitle)),
+        loadScores: (teamId) => dispatch(loadScores(teamId))
     }
 }
 
