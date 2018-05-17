@@ -309,6 +309,14 @@ class DivisionsController extends Controller {
 		return redirect()->route('divisions.index')->with('message', "$count score runs deleted");
 	}
 
+	public function clear_compyear_scores($compyear_id) {
+		$count = 0;
+		$compYear = \App\Models\CompYear::with('divisions')->find($compyear_id);
+		$divisionList = $compYear->divisions->pluck('id', 'id')->all();
+		$count = Score_run::whereIn('division_id', $divisionList)->delete();
+		return redirect()->route('compyears.index')->with('message', "$count score runs deleted");
+	}
+
 	public function clear_all_scores() {
 		$count = 0;
 		if(Roles::isAdmin()) {

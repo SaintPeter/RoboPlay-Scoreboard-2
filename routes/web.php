@@ -129,6 +129,7 @@ Route::middleware([ 'auth' ])->group( function() {
 
         // Manage CompYears
         Route::resource('compyears', 'CompYearsController');
+        Route::get('compyears/clear_div_scores/{compyear_id}', ['as' => 'compyears.clear_div_scores', 'uses' => 'DivisionsController@clear_compyear_scores']);
 
         // Manage Competitions
         Route::resource('competitions', 'CompetitionsController');
