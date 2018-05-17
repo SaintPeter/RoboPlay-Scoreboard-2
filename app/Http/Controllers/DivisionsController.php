@@ -286,7 +286,7 @@ class DivisionsController extends Controller {
 	}
 
 	// Copy a list of challenges from one divsion to another
-	public function copyChallenges($to_id) {
+	public function copyChallenges(Request $req, $to_id) {
 		$from_id = $req->input('from_id', 0);
 		$from = Division::with('challenges')->findOrFail($from_id);
 		$to = Division::with('challenges')->findOrFail($to_id);
