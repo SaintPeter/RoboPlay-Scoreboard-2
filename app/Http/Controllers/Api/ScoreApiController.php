@@ -17,10 +17,10 @@ class ScoreApiController extends Controller
 	public function challenges(Request $req, $year, $level) {
 		$cache_name = "challenge_data_${year}_${level}";
 		if($req->has('clear_cache')) {
-			Cache::delete($cache_name);
+			Cache::tags(['challenge_data'])->flush();
 		}
 
-		$challenge_data = Cache::remember($cache_name, 60 * 24, function() use ($year, $level) {
+		$challenge_data = Cache::tags(['challenge_data'])->remember($cache_name, 60 * 24, function() use ($year, $level) {
 			$compyear = CompYear::where('year',$year)
 				->with([ 'divisions' => function($q) use ($level) {
 					return $q->where('level', $level);

@@ -168,6 +168,11 @@ class ChallengesController extends Controller {
 		return redirect()->route('challenges.index');
 	}
 
+	public function clear_cache() {
+		\Cache::tags(['challenge_data'])->flush();
+		return redirect()->back()->with('message', 'Cache Cleared');
+	}
+
 	public function duplicate($id) {
 		$challenge = Challenge::with('score_elements','randoms', 'random_lists')->findOrFail($id);
 

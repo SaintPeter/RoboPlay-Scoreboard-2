@@ -42,7 +42,10 @@
 	{!! Form::select('level_select', $Challenge::$levels, Session::get('level_select', 0), [ 'class' => 'form-control', 'id' => 'level_select' ])  !!}
 </div>
 
-<p>{{ link_to_route('challenges.create', 'Add Challenge', [], [ 'class' => 'btn btn-primary' ]) }}</p>
+<p>
+    {{ link_to_route('challenges.create', 'Add Challenge', [], [ 'class' => 'btn btn-primary' ]) }}
+    {{ link_to_route('challenges.clear_cache', 'Clear Challenge Cache', [], [ 'class' => 'btn btn-warning' ]) }}
+</p>
 
 <table class="table table-striped table-bordered">
 	<thead>

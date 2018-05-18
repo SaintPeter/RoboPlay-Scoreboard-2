@@ -143,8 +143,9 @@ Route::middleware([ 'auth' ])->group( function() {
 //		 ->where('competition_id', '\d+');
 
         // Manage Challenges
-        Route::resource('challenges', 'ChallengesController');
+        Route::get('challenges/clear_cache', ['as' => 'challenges.clear_cache', 'uses' => 'ChallengesController@clear_cache']);
         Route::get('challenges/{id}/duplicate', [ 'as' => 'challenges.duplicate', 'uses' => 'ChallengesController@duplicate' ]);
+        Route::resource('challenges', 'ChallengesController');
 
         // Manage Divisions
         Route::resource('divisions', 'DivisionsController');
