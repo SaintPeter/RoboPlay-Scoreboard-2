@@ -10,12 +10,14 @@ const resetButtonStyle = { width: "5em", padding: "5px" };
 const playButtonStyle = { width: "5em", padding: "5px", marginLeft: "5px" };
 
 const timeDivStyle = {
+    height: "40px",
     width: "5em",
     border: "1px solid #ddd",
-    padding: "5px",
-    alignSelf: "flex-end",
-    textAlign: "center"
-
+    padding: "0 5px",
+    textAlign: "center",
+    margin: "0.5em 0",
+    lineHeight: "40px"
+    /*alignSelf: "flex-end"*/
 };
 
 const addButtonStyle = {
@@ -24,7 +26,7 @@ const addButtonStyle = {
     padding: "5px",
     borderRadius: ".3125em 0 0 .3125em ",
     height:"40px",
-    alignSelf: "flex-end"
+    /*alignSelf: "flex-end"*/
 };
 
 const minusButtonStyle = {
@@ -33,14 +35,13 @@ const minusButtonStyle = {
     padding: "5px",
     borderRadius: "0 .3125em .3125em 0",
     height: "40px",
-    alignSelf: "flex-end"
+    /*alignSelf: "flex-end"*/
 };
 
 const containerStyle = {
     display: "flex",
     justifyContent: "center",
-    alignItems: "baseline",
-    alignContent: "baseline",
+    alignItems: "center",
     lineHeight: 1.7,
     height: 50
 };
