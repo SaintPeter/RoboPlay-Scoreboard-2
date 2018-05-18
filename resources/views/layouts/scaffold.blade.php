@@ -43,6 +43,35 @@
 			.table-nonfluid {
                width: auto !important;
             }
+            .cblock {
+                width: 20px;
+                height: 20px;
+                border: 1px black solid;
+                display: inline-block;
+                text-align: center;
+                line-height: 20px;
+                font-weight: bold;
+            }
+            .c_A {
+                background-color: magenta;
+                color: white;
+            }
+            .c_B {
+                background-color: yellow;
+            }
+            .c_C {
+                background-color: green;
+                color: white;
+            }
+            .c_D {
+                background-color: Blue;
+                color: white;
+            }
+            .c_E {
+                background-color: white;
+            }
+
+
 		</style>
         @yield('style')
 
