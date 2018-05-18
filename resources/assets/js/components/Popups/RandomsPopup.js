@@ -31,7 +31,14 @@ export default class RandomsPopup extends Component {
 
     componentDidMount() {
         this.$node = $(this.refs.popup);
-        this.$node.popup();
+        this.$node.popup({
+            overlayTheme: "b",
+            /*afteropen: () => {
+                setTimeout(() => {
+                    $.mobile.silentScroll(this.$node.parent().position().top);
+                },1);
+            }*/
+        });
     }
 
     shouldComponentUpdate() {
@@ -66,10 +73,10 @@ export default class RandomsPopup extends Component {
                      id="randomPopup"
                      className="ui-corner-all">
                     <div role="banner" data-role="header" data-theme="a" className="ui-corner-top ui-header ui-bar-a">
-                        <h1 role="heading" className="ui-title">Random Number</h1>
+                        <h1 role="heading" className="ui-title">Random Numbers</h1>
                     </div>
                     <div role="main" className="ui-corner-bottom ui-content center">
-                        <span className="bigtext">{ this.randoms }</span>
+                        { this.randoms }
                     </div>
                 </div>
             </div>

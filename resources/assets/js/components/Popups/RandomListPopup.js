@@ -57,7 +57,15 @@ export default class RandomListPopup extends Component {
 
     componentDidMount() {
         this.$node = $(this.refs.popup);
-        this.$node.popup();
+        this.$node.popup({
+            overlayTheme: "b"
+            /*,
+            afteropen: () => {
+                setTimeout(() => {
+                    $.mobile.silentScroll(this.$node.parent().position().top);
+                },1);
+            }*/
+        });
     }
 
     shouldComponentUpdate() {
@@ -83,7 +91,7 @@ export default class RandomListPopup extends Component {
                        data-rel="popup"
                        data-position-to="window"
                        className="ui-btn ui-btn-inline pull-right">Popout</button>
-                    <h4>RandomList</h4>
+                    <h4>Random List</h4>
                     { this.randomLists }
                 </div>
                 <div ref={"popup"}
@@ -95,7 +103,7 @@ export default class RandomListPopup extends Component {
                         <h1 role="heading" className="ui-title">Random Number</h1>
                     </div>
                     <div role="main" className="ui-corner-bottom ui-content center">
-                        <span className="bigtext">{ this.randomListPopups }</span>
+                        { this.randomListPopups }
                     </div>
                 </div>
             </div>

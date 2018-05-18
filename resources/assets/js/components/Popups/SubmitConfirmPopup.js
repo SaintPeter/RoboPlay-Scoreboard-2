@@ -6,7 +6,13 @@ export default class SubmitConfirmPopup extends Component {
         this.$node.popup( {
             afterclose: () => {
                 this.props.onCancel();
-            }
+            },
+            afteropen: () => {
+                setTimeout(() => {
+                    $.mobile.silentScroll(this.$node.parent().position().top);
+                },1);
+            },
+            positionTo: "window"
         });
     }
 

@@ -118,6 +118,18 @@ class ScoreChallengeApp extends Component {
         return <li>Unknown Type: {type}</li>;
     };
 
+    submitConfirmShow = (e) => {
+        e.preventDefault();
+        this.setState({ submitConfirmVisible: true });
+        return false;
+    };
+
+    abortConfirmShow = (e) => {
+        e.preventDefault();
+        this.setState({ abortConfirmVisible: true });
+        return false;
+    };
+
     submitConfirmCanceled = () => {
       this.setState({ submitConfirmVisible: false });
     };
@@ -158,6 +170,19 @@ class ScoreChallengeApp extends Component {
 
         return (
             <div className="ui-content">
+                <SubmitConfirmPopup
+                    onSubmit={ this.submitConfirmConfirmed }
+                    onCancel={ this.submitConfirmCanceled }
+                    runNumber={ this.runNumber }
+                    visible={ this.state.submitConfirmVisible }
+                    score={ this.state.total }
+                />
+                <AbortConfirmPopup
+                    onAbort={ this.abortConfirmConfirmed }
+                    onCancel={ this.abortConfirmCanceled }
+                    runNumber={ this.runNumber }
+                    visible={ this.state.abortConfirmVisible }
+                />
                 <div className="ui-body ui-body-a ui-corner-all">
                     <strong>Judge: </strong>{judgeName}<br />
                     <strong>Division: </strong>{this.divisionName}<br />
@@ -191,7 +216,7 @@ class ScoreChallengeApp extends Component {
                     <li className="ui-field-contain ui-li-static ui-body-inherit">
                         <fieldset className="ui-grid-b">
                             <div className="ui-block-b">
-                                <UIButton onClick={(e) => { this.setState({ submitConfirmVisible: true }) }} >
+                                <UIButton onClick={this.submitConfirmShow} >
                                     Submit
                                 </UIButton>
                             </div>
@@ -202,26 +227,13 @@ class ScoreChallengeApp extends Component {
                                 </Link>
                             </div>
                             <div className="ui-block-b">
-                                <UIButton onClick={(e) => { this.setState({ abortConfirmVisible: true }) }}>
+                                <UIButton onClick={this.abortConfirmShow}>
                                     Abort
                                 </UIButton>
                             </div>
                         </fieldset>
                     </li>
                 </ul>
-                <SubmitConfirmPopup
-                    onSubmit={ this.submitConfirmConfirmed }
-                    onCancel={ this.submitConfirmCanceled }
-                    runNumber={ this.runNumber }
-                    visible={ this.state.submitConfirmVisible }
-                    score={ this.state.total }
-                />
-                <AbortConfirmPopup
-                    onAbort={ this.abortConfirmConfirmed }
-                    onCancel={ this.abortConfirmCanceled }
-                    runNumber={ this.runNumber }
-                    visible={ this.state.abortConfirmVisible }
-                />
             </div>
         )
     }
