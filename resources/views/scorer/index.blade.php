@@ -135,6 +135,14 @@
             line-height: 20px;
             font-weight: bold;
         }
+
+        .bigtext .cblock {
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            font-size: 35px;
+        }
+
         .c_A {
             background-color: magenta;
             color: white;
