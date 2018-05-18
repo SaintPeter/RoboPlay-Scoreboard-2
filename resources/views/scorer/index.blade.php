@@ -73,7 +73,7 @@
         }
         .score_display {
             top: 25%;
-            width: 2em;
+            width: 3em;
         }
 
         .favoriteButton {
