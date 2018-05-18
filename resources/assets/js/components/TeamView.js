@@ -34,6 +34,7 @@ class TeamViewApp extends Component {
 
   componentWillMount() {
       this.props.updateBack(this.backURL);
+      this.props.updateTitle('Team Score View');
   }
 
   componentDidMount() {
