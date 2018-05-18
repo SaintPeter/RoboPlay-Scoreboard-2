@@ -68,6 +68,10 @@ class TeamViewApp extends Component {
       this.props.loadScores(this.teamId);
   };
 
+  goToTeamScoresView = () => {
+      window.open(`/team/${this.teamId}`,'_blank');
+  }
+
   render() {
     const scores = this.scores;
     const challengeData = this.challengeData;
@@ -98,6 +102,9 @@ class TeamViewApp extends Component {
         </div>
           <UIButton onClick={this.loadScores}>
               Force Reload Scores
+          </UIButton>
+          <UIButton onClick={this.goToTeamScoresView}>
+              Edit Scores
           </UIButton>
       </div>
     );

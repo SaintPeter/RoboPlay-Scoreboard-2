@@ -109,7 +109,7 @@ class ScoreApiController extends Controller
 		$runs = DB::select(
 			'SELECT CONCAT(team_id,"_", challenge_id,"_") as rkey, COUNT(*) AS runs, SUM(abort = 1) AS aborts ' .
 			'FROM scoreboard2.score_runs ' .
-			'WHERE team_id = ? ' .
+			'WHERE team_id = ? AND deleted_at is null ' .
 			'GROUP BY team_id , challenge_id'
 		, [ $team_id ]);
 		return \Response::json($runs);

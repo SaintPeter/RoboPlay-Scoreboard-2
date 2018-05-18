@@ -32,7 +32,7 @@ class ScoreChallengeApp extends Component {
         this.backURL = `/c/${this.compId}/d/${this.divId}/t/${this.teamId}`;
 
         let key = `${this.teamId}_${this.chalId}_runs`;
-        this.runNumber = (this.props.runs[key]) ? this.props.runs[key] : 1;
+        this.runNumber = (this.props.runs[key]) ? this.props.runs[key] + 1 : 1;
         
         this.state = {
             total: 0,
