@@ -10,7 +10,7 @@ export default class AbortConfirmPopup extends Component {
             afteropen: () => {
                 setTimeout(() => {
                     $.mobile.silentScroll(this.$node.parent().position().top);
-                },1);
+                },100);
             }
         });
     }

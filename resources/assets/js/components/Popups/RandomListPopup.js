@@ -63,7 +63,7 @@ export default class RandomListPopup extends Component {
             afteropen: () => {
                 setTimeout(() => {
                     $.mobile.silentScroll(this.$node.parent().position().top);
-                },1);
+                },100);
             }*/
         });
     }
