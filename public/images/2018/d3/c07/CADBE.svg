@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="600" height="600" >
+
+<g transform="translate(50, 50)">
+
+	<!--1st square-->
+	<rect x="0" width="500" height="100" style="fill:yellow;stroke-width:3;stroke:#000000" />
+
+	<!--2nd square-->
+	<rect x="100" width="100" height="100" style="fill:cyan;stroke-width:3;stroke:#000000"/>
+
+	<!--3rd square-->
+	<rect x="200" width="100" height="100" style="fill:magenta;stroke-width:3;stroke:#000000"/>
+
+	<!--4th square-->
+	<rect x="300" width="100" height="100" style="fill:green;stroke-width:3;stroke:#000000"/>
+
+	<!--5th square-->
+	<rect x="400" width="100" height="100" style="fill:white;stroke-width:3;stroke:#000000"/>
+
+</g>
+</svg>
