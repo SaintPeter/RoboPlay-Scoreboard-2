@@ -156,7 +156,6 @@
         }
         .c_D {
             background-color: cyan;
-            color: white;
         }
         .c_E {
             background-color: white;
