@@ -64,7 +64,7 @@
                 color: white;
             }
             .c_D {
-                background-color: Blue;
+                background-color: cyan;
                 color: white;
             }
             .c_E {
