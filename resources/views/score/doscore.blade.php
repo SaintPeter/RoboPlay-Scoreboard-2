@@ -97,7 +97,7 @@
 	<p>
 		<strong>{{ $challenge->divisions->find($team->division_id)->pivot->display_order }}.&nbsp;{{ $challenge->display_name }}</strong>
 		<hr>
-		{!! nl2br($challenge->rules)  !!}
+		{!! $challenge->rules  !!}
         </p>
 </div>
 

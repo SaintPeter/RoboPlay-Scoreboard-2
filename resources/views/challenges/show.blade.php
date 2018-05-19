@@ -260,7 +260,7 @@ function dialog_close_handler(event) {
 		<tr>
 			<td>{{{ $challenge->internal_name }}}</td>
 					<td>{{ $challenge->display_name }}</td>
-					<td>{!! nl2br($challenge->rules) !!}</td>
+					<td>{!! $challenge->rules !!}</td>
 					<td>{{{ $challenge->points }}}</td>
 					<td>{{{ $challenge->level }}}</td>
                     <td>{{{ $challenge->year }}}</td>
