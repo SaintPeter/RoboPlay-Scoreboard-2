@@ -641,7 +641,7 @@ class InvoiceReview extends Controller {
 							$division,
 							$team,
 							$challenge,
-							$run_number,
+							$run_number + 1,
 							$run['total'],
 							$run['abort'] ? 'Abort' : 'Normal'
 						]) . '",';
