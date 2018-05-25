@@ -89,19 +89,19 @@ class Score_run extends Model {
 
 	/* Relationships
 	   ------------------------------ */
-	public function teams()
+	public function team()
 	{
-		return $this->hasMany('App\Models\Team');
+		return $this->belongsTo('App\Models\Team');
 	}
 
-	public function challenges()
+	public function challenge()
 	{
-		return $this->hasMany('App\Models\Challenge');
+		return $this->belongsTo('App\Models\Challenge');
 	}
 
-	public function divisions()
+	public function division()
 	{
-		return $this->hasMany('App\Models\Division');
+		return $this->belongsTo('App\Models\Division');
 	}
 
 	public function user()

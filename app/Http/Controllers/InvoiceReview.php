@@ -14,17 +14,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 use App\{
-	Enums\UserTypes,
-	Models\Schools,
-	Models\Team,
-	Models\User,
-	Models\Video,
-	Models\School,
-	Models\Frm_items,
-	Models\CompYear,
-	Models\Invoices,
-	Models\Wp_user,
-	Models\Wp_invoice_table
+	Enums\UserTypes, Models\Schools, Models\Score_run, Models\Team, Models\User, Models\Video, Models\School, Models\Frm_items, Models\CompYear, Models\Invoices, Models\Wp_user, Models\Wp_invoice_table
 };
 class InvoiceReview extends Controller {
 
@@ -610,6 +600,63 @@ class InvoiceReview extends Controller {
 		return Response::make($content, '200', array(
 			'Content-Type' => 'application/octet-stream',
 			'Content-Disposition' => 'attachment; filename="video_demographics_' . $year . '.csv"'
+		));
+	}
+
+	public function challenge_runs_csv($year = '')
+	{
+		if(!$year) {
+			return redirect()->route('data_export')->with('message', 'Year must be set to export data');
+		}
+
+		$divisions = CompYear::where('year',$year)->first()->divisions->pluck('id')->all();
+
+		$scores = Score_run::whereIn('division_id', $divisions)
+			->with('division', 'division.competition','team','challenge', 'challenge.divisions')
+			->orderBy('challenge_id','run_number')
+			->whereNull('deleted_at')
+			->get();
+
+		$scoreSummary = [];
+		foreach($scores as $run) {
+			$order = $run->challenge->divisions->first()->pivot->display_order;
+			$challenge_name = sprintf("%02d. %s", $order, $run->challenge->display_name);
+			$scoreSummary[$run->division->name][$run->team->name][$challenge_name][] = [
+				'scores' => $run->scores,
+				'abort' => $run->abort,
+				'total' => $run->total,
+				'location' => $run->division->competition->location
+				];
+		}
+
+		// Header
+		$content = "Location,Division,Team,Challenge,Run,Score,Abort,s1,s2,s3,s4,s5,s6\n";
+
+		foreach($scoreSummary as $division => $teams) {
+			foreach($teams as $team => $challenges) {
+				foreach($challenges as $challenge => $runs) {
+					foreach($runs as $run_number => $run) {
+						$content .= '"' . join('","', [
+							$run['location'],
+							$division,
+							$team,
+							$challenge,
+							$run_number,
+							$run['total'],
+							$run['abort'] ? 'Abort' : 'Normal'
+						]) . '",';
+						$content .= join(",", $run['scores']) . "\n";
+					}
+				}
+			}
+		}
+
+		//dd($content);
+
+		// return an string as a file to the user
+		return Response::make($content, '200', array(
+			'Content-Type' => 'application/octet-stream',
+			'Content-Disposition' => 'attachment; filename="challenge_runs_' . $year . '.csv"'
 		));
 	}
 

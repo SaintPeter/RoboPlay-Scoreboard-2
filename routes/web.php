@@ -225,6 +225,7 @@ Route::middleware([ 'auth' ])->group( function() {
         Route::get('data_export/teacher_teams_{year}.csv',			[ 'as' => 'data_export.teacher_teams',    'uses' => 'InvoiceReview@teacher_teams_csv' ]);
         Route::get('data_export/student_demographics_{year}.csv',	[ 'as' => 'data_export.student_demographics',    'uses' => 'InvoiceReview@student_demographics_csv' ]);
         Route::get('data_export/video_demographics_{year}.csv',	    [ 'as' => 'data_export.video_demographics',    'uses' => 'InvoiceReview@video_demographics_csv' ]);
+        Route::get('data_export/challenge_runs_{year}.csv',         [ 'as' => 'data_export.challenge_runs',    'uses' => 'InvoiceReview@challenge_runs_csv' ]);
 
         // File Types Editing
         Route::resource('filetypes', 'FileTypesController');
