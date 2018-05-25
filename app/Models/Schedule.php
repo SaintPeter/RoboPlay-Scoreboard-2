@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 /**
  * App\Models\Schedule
@@ -29,7 +30,7 @@ class Schedule extends \Eloquent {
 	];
 
 	public function getStartAttribute($value) {
-	    return Carbon\Carbon::createFromFormat('H:i:s', $value);
+	    return Carbon::createFromFormat('H:i:s', $value);
 	}
 
 	public function setStartAttribute($value) {
@@ -37,7 +38,7 @@ class Schedule extends \Eloquent {
 	}
 
 	public function getEndAttribute($value) {
-	    return Carbon\Carbon::createFromFormat('H:i:s', $value);
+	    return Carbon::createFromFormat('H:i:s', $value);
 	}
 
 	public function setEndAttribute($value) {
