@@ -564,14 +564,14 @@ class InvoiceReview extends Controller {
 
 		$invoices = Invoices::with('user', 'school')
 	                        ->with( [ 'videos' => function($q) use ($year) {
-	                             return $q->where('year', $year)->where('flag', 0);
+	                             return $q->where('year', $year);
 	                        }, 'videos.students', 'videos.division', 'videos.division.competition',
 	                           'videos.students.math_level', 'videos.students.ethnicity'])
     	                    ->where('year', $year)
     	                    ->get();
 
         // Header
-	    $content = "Teacher Name,School,District,County,Video Name,Student Name,Gender,Ethnicity,Grade,Math Level,Math Div,Division\n";
+	    $content = "Teacher Name,School,District,County,Video Name,Status,Student Name,Gender,Ethnicity,Grade,Math Level,Math Div,Division\n";
 
 		foreach($invoices as $invoice) {
 		    foreach($invoice->videos as $video) {
@@ -583,6 +583,7 @@ class InvoiceReview extends Controller {
         			                isset($invoice->school) ? $invoice->school->district : "No School",
         			                isset($invoice->school) ? $invoice->school->county : "No School",
 	                                $video->name,
+					$video->flag == 0 ? 'Normal' : 'Disqualified',
 	                                preg_replace('/"/','""',$student->fullName()),
 	                                $student->gender,
 	                                $student->ethnicity->name,
