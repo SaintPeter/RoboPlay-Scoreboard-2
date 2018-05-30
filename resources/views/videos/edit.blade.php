@@ -173,7 +173,7 @@
 
 	<div class="form-group">
 		{!! Form::label('awards[]', 'Awards')  !!}
-		{!! Form::select('awards[]', $awards_list, $awards_selected, [ 'class'=>'form-control', 'multiple' => 'multiple', 'size' => 6 ])  !!}
+		{!! Form::select('awards[]', $awards_list, $awards_selected, [ 'class'=>'form-control', 'multiple' => 'multiple', 'size' => 7 ])  !!}
 	</div>
 
 	<div class="form-group">
