@@ -1,7 +1,6 @@
 /node_modules
 /public/hot
 /public/storage
-/public/js/app.js
 /storage/*.key
 /vendor
 /utils
@@ -14,3 +13,4 @@ yarn-error.log
 .env
 _ide*
 .phpstorm.meta.php
+/public/js/scorer.js

@@ -168,6 +168,6 @@
 <body>
     <div id="scorer"></div>
 
-    <script defer src="{{asset('js/app.js')}}" ></script>
+    <script defer src="{{asset('js/scorer.js')}}" ></script>
 </body>
 </html>
