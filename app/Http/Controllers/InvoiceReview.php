@@ -18,6 +18,12 @@ use App\{
 };
 class InvoiceReview extends Controller {
 
+	function invoicer() {
+
+		return View::make('invoicer.index');
+	}
+
+
 	/**
 	 * Display a listing of the resource.
 	 * GET /invoicereview

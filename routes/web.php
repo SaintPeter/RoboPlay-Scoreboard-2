@@ -205,6 +205,11 @@ Route::middleware([ 'auth' ])->group( function() {
 	    Route::get('admin/reset_password/{user}',           [ 'as' => 'admin_reset_password',    'uses' => 'AdminController@reset_password']);
 
         // Invoice Review
+	    // React
+	    Route::get('invoicer/{path?}',                      [ 'as' => 'invoicer', 'uses' => 'InvoiceReview@invoicer' ] )
+		    ->where('path',".*");
+
+	    // Legacy
         Route::get('invoice_review/toggle_video/{id?}',     [ 'as' => 'invoice_review.toggle_video', 'uses' => 'InvoiceReview@toggle_video' ]);
         Route::get('invoice_review/toggle_team/{id?}',      [ 'as' => 'invoice_review.toggle_team',  'uses' => 'InvoiceReview@toggle_team' ]);
         Route::get('invoice_review/toggle_paid/{id?}',      [ 'as' => 'invoice_review.toggle_paid',  'uses' => 'InvoiceReview@toggle_paid' ]);
