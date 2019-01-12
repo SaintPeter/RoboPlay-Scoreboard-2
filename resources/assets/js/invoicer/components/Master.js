@@ -3,6 +3,7 @@ import { BrowserRouter , Route, Switch, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import InvoiceList from './InvoiceList'
+import YearSelect from './YearSelect'
 
 class MasterApp extends Component {
     constructor(props) {
@@ -26,11 +27,11 @@ class MasterApp extends Component {
     render(){
         return (
             <BrowserRouter basename="invoicer">
-                <div className="content">
-
-                    <Switch>
-                        <Route exact path="/:year?" component={InvoiceList} />
-                    </Switch>
+                <div>
+                  <YearSelect />
+                  <Switch>
+                      <Route exact path="/:year?" component={InvoiceList} />
+                  </Switch>
                 </div>
             </BrowserRouter>
 

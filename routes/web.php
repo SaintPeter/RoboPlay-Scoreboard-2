@@ -206,8 +206,8 @@ Route::middleware([ 'auth' ])->group( function() {
 
         // Invoice Review
 	    // React
-	    Route::get('invoicer/{path?}',                      [ 'as' => 'invoicer', 'uses' => 'InvoiceReview@invoicer' ] )
-		    ->where('path',".*");
+	    Route::get('invoicer/{year?}',                      [ 'as' => 'invoicer', 'uses' => 'InvoiceReview@invoicer' ] )
+		    ->where('year',"\d{4}");
 
 	    // Legacy
         Route::get('invoice_review/toggle_video/{id?}',     [ 'as' => 'invoice_review.toggle_video', 'uses' => 'InvoiceReview@toggle_video' ]);

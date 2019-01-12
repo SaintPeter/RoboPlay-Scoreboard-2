@@ -10,7 +10,8 @@
     {{ HTML::style('//maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css') }}
 
     <script type="application/javascript">
-
+        var urlYear = {!! $year !!};
+        var yearList = {!! $yearList !!};
     </script>
 
     <style>
@@ -19,7 +20,23 @@
 
 </head>
 <body>
-    <div id="invoicer"></div>
+    <div class="container">
+        <h1>Invoice Review</h1>
+        @if(!isset($skip_breadcrumbs))
+            @php
+                if(Breadcrumbs::exists()) {
+                    echo Breadcrumbs::render();
+                } else {
+                    echo '<div class="error">Breadcrumbs - Missing Route: ' . Route::current()->getName() . "</div>";
+                }
+            @endphp
+        @endif
+        <div id="invoicer"></div>
+    </div>
+
+    <div class="text-center">
+        <span style="font-size: 10px; ">This page took {{ round((microtime(true) - LARAVEL_START),5) }} seconds to render</span>
+    </div>
 
     <script defer src="{{asset('js/invoicer.js')}}" ></script>
 </body>

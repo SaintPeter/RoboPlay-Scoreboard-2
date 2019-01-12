@@ -18,9 +18,12 @@ use App\{
 };
 class InvoiceReview extends Controller {
 
-	function invoicer() {
+	function invoicer($year = 0) {
+		$year = CompYear::yearOrMostRecent($year);
+		$yearList = json_encode(CompYear::orderBy('year')->pluck('year'));
 
-		return View::make('invoicer.index');
+		return View::make('invoicer.index')
+			->with(compact('year','yearList'));
 	}
 
 
@@ -219,6 +222,13 @@ class InvoiceReview extends Controller {
 			1702       Challenge Competition - Complete Package ($320 per team)
             N/A        Challenge Competition - Basic Package - Not included this year
 			1711       wp_school_id entry from usermeta
+
+            _ 2019 Field Information__
+            field_id   Description
+            2320       Video Competition
+			2318       Challenge Competition - Complete Package ($320 per team)
+            N/A        Challenge Competition - Basic Package - Not included this year
+			2329       wp_school_id entry from usermeta
             */
 
 	        $field_ids = [
@@ -232,6 +242,11 @@ class InvoiceReview extends Controller {
 					'video' => 1703,
 					'challenge_complete' => 1702,
 					'school_id' => 1711
+		        ],
+		        '2019' => [
+			        'video' => 2320,
+			        'challenge_complete' => 2318,
+			        'school_id' => 2329
 		        ]
 	        ];
 

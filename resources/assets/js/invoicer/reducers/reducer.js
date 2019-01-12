@@ -1,11 +1,9 @@
 import { combineReducers } from 'redux';
 
-function generic(state = {}, action) {
-  return state;
-}
+import activeYear from './activeYear'
 
 const reducer = combineReducers({
-  generic,
+  activeYear,
 });
 
 export default reducer;

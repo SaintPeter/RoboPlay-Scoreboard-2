@@ -104,6 +104,11 @@ try {
 		$bc->push('Invoice Review', route('invoice_review'));
 	});
 
+	Breadcrumbs::register('invoicer', function (BreadcrumbsGenerator $bc) {
+		$bc->parent('home');
+		$bc->push('Invoice Review', route('invoicer'));
+	});
+
 	Breadcrumbs::register('data_export', function (BreadcrumbsGenerator $bc) {
 		$bc->parent('home');
 		$bc->push('Data Export', route('data_export'));
