@@ -1,11 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
-use App\Models\ {
-  Files,
-  CompYear
+use App\Models\{
+	CompYear, Files
 };
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -208,6 +206,10 @@ Route::middleware([ 'auth' ])->group( function() {
 	    // React
 	    Route::get('invoicer/{year?}',                      [ 'as' => 'invoicer', 'uses' => 'InvoiceReview@invoicer' ] )
 		    ->where('year',"\d{4}");
+
+	    Route::prefix('/api/')->namespace('Api')->name('api.')->group(function() {
+		    Route::get('invoicer/invoice_list/{year}',  ['as' => 'invoice_list', 'uses' => 'InvoiceApiController@invoice_json']);
+	    });
 
 	    // Legacy
         Route::get('invoice_review/toggle_video/{id?}',     [ 'as' => 'invoice_review.toggle_video', 'uses' => 'InvoiceReview@toggle_video' ]);

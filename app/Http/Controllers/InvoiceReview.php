@@ -26,7 +26,6 @@ class InvoiceReview extends Controller {
 			->with(compact('year','yearList'));
 	}
 
-
 	/**
 	 * Display a listing of the resource.
 	 * GET /invoicereview
