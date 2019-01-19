@@ -4,6 +4,8 @@ import {connect} from "react-redux";
 import {updateBackButton, updatePageTitle} from "../../scorer/actions/Generic";
 import {setActiveYear} from "../reducers/activeYear";
 import {fetchInvoiceData} from "../reducers/invoiceData";
+import PaidButton from "./PaidButton"
+import VideoRow from "./VideoRow"
 
 class InvoiceListApp extends Component {
   constructor(props) {
@@ -25,14 +27,14 @@ class InvoiceListApp extends Component {
   componentWillReceiveProps(nextProps) {
     if(nextProps.match.params.year != this.props.match.params.year && nextProps.match.params.year) {
       this.props.setActiveYear(nextProps.match.params.year);
-      this.props.fetchInvoiceData(thisYear);
+      this.props.fetchInvoiceData(nextProps.match.params.year);
     }
   }
 
   render() {
     const invoiceData = this.props.invoiceData[this.props.activeYear] ? this.props.invoiceData[this.props.activeYear] : [];
 
-    if(invoiceData.length) {
+    if(invoiceData.hasOwnProperty('invoices') && Object.keys(invoiceData.invoices).length) {
       return <table className="table">
         <thead>
         <tr>
@@ -48,9 +50,12 @@ class InvoiceListApp extends Component {
         </tr>
         </thead>
         <tbody>
-          {invoiceData.map(invoice => {
-            return <InvoiceRow key={invoice.id} rowData={invoice} year={this.props.activeYear}/>
+          {Object.entries(invoiceData.invoices).map(invoice => {
+            return [ <InvoiceRow key={invoice[0]} rowData={invoice[1]} year={this.props.activeYear}/>,
+              <VideoRow key={'invoice_'+invoice[0]} id={'invoice_'+invoice[0]} rowData={invoice[1]} visible={true}/> ]
+              //<TeamRow key={'video_'+invoice[0]} rowData={invoice[1]}/>
           })}
+
         </tbody>
       </table>
     } else {
@@ -95,14 +100,26 @@ class InvoiceRow extends Component {
       <td>
         {row.school_name}
       </td>
-      <td>{row.teams_unchecked}&nbsp;/&nbsp;{row.teams_checked}&nbsp;/&nbsp;{row.team_count}</td>
-      <td>{row.videos_unchecked}&nbsp;/&nbsp;{row.videos_checked}&nbsp;/&nbsp;{row.video_count}</td>
-      <td></td>
+      <td>{row.team_count}&nbsp;(
+        <span style={{color: 'red'}}>{row.teams_unchecked}</span>
+        &nbsp;/&nbsp;
+        <span style={{color: 'green'}}>{row.teams_checked})</span>
+      </td>
+      <td>{row.video_count}&nbsp;(
+        <span style={{color: 'red'}}>{row.videos_unchecked}</span>
+        &nbsp;/&nbsp;
+        <span style={{color: 'green'}}>{row.videos_checked})</span>
+      </td>
+      <td>T:&nbsp;{row.team_student_count}&nbsp;V:&nbsp;{row.video_student_count}</td>
       <td>{row.notes}</td>
-      <td>{row.paid}</td>
+      <td><PaidButton paid={row.paid} /></td>
+      <td>
+      </td>
     </tr>
   }
 }
+
+
 
 // Map Redux state to component props
 function mapStateToProps(state) {
