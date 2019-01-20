@@ -12,4 +12,4 @@ let mix = require('laravel-mix');
  */
 
 mix.react('resources/assets/js/scorer/scorer.js', 'public/js');
-mix.react('resources/assets/js/invoicer/invoicer.js', 'public/js');
+mix.react('resources/assets/js/invoicer/invoicer.js', 'public/js').sourceMaps();
