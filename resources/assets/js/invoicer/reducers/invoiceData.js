@@ -19,9 +19,9 @@ export const fetchInvoiceData = (year) => (dispatch, getState) => {
       dispatch(setInvoiceData(year, data));
     })
     .then(() => Promise.resolve('Data Saved'))
-    .catch( (error) => {
-      console.log("Error loading Invoice data from remote: " + error);
-    });
+    // .catch( (error) => {
+    //   console.log("Error loading Invoice data from remote: " + error);
+    // });
 };
 
 

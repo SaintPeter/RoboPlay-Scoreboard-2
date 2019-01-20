@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import {connect} from "react-redux";
-import {updateBackButton, updatePageTitle} from "../../scorer/actions/Generic";
+
 import {setActiveYear} from "../reducers/activeYear";
 import {fetchInvoiceData} from "../reducers/invoiceData";
-import PaidButton from "./PaidButton"
-import VideoRow from "./VideoRow"
+
+import VideoRow from "./VideoRow";
+import InvoiceRow from "./InvoiceRow";
+import TeamRow from "./TeamRow";
 
 class InvoiceListApp extends Component {
   constructor(props) {
@@ -51,9 +53,11 @@ class InvoiceListApp extends Component {
         </thead>
         <tbody>
           {Object.entries(invoiceData.invoices).map(invoice => {
-            return [ <InvoiceRow key={invoice[0]} rowData={invoice[1]} year={this.props.activeYear}/>,
-              <VideoRow key={'invoice_'+invoice[0]} id={'invoice_'+invoice[0]} rowData={invoice[1]} visible={true}/> ]
-              //<TeamRow key={'video_'+invoice[0]} rowData={invoice[1]}/>
+            return [
+              <InvoiceRow key={invoice[0]} rowData={invoice[1]} year={this.props.activeYear}/>,
+              <VideoRow key={'video_invoice_'+invoice[0]} invoiceId={invoice[0]} rowData={invoice[1]} />,
+              <TeamRow key={'team_invoice_'+invoice[0]} invoiceId={invoice[0]}  rowData={invoice[1]}/>
+            ]
           })}
 
         </tbody>
@@ -64,60 +68,6 @@ class InvoiceListApp extends Component {
   }
 }
 
-class InvoiceRow extends Component {
-  render() {
-    const row = this.props.rowData;
-    return <tr key={row.id}>
-      <td>
-        <a href={"mailto:" + row.email} target="_blank" title="E-mail User">{row.user_name}</a>
-
-        <small style={{'whiteSpace': 'nowrap'}}>(
-          <a href={"/switch_user/" + row.user_id} title="Switch to this User">
-            <i className="fa fa-arrow-circle-right"></i>
-          </a>
-          &nbsp;/&nbsp;
-          <a href={"http://c-stem.ucdavis.edu/wp-admin/user-edit.php?user_id=" + row.user_id}
-             title="Edit User's Wordpress Profile" target="_blank">
-            <i className="fa fa-pencil"></i>
-          </a>
-          {(this.props.year >= 2017) ? <span>
-            &nbsp;/&nbsp;
-            <a
-            href={"http://c-stem.ucdavis.edu/wp-admin/admin.php?page=formidable-entries&frm_action=edit&id=" + row.remote_id}
-            title="Edit Formidable Invoice" target="_blank">
-            <i className="fa fa-file-text"></i>
-            </a>
-            </span>
-            :
-            <span></span>
-          }
-          )
-        </small>
-      </td>
-      <td>
-        {row.email}
-      </td>
-      <td>
-        {row.school_name}
-      </td>
-      <td>{row.team_count}&nbsp;(
-        <span style={{color: 'red'}}>{row.teams_unchecked}</span>
-        &nbsp;/&nbsp;
-        <span style={{color: 'green'}}>{row.teams_checked})</span>
-      </td>
-      <td>{row.video_count}&nbsp;(
-        <span style={{color: 'red'}}>{row.videos_unchecked}</span>
-        &nbsp;/&nbsp;
-        <span style={{color: 'green'}}>{row.videos_checked})</span>
-      </td>
-      <td>T:&nbsp;{row.team_student_count}&nbsp;V:&nbsp;{row.video_student_count}</td>
-      <td>{row.notes}</td>
-      <td><PaidButton paid={row.paid} /></td>
-      <td>
-      </td>
-    </tr>
-  }
-}
 
 
 
@@ -126,6 +76,7 @@ function mapStateToProps(state) {
   return {
     activeYear: state.activeYear,
     invoiceData: state.invoiceData,
+    showVideosList: state.showVideosList,
   }
 }
 
@@ -133,7 +84,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     setActiveYear: (newYear) => dispatch(setActiveYear(newYear)),
-    fetchInvoiceData: (year) => dispatch(fetchInvoiceData(year))
+    fetchInvoiceData: (year) => dispatch(fetchInvoiceData(year)),
   }
 }
 

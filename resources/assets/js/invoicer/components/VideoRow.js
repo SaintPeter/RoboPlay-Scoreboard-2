@@ -5,8 +5,8 @@ class VideoRowApp extends Component {
   render() {
     const videos = this.props.rowData.video_data;
 
-    if(videos && videos.length > 0 && this.props.visible) {
-      return <tr key={this.props.id}>
+    if(videos && videos.length > 0 && this.props.showVideosList.hasOwnProperty(this.props.invoiceId)) {
+      return <tr key={"invoice_" + this.props.invoiceId}>
         <td colSpan={8}>
           <table className="table">
             <thead>
@@ -60,7 +60,9 @@ class VideoRowApp extends Component {
 
 // Map Redux state to component props
 function mapStateToProps(state) {
-  return {}
+  return {
+    showVideosList: state.showVideosList
+  }
 }
 
 // Map Redux actions to component props

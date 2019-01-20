@@ -49,6 +49,7 @@ class InvoiceApiController extends Controller
 			$teamData = $invoice->teams->reduce(function($team_carry, $team) use (&$team_student_count){
 				$student_list = $team->students->reduce(function($student_carry, $student) {
 						$student_carry[] = [
+							'id' => $student->id,
 							'name' => $student->fullName(),
 							'math_level_name' => $student->math_level->name,
 							'math_lavel' => $student->math_level->level,
