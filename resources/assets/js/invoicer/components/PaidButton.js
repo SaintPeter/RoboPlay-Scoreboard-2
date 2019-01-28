@@ -7,16 +7,19 @@ class PaidButtonApp extends Component {
     switch(this.props.paid) {
       case 0: // Unpaid
         return <button
+          onClick={this.props.onClick}
           className={'btn btn-xs btn-danger'}>
           Unpaid
         </button>
       case 1: // Paid
         return <button
+          onClick={this.props.onClick}
           className={'btn btn-xs btn-success'}>
           Paid
         </button>
       case 2: // Pending
         return <button
+          onClick={this.props.onClick}
           className={'btn btn-xs btn-warning'}>
           Pending
         </button>

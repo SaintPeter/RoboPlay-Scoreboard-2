@@ -208,7 +208,10 @@ Route::middleware([ 'auth' ])->group( function() {
 		    ->where('year',"\d{4}");
 
 	    Route::prefix('/api/')->namespace('Api')->name('api.')->group(function() {
-		    Route::get('invoicer/invoice_list/{year}',  ['as' => 'invoice_list', 'uses' => 'InvoiceApiController@invoice_json']);
+		    Route::get('invoicer/invoice_list/{year}',                  ['as' => 'invoice_list', 'uses' => 'InvoiceApiController@invoice_json']);
+		    Route::get('invoicer/save_team_div/{team_id}/{div_id}',     [ 'as' => 'invoicer.save_team_div', 'uses' => 'InvoiceApiController@save_team_division' ]);
+		    Route::get('invoicer/toggle_team/{id}',                     [ 'as' => 'invoicer.toggle_team',  'uses' => 'InvoiceApiController@toggle_team' ]);
+		    Route::get('invoicer/save_video_div/{video_id}/{div_id}',   [ 'as' => 'invoicer.save_video_div', 'uses' => 'InvoiceApiController@save_video_division' ]);
 	    });
 
 	    // Legacy

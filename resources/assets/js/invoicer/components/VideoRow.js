@@ -1,9 +1,17 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
+import {updateVideoDivision} from "../reducers/invoiceData"
+
 class VideoRowApp extends Component {
+  videoDivisonChangeHandler = (e, videoId) => {
+    console.log(`Update - Invoice: ${this.props.invoiceId} Video: ${videoId} changed to ${e.target.value}`);
+    this.props.updateVideoDivision(this.props.invoiceId,videoId,e.target.value);
+  };
+
   render() {
-    const videos = this.props.rowData.video_data;
+    const videos = this.props.rowData;
+    let divData = this.props.divData;
 
     if(videos && videos.length > 0 && this.props.showVideosList.hasOwnProperty(this.props.invoiceId)) {
       return <tr key={"invoice_" + this.props.invoiceId}>
@@ -26,7 +34,10 @@ class VideoRowApp extends Component {
                 (<a href={"http://youtube.com/watch?v="+ video.yt_code} target="_new">YouTube</a>)
               </td>
               <td>
-                Video Division Selector Here
+                <VideoDropDown
+                  divData={divData}
+                  onChange={(e) => this.videoDivisonChangeHandler(e,video.id)}
+                  value={video.vid_division_id}/>
               </td>
               <td className="text-center" colSpan="3">
                     <span className={video.status_class}>
@@ -35,7 +46,7 @@ class VideoRowApp extends Component {
               </td>
               <td className="text-center">{video.student_count}</td>
               <td>
-                Video Button Here
+                Status Button Here
               </td>
 
             </tr>,
@@ -58,6 +69,18 @@ class VideoRowApp extends Component {
   }
 }
 
+class VideoDropDown extends Component {
+  render() {
+    return <select onChange={this.props.onChange} value={this.props.value}>
+      {
+        Object.entries(this.props.divData).map(items => {
+            return <option key={items[0]} value={items[0]}>{items[1]}</option>
+          })
+      }
+    </select>
+  }
+}
+
 // Map Redux state to component props
 function mapStateToProps(state) {
   return {
@@ -67,7 +90,9 @@ function mapStateToProps(state) {
 
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
-  return {}
+  return {
+    updateVideoDivision: (invoiceId,videoId,newDivsion) => dispatch(updateVideoDivision(invoiceId,videoId,newDivsion))
+  }
 }
 
 const VideoRow = connect(

@@ -1,3 +1,5 @@
+import update from 'immutability-helper';
+
 export function setInvoiceData(year, data) {
   return {
     type: 'SET_YEAR_DATA',
@@ -5,6 +7,74 @@ export function setInvoiceData(year, data) {
     data
   }
 }
+
+export function setTeamDivision(year,invoiceId,teamId,newDivision) {
+  return {
+    type: 'SET_TEAM_DIVISION',
+    year,
+    invoiceId,
+    teamId,
+    newDivision
+  }
+}
+
+export function toggleTeamChecked(year,invoiceId,teamId) {
+  return {
+    type: 'TOGGLE_TEAM_CHECKED',
+    year,
+    invoiceId,
+    teamId
+  }
+}
+
+export function setVideoDivision(year,invoiceId,videoId,newDivision) {
+  return {
+    type: 'SET_VIDEO_DIVISION',
+    year,
+    invoiceId,
+    videoId,
+    newDivision
+  }
+}
+
+export const updateTeamDivision = (invoiceId,teamId,newDivision) => (dispatch, getState) => {
+  const year = getState().activeYear;
+
+  console.log(`Updating Year: ${year}, Team: ${teamId}, Division: ${newDivision}`);
+  return window.axios.get('/api/invoicer/save_team_div/' + teamId + "/" + newDivision)
+    .then((response) => {
+      dispatch(setTeamDivision(year,invoiceId,teamId,newDivision));
+    })
+    // .catch((err) => {
+    //   console.log(`Error updating team ${teamId} to division ${newDivision}: ${err}`)
+    // })
+};
+
+export const updateTeamChecked = (invoiceId,teamId) => (dispatch, getState) => {
+  const year = getState().activeYear;
+  console.log(`Toggle Checked Year: ${year}, Team: ${teamId}`);
+
+  return window.axios.get('/api/invoicer/toggle_team/' + teamId)
+    .then((response) => {
+      dispatch(toggleTeamChecked(year,invoiceId,teamId));
+    })
+  // .catch((err) => {
+  //   console.log(`Error updating team ${teamId} to division ${newDivision}: ${err}`)
+  // })
+};
+
+export const updateVideoDivision = (invoiceId,videoId,newDivision) => (dispatch, getState) => {
+  const year = getState().activeYear;
+
+  console.log(`Updating Year: ${year}, Video: ${videoId}, Division: ${newDivision}`);
+  return window.axios.get('/api/invoicer/save_video_div/' + videoId + "/" + newDivision)
+    .then((response) => {
+      dispatch(setVideoDivision(year,invoiceId,videoId,newDivision));
+    })
+  // .catch((err) => {
+  //   console.log(`Error updating video ${videoId} to division ${newDivision}: ${err}`)
+  // })
+};
 
 export const fetchInvoiceData = (year) => (dispatch, getState) => {
   //const {InvoiceData} = getState();
@@ -26,9 +96,66 @@ export const fetchInvoiceData = (year) => (dispatch, getState) => {
 
 
 const invoiceData = (state = {}, action) => {
+  let teamIndex = -1;
+  let newState = {};
   switch(action.type) {
     case 'SET_YEAR_DATA':
       return Object.assign({}, state, {[action.year]: action.data});
+    case 'SET_TEAM_DIVISION':
+      teamIndex = state[action.year].team_data[action.invoiceId].findIndex(team => team.id === action.teamId);
+
+      if(teamIndex < 0) {
+        console.log(`Error: Unable to find team ${action.teamId} in Invoice ${action.invoiceId}`);
+        return state;
+      }
+      newState = { [action.year]: {
+        team_data: {
+          [action.invoiceId]:{
+            [teamIndex]:{
+              division_id: {
+                $set: action.newDivision
+              }
+            }
+          }
+        }
+      }};
+      return update(state,newState);
+    case 'TOGGLE_TEAM_CHECKED':
+      teamIndex = state[action.year].team_data[action.invoiceId].findIndex(team => team.id === action.teamId);
+
+      if(teamIndex < 0) {
+        console.log(`Error: Unable to find team ${action.teamId} in Invoice ${action.invoiceId}`);
+        return state;
+      }
+      newState = { [action.year]: {
+          team_data: {
+            [action.invoiceId]:{
+              [teamIndex]:{
+                $toggle: ['status']
+              }
+            }
+          }
+        }};
+      return update(state,newState);
+    case 'SET_VIDEO_DIVISION':
+      const videoIndex = state[action.year].video_data[action.invoiceId].findIndex(video => video.id === action.videoId);
+
+      if(videoIndex < 0) {
+        console.log(`Error: Unable to find video ${action.videoId} in Invoice ${action.invoiceId}`);
+        return state;
+      }
+      newState = { [action.year]: {
+          video_data: {
+            [action.invoiceId]:{
+              [videoIndex]:{
+                vid_division_id: {
+                  $set: action.newDivision
+                }
+              }
+            }
+          }
+        }};
+      return update(state,newState);
     default:
       return state;
   }

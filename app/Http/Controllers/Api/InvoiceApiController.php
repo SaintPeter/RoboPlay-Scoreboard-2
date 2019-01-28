@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 use App\Models\ {
+	Team,
+	Video,
 	Invoices,
 	CompYear
 };
@@ -31,7 +33,9 @@ class InvoiceApiController extends Controller
 			->get();
 
 		// Collapse collections down to simple JSON
-		$invoices = $invoicesCol->reduce(function($invoice_carry, $invoice){
+		$teamData = [];
+		$videoData = [];
+		$invoices = $invoicesCol->reduce(function($invoice_carry, $invoice) use (&$teamData, &$videoData){
 			// Count checked and unchecked teams
 			$teamStats = $invoice->teams->reduce(function($team_carry, $team){
 				$team_carry[ $team->audit ? 'checked' : 'unchecked' ]++;
@@ -46,7 +50,7 @@ class InvoiceApiController extends Controller
 
 			// Teams to Array
 			$team_student_count = 0;
-			$teamData = $invoice->teams->reduce(function($team_carry, $team) use (&$team_student_count){
+			$teamData = $invoice->teams->reduce(function($team_carry, $team) use (&$team_student_count, $invoice){
 				$student_list = $team->students->reduce(function($student_carry, $student) {
 						$student_carry[] = [
 							'id' => $student->id,
@@ -57,7 +61,7 @@ class InvoiceApiController extends Controller
 						];
 					return $student_carry;
 				}, []);
-				$team_carry[] = [
+				$team_carry[$invoice->id][] = [
 					'id' => $team->id,
 					'name' => $team->name,
 					'division_id' => $team->division_id,
@@ -67,12 +71,12 @@ class InvoiceApiController extends Controller
 				];
 				$team_student_count += $team->students->count();
 				return $team_carry;
-			}, []);
+			}, $teamData);
 
 			// Videos to Array
 			$video_student_count = 0;
-			$videoData = $invoice->videos->reduce(function($video_carry, $video) use (&$video_student_count){
-				$video_carry[] = [
+			$videoData = $invoice->videos->reduce(function($video_carry, $video) use (&$video_student_count, $invoice){
+				$video_carry[$invoice->id][] = [
 					'id' => $video->id,
 					'name' => $video->name,
 					'code' => $video->yt_code,
@@ -83,7 +87,7 @@ class InvoiceApiController extends Controller
 				];
 				$video_student_count += $video->students->count();
 				return $video_carry;
-			}, []);
+			}, $videoData);
 			
 			// Each Invoice, grouped by ID
 			$invoice_carry[$invoice->id] = [
@@ -99,12 +103,12 @@ class InvoiceApiController extends Controller
 				'teams_checked' => $teamStats['checked'],
 				'teams_unchecked' => $teamStats['unchecked'],
 				'team_student_count' => $team_student_count,
-				'team_data' => $teamData,
+				//'team_data' => $teamData,
 				'video_count' => $invoice->video_count,
 				'videos_checked' => $videoStats['checked'],
 				'videos_unchecked' => $videoStats['unchecked'],
 				'video_student_count' => $video_student_count,
-				'video_data' => $videoData,
+				//'video_data' => $videoData,
 			];
 			return $invoice_carry;
 		},[]);
@@ -123,47 +127,29 @@ class InvoiceApiController extends Controller
 		$returnData = [
 			'team_divisions' => $division_list,
 			'vid_divisions' => $vid_division_list,
-			'invoices' => $invoices
+			'invoices' => $invoices,
+			'team_data' => $teamData,
+			'video_data' => $videoData,
 		];
 
 		return response()->json($returnData);
 	}
 
-	function invoice_json_old($year = 0) {
-		if($year == 0) {
-			return response("Year Not Found",404);
-		}
+	function save_team_division($team_id, $div_id) {
+		$team = Team::findOrFail($team_id);
+		$team->update(['division_id' => $div_id ]);
+		return 'true';
+	}
 
-		$invoices = DB::table('invoices')
-			->leftJoin('teams', function($join) use ($year){
-				$join->on('teams.teacher_id', '=','invoices.user_id')
-					->where('teams.year','=',$year);
-			})
-			->leftJoin('videos', function($join) use ($year){
-				$join->on('videos.teacher_id', '=','invoices.user_id')
-					->where('videos.year','=',$year);
-			})
-			->leftJoin('users', 'users.id','=','invoices.user_id')
-			->leftJoin('schools','invoices.school_id','=','schools.id')
-			->select('invoices.id',
-				'invoices.remote_id',
-				'invoices.user_id',
-				'invoices.notes',
-				'invoices.paid',
-				'users.name as user_name',
-				'users.email',
-				'schools.name as school_name',
-				'invoices.team_count',
-				DB::Raw('CAST(ifnull(SUM(teams.audit = 0),0) AS UNSIGNED) AS teams_unchecked'),
-				DB::Raw('CAST(ifnull(SUM(teams.audit = 1),0) AS UNSIGNED) AS teams_checked'),
-				'invoices.video_count',
-				DB::Raw('CAST(ifnull(SUM(videos.audit = 0),0) AS UNSIGNED) AS videos_unchecked'),
-				DB::Raw('CAST(ifnull(SUM(videos.audit = 1),0) AS UNSIGNED) AS videos_checked')
-			)
-			->groupBy('invoices.id')
-			->where('invoices.year','=', $year)
-			->get();
+	public function save_video_division($video_id, $vid_div_id) {
+		$video = Video::findOrFail($video_id);
+		$video->update(['vid_division_id' => $vid_div_id ]);
+		return 'true';
+	}
 
-		return response()->json($invoices);
+	public function toggle_team($team_id) {
+		$team = Team::findOrFail($team_id);
+		$team->update(['audit' => !$team->audit ]);
+		return 'true';
 	}
 }

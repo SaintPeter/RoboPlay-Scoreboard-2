@@ -34,7 +34,9 @@ class InvoiceListApp extends Component {
   }
 
   render() {
-    const invoiceData = this.props.invoiceData[this.props.activeYear] ? this.props.invoiceData[this.props.activeYear] : [];
+    const invoiceData = this.props.invoiceData[this.props.activeYear] ? this.props.invoiceData[this.props.activeYear] : {};
+    const teamData  = invoiceData.hasOwnProperty('team_data') ? invoiceData.team_data : {};
+    const videoData = invoiceData.hasOwnProperty('video_data') ? invoiceData.video_data : {};
 
     if(invoiceData.hasOwnProperty('invoices') && Object.keys(invoiceData.invoices).length) {
       return <table className="table">
@@ -55,8 +57,18 @@ class InvoiceListApp extends Component {
           {Object.entries(invoiceData.invoices).map(invoice => {
             return [
               <InvoiceRow key={invoice[0]} rowData={invoice[1]} year={this.props.activeYear}/>,
-              <VideoRow key={'video_invoice_'+invoice[0]} invoiceId={invoice[0]} rowData={invoice[1]} />,
-              <TeamRow key={'team_invoice_'+invoice[0]} invoiceId={invoice[0]}  rowData={invoice[1]}/>
+              <VideoRow
+                key={'video_invoice_'+invoice[0]}
+                invoiceId={invoice[0]}
+                rowData={videoData[invoice[1].id]}
+                divData={invoiceData.vid_divisions}
+              />,
+              <TeamRow
+                key={'team_invoice_'+invoice[0]}
+                invoiceId={invoice[0]}
+                rowData={teamData[invoice[1].id]}
+                divData={invoiceData.team_divisions}
+              />
             ]
           })}
 
@@ -77,6 +89,7 @@ function mapStateToProps(state) {
     activeYear: state.activeYear,
     invoiceData: state.invoiceData,
     showVideosList: state.showVideosList,
+    showTeamsList: state.showTeamsList
   }
 }
 
