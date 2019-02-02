@@ -27,6 +27,22 @@ export function toggleTeamChecked(year,invoiceId,teamId) {
   }
 }
 
+export function updateTeamCheckedCounts(year, invoiceId,teamId) {
+  return {
+    type: 'UPDATE_TEAM_CHECKED_COUNTS',
+    year,
+    invoiceId,
+    teamId
+  }
+}
+
+export function toggleTeamCheckedAndRecalc(year,invoiceId,teamId) {
+  return (dispatch) => {
+    dispatch(toggleTeamChecked(year,invoiceId,teamId));
+    dispatch(updateTeamCheckedCounts(year,invoiceId,teamId));
+  }
+}
+
 export function setVideoDivision(year,invoiceId,videoId,newDivision) {
   return {
     type: 'SET_VIDEO_DIVISION',
@@ -79,7 +95,7 @@ export const updateTeamChecked = (invoiceId,teamId) => (dispatch, getState) => {
 
   return window.axios.get('/api/invoicer/toggle_team/' + teamId)
     .then((response) => {
-      dispatch(toggleTeamChecked(year,invoiceId,teamId));
+      dispatch(toggleTeamCheckedAndRecalc(year,invoiceId,teamId));
     })
   // .catch((err) => {
   //   console.log(`Error updating team ${teamId} to division ${newDivision}: ${err}`)
@@ -120,7 +136,7 @@ export const fetchInvoiceData = (year) => (dispatch, getState) => {
 
 const invoiceData = (state = {}, action) => {
   let teamIndex = -1;
-  let newState = {};
+  let stateUpdate = {};
   switch(action.type) {
     case 'SET_YEAR_DATA':
       return Object.assign({}, state, {[action.year]: action.data});
@@ -131,7 +147,7 @@ const invoiceData = (state = {}, action) => {
         console.log(`Error: Unable to find team ${action.teamId} in Invoice ${action.invoiceId}`);
         return state;
       }
-      newState = { [action.year]: {
+      stateUpdate = { [action.year]: {
         team_data: {
           [action.invoiceId]:{
             [teamIndex]:{
@@ -142,7 +158,7 @@ const invoiceData = (state = {}, action) => {
           }
         }
       }};
-      return update(state,newState);
+      return update(state,stateUpdate);
     case 'TOGGLE_TEAM_CHECKED':
       teamIndex = state[action.year].team_data[action.invoiceId].findIndex(team => team.id === action.teamId);
 
@@ -150,7 +166,7 @@ const invoiceData = (state = {}, action) => {
         console.log(`Error: Unable to find team ${action.teamId} in Invoice ${action.invoiceId}`);
         return state;
       }
-      newState = { [action.year]: {
+      stateUpdate = { [action.year]: {
           team_data: {
             [action.invoiceId]:{
               [teamIndex]:{
@@ -159,7 +175,21 @@ const invoiceData = (state = {}, action) => {
             }
           }
         }};
-      return update(state,newState);
+      return update(state,stateUpdate);
+    case 'UPDATE_TEAM_CHECKED_COUNTS':
+      const teamCounts = state[action.year].team_data[action.invoiceId].reduce((carry, team) => {
+        carry[team.status ? 1 : 0]++;
+        return carry;
+      },[0,0]);
+      stateUpdate = { [action.year]: {
+         invoices: {
+           [action.invoiceId]: {
+             teams_checked: { $set: teamCounts[1] },
+             teams_unchecked: { $set: teamCounts[0] }
+           }
+         }
+      }};
+      return update(state, stateUpdate);
     case 'SET_VIDEO_DIVISION':
       const videoIndex = state[action.year].video_data[action.invoiceId].findIndex(video => video.id === action.videoId);
 
@@ -167,7 +197,7 @@ const invoiceData = (state = {}, action) => {
         console.log(`Error: Unable to find video ${action.videoId} in Invoice ${action.invoiceId}`);
         return state;
       }
-      newState = { [action.year]: {
+      stateUpdate = { [action.year]: {
           video_data: {
             [action.invoiceId]:{
               [videoIndex]:{
@@ -178,9 +208,9 @@ const invoiceData = (state = {}, action) => {
             }
           }
         }};
-      return update(state,newState);
+      return update(state,stateUpdate);
     case 'UPDATE_PAID_NOTES':
-      newState = { [action.year]: {
+      stateUpdate = { [action.year]: {
           invoices: {
             [action.invoiceId]:{
               paid: { $set: action.paid },
@@ -188,7 +218,7 @@ const invoiceData = (state = {}, action) => {
             }
           }
         }};
-      return update(state, newState);
+      return update(state, stateUpdate);
     default:
       return state;
   }
