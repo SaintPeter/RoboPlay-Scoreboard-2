@@ -4,12 +4,16 @@ import activeYear from './activeYear'
 import invoiceData from './invoiceData'
 import showVideosList from "./showVideosList";
 import showTeamsList from "./showTeamsList";
+import showAllVideos from "./showAllVideos";
+import showAllTeams from "./showAllTeams"
 
 const reducer = combineReducers({
   activeYear,
   invoiceData,
   showVideosList,
-  showTeamsList
+  showTeamsList,
+  showAllVideos,
+  showAllTeams
 });
 
 export default reducer;

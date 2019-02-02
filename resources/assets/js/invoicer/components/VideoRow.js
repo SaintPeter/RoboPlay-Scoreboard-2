@@ -13,7 +13,7 @@ class VideoRowApp extends Component {
     const videos = this.props.rowData;
     let divData = this.props.divData;
 
-    if(videos && videos.length > 0 && this.props.showVideosList.hasOwnProperty(this.props.invoiceId)) {
+    if(videos && videos.length > 0 && (this.props.showAllVideos || this.props.showVideosList.hasOwnProperty(this.props.invoiceId))) {
       return <tr key={"invoice_" + this.props.invoiceId}>
         <td colSpan={8}>
           <table className="table">
@@ -84,7 +84,8 @@ class VideoDropDown extends Component {
 // Map Redux state to component props
 function mapStateToProps(state) {
   return {
-    showVideosList: state.showVideosList
+    showVideosList: state.showVideosList,
+    showAllVideos: state.showAllVideos
   }
 }
 

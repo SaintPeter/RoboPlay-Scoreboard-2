@@ -19,7 +19,7 @@ class TeamRowApp extends Component {
     let teamData = this.props.rowData;
     let divData = this.props.divData;
 
-    if (teamData && teamData.length > 0 && this.props.showTeamsList.hasOwnProperty(this.props.invoiceId)) {
+    if (teamData && teamData.length > 0 && (this.props.showAllTeams || this.props.showTeamsList.hasOwnProperty(this.props.invoiceId))) {
       return <tr key={"teams_" + this.props.invoiceId}>
         <td colSpan="8" className="team_section" id="teams{{ $invoice->id }}">
           <table className="table pull-right">
@@ -135,7 +135,8 @@ class CheckedButton extends Component {
 // Map Redux state to component props
 function mapStateToProps(state) {
   return {
-    showTeamsList: state.showTeamsList
+    showTeamsList: state.showTeamsList,
+    showAllTeams: state.showAllTeams
   }
 }
 
