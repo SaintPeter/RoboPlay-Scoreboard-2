@@ -125,13 +125,14 @@ class InvoiceRowApp extends Component {
           </Modal.Footer>
         </Modal>
       </td>
-      <td>
+      <td className="text-nowrap">
         <button
           className={"btn btn-xs btn-success"}
           disabled={row.videos_checked + row.videos_unchecked === 0}
           onClick={() => this.props.toggleShowVideo(row.id)}
           title={"Show Videos"}
         >Videos</button>
+        &nbsp;
         <button
           className={"btn btn-xs btn-info"}
           disabled={row.teams_checked + row.teams_unchecked === 0}
