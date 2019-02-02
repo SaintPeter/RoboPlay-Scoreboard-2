@@ -37,6 +37,29 @@ export function setVideoDivision(year,invoiceId,videoId,newDivision) {
   }
 }
 
+export function setPaidNotes(year, invoiceId,paid,notes) {
+  return {
+    type: 'UPDATE_PAID_NOTES',
+    year,
+    invoiceId,
+    paid,
+    notes
+  }
+}
+
+export const updatePaidNotes = (invoiceId, paid, notes) => (dispatch, getState) => {
+  const year = getState().activeYear;
+
+  return window.axios.post(`/api/invoicer/update_paid_notes/${invoiceId}/${paid}`, {notes})
+    .then((response) => {
+      console.log(`Update Paid Notes - Invoice ${invoiceId}, Paid: ${paid}, Notes: ${notes}`);
+      dispatch(setPaidNotes(year, invoiceId, paid, notes));
+    })
+    .catch((err) => {
+      console.log(`Error Updating Paid Notes - Invoice ${invoiceId}, Paid: ${paid}, Notes: ${notes}\n${err}`)
+    })
+};
+
 export const updateTeamDivision = (invoiceId,teamId,newDivision) => (dispatch, getState) => {
   const year = getState().activeYear;
 
@@ -156,6 +179,16 @@ const invoiceData = (state = {}, action) => {
           }
         }};
       return update(state,newState);
+    case 'UPDATE_PAID_NOTES':
+      newState = { [action.year]: {
+          invoices: {
+            [action.invoiceId]:{
+              paid: { $set: action.paid },
+              notes: { $set: action.notes }
+            }
+          }
+        }};
+      return update(state, newState);
     default:
       return state;
   }

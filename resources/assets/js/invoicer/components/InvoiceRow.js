@@ -5,6 +5,7 @@ import {Button, Modal, FormGroup, ControlLabel, FormControl, ToggleButtonGroup, 
 import PaidButton from "./PaidButton"
 import {toggleShowVideo} from "../reducers/showVideosList";
 import {toggleShowTeam} from "../reducers/showTeamsList";
+import {updatePaidNotes} from "../reducers/invoiceData";
 
 class InvoiceRowApp extends Component {
   constructor(props) {
@@ -34,11 +35,11 @@ class InvoiceRowApp extends Component {
   };
 
   handleModalNotes = (e) => {
-    this.State({modalNotes: e.target.value});
+    this.setState({modalNotes: e.target.value});
   };
 
   handleModalSaveAndClose = () => {
-    // TODO: Save Data
+    this.props.updatePaidNotes(this.props.rowData.id, this.state.modalPaid, this.state.modalNotes);
     this.setState({showPaidModal: false});
   };
 
@@ -66,7 +67,7 @@ class InvoiceRowApp extends Component {
             </a>
             </span>
             :
-            <span></span>
+            null
           }
           )
         </small>
@@ -89,7 +90,7 @@ class InvoiceRowApp extends Component {
       </td>
       <td>T:&nbsp;{row.team_student_count}&nbsp;V:&nbsp;{row.video_student_count}</td>
       <td>{row.notes}</td>
-      <td>
+      <td className="text-center">
         <PaidButton paid={row.paid} onClick={this.handleModalShow}/>
         <Modal show={this.state.showPaidModal} onHide={() => this.handleModalClose(row.id)}>
           <Modal.Header>
@@ -155,6 +156,7 @@ function mapDispatchToProps(dispatch) {
   return {
     toggleShowVideo: (id) => dispatch(toggleShowVideo(id)),
     toggleShowTeam: (id) => dispatch(toggleShowTeam(id)),
+    updatePaidNotes: (id, paid, notes) => dispatch(updatePaidNotes(id, paid, notes))
   }
 }
 

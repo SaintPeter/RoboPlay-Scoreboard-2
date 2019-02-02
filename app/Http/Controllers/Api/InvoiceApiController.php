@@ -152,4 +152,10 @@ class InvoiceApiController extends Controller
 		$team->update(['audit' => !$team->audit ]);
 		return 'true';
 	}
+
+	public function update_paid_notes(Request $req, $invoice_id, $paid) {
+		$invoice = Invoices::findOrFail($invoice_id);
+		$invoice->update(['paid' => $paid, 'notes' => $req->input('notes', '') ]);
+		return 'true';
+	}
 }
