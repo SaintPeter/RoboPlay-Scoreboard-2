@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\InvoiceReview;
 use DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -133,6 +134,15 @@ class InvoiceApiController extends Controller
 		];
 
 		return response()->json($returnData);
+	}
+
+	function sync_invoices($year) {
+		$result = \Artisan::call('scoreboard:sync_db');
+		if($result == 0) {
+			$output = App::make('InvoiceReview')->invoice_sync($year);
+			return response()->json(['message' => $output]);
+		}
+		return response("Error",500);
 	}
 
 	function save_team_division($team_id, $div_id) {
