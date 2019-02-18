@@ -14,7 +14,7 @@ class SyncWordpressDB extends Command
      *
      * @var string
      */
-    protected $signature = 'scoreboard:db_sync';
+    protected $signature = 'scoreboard:sync_db';
 
     /**
      * The console command description.

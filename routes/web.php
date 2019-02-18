@@ -213,6 +213,7 @@ Route::middleware([ 'auth' ])->group( function() {
 		    Route::get('invoicer/toggle_team/{id}',                     [ 'as' => 'invoicer.toggle_team',  'uses' => 'InvoiceApiController@toggle_team' ]);
 		    Route::get('invoicer/save_video_div/{video_id}/{div_id}',   [ 'as' => 'invoicer.save_video_div', 'uses' => 'InvoiceApiController@save_video_division' ]);
 		    Route::post('invoicer/update_paid_notes/{id}/{paid}',       [ 'as' => 'invoicer.update_paid_notes', 'uses' => 'InvoiceApiController@update_paid_notes']);
+		    Route::get('invoicer/sync_invoices/{year}',                 [ 'as' => 'invoicer.sync_invoices', 'uses' => 'InvoiceApiController@sync_invoices']);
 	    });
 
 	    // Legacy

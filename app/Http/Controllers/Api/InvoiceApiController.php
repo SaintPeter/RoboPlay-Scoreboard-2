@@ -18,16 +18,16 @@ use App\Models\ {
 class InvoiceApiController extends Controller
 {
 	function invoice_json($year = 0) {
-		if($year == 0) {
-			return response("Year Not Found",404);
+		if ($year == 0) {
+			return response("Year Not Found", 404);
 		}
 
 		// Fetch Invoices and all data
-		$invoicesCol = Invoices::with( 'user', 'school')
-			->with( [ 'videos' => function(HasMany $q) use ($year) {
+		$invoicesCol = Invoices::with('user', 'school')
+			->with(['videos' => function (HasMany $q) use ($year) {
 				return $q->where('year', $year);
 			}, 'videos.students'])
-			->with( [ 'teams' => function(HasMany $q) use ($year) {
+			->with(['teams' => function (HasMany $q) use ($year) {
 				return $q->where('year', $year);
 			}, 'teams.students', 'teams.students.math_level', 'teams.division'])
 			->where('year', $year)
@@ -36,30 +36,30 @@ class InvoiceApiController extends Controller
 		// Collapse collections down to simple JSON
 		$teamData = [];
 		$videoData = [];
-		$invoices = $invoicesCol->reduce(function($invoice_carry, $invoice) use (&$teamData, &$videoData){
+		$invoices = $invoicesCol->reduce(function ($invoice_carry, $invoice) use (&$teamData, &$videoData) {
 			// Count checked and unchecked teams
-			$teamStats = $invoice->teams->reduce(function($team_carry, $team){
-				$team_carry[ $team->audit ? 'checked' : 'unchecked' ]++;
+			$teamStats = $invoice->teams->reduce(function ($team_carry, $team) {
+				$team_carry[$team->audit ? 'checked' : 'unchecked']++;
 				return $team_carry;
-			},[ 'checked' => 0, 'unchecked' => 0]);
+			}, ['checked' => 0, 'unchecked' => 0]);
 
 			// Count checked and unchecked videos
-			$videoStats = $invoice->videos->reduce(function($video_carry, $video){
-				$video_carry[ $video->audit ? 'checked' : 'unchecked' ]++;
+			$videoStats = $invoice->videos->reduce(function ($video_carry, $video) {
+				$video_carry[$video->audit ? 'checked' : 'unchecked']++;
 				return $video_carry;
-			},[ 'checked' => 0, 'unchecked' => 0]);
+			}, ['checked' => 0, 'unchecked' => 0]);
 
 			// Teams to Array
 			$team_student_count = 0;
-			$teamData = $invoice->teams->reduce(function($team_carry, $team) use (&$team_student_count, $invoice){
-				$student_list = $team->students->reduce(function($student_carry, $student) {
-						$student_carry[] = [
-							'id' => $student->id,
-							'name' => $student->fullName(),
-							'math_level_name' => $student->math_level->name,
-							'math_lavel' => $student->math_level->level,
-							'tshirt' => $student->tshirt ? $student->tshirt : "N/A"
-						];
+			$teamData = $invoice->teams->reduce(function ($team_carry, $team) use (&$team_student_count, $invoice) {
+				$student_list = $team->students->reduce(function ($student_carry, $student) {
+					$student_carry[] = [
+						'id' => $student->id,
+						'name' => $student->fullName(),
+						'math_level_name' => $student->math_level->name,
+						'math_lavel' => $student->math_level->level,
+						'tshirt' => $student->tshirt ? $student->tshirt : "N/A",
+					];
 					return $student_carry;
 				}, []);
 				$team_carry[$invoice->id][] = [
@@ -76,7 +76,7 @@ class InvoiceApiController extends Controller
 
 			// Videos to Array
 			$video_student_count = 0;
-			$videoData = $invoice->videos->reduce(function($video_carry, $video) use (&$video_student_count, $invoice){
+			$videoData = $invoice->videos->reduce(function ($video_carry, $video) use (&$video_student_count, $invoice) {
 				$video_carry[$invoice->id][] = [
 					'id' => $video->id,
 					'name' => $video->name,
@@ -84,12 +84,12 @@ class InvoiceApiController extends Controller
 					'vid_division_id' => $video->vid_division_id,
 					'student_count' => $video->students->count(),
 					'status' => $video->audit,
-					'notes' => $video->notes ? $video->notes : ''
+					'notes' => $video->notes ? $video->notes : '',
 				];
 				$video_student_count += $video->students->count();
 				return $video_carry;
 			}, $videoData);
-			
+
 			// Each Invoice, grouped by ID
 			$invoice_carry[$invoice->id] = [
 				'id' => $invoice->id,
@@ -112,7 +112,7 @@ class InvoiceApiController extends Controller
 				//'video_data' => $videoData,
 			];
 			return $invoice_carry;
-		},[]);
+		}, []);
 
 		$comp_year = CompYear::where('year', $year)
 			->with('vid_divisions', 'divisions', 'divisions.competition')
@@ -121,7 +121,7 @@ class InvoiceApiController extends Controller
 		$vid_division_list = $comp_year->vid_divisions->pluck('name', 'id')->all();
 
 		$division_list = [];
-		foreach($comp_year->divisions as $division) {
+		foreach ($comp_year->divisions as $division) {
 			$division_list[$division->competition->name][$division->id] = $division->longname();
 		}
 
@@ -138,34 +138,34 @@ class InvoiceApiController extends Controller
 
 	function sync_invoices($year) {
 		$result = \Artisan::call('scoreboard:sync_db');
-		if($result == 0) {
+		if ($result == 0) {
 			$output = App::make('InvoiceReview')->invoice_sync($year);
 			return response()->json(['message' => $output]);
 		}
-		return response("Error",500);
+		return response("Error", 500);
 	}
 
 	function save_team_division($team_id, $div_id) {
 		$team = Team::findOrFail($team_id);
-		$team->update(['division_id' => $div_id ]);
+		$team->update(['division_id' => $div_id]);
 		return 'true';
 	}
 
 	public function save_video_division($video_id, $vid_div_id) {
 		$video = Video::findOrFail($video_id);
-		$video->update(['vid_division_id' => $vid_div_id ]);
+		$video->update(['vid_division_id' => $vid_div_id]);
 		return 'true';
 	}
 
 	public function toggle_team($team_id) {
 		$team = Team::findOrFail($team_id);
-		$team->update(['audit' => !$team->audit ]);
+		$team->update(['audit' => !$team->audit]);
 		return 'true';
 	}
 
 	public function update_paid_notes(Request $req, $invoice_id, $paid) {
 		$invoice = Invoices::findOrFail($invoice_id);
-		$invoice->update(['paid' => $paid, 'notes' => $req->input('notes', '') ]);
+		$invoice->update(['paid' => $paid, 'notes' => $req->input('notes', '')]);
 		return 'true';
 	}
 }
