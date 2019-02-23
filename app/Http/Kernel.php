@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
         'adminFilter' => \App\Http\Middleware\adminFilter::class,
         'judgeFilter' => \App\Http\Middleware\judgeFilter::class,
         'teacherFilter' => \App\Http\Middleware\teacherFilter::class,
+	    'videoReviewerFilter' => \App\Http\Middleware\videoReviewerFilter::class,
         'variablePickup' => \App\Http\Middleware\variablePickup::class,
     ];
 }

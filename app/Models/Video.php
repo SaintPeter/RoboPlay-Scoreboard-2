@@ -149,6 +149,10 @@ class Video extends Model {
 		return $this->belongsTo('App\Models\User', 'teacher_id');
 	}
 
+	public function problems() {
+		return $this->hasMany(Video_review_problems::class);
+	}
+
 	// Methods
 	public function student_count()
 	{

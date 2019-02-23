@@ -435,6 +435,10 @@ Route::middleware([ 'auth' ])->group( function() {
 	Route::middleware([ 'videoReviewerFilter' ])->group( function () {
 		Route::get('video_review/{year?}', ['as' => 'video_review', 'uses' => 'VideoReviewController@index']);
 
+		Route::prefix('/api/')->name('api.')->group(function() {
+			Route::get('video_review/{year?}/review_status', ['as' => 'video_review.status', 'uses' => 'VideoReviewController@review_status']);
+
+		});
 	});
 
 });

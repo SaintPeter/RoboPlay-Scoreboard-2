@@ -12,4 +12,5 @@ let mix = require('laravel-mix');
  */
 
 mix.react('resources/assets/js/scorer/scorer.js', 'public/js');
-mix.react('resources/assets/js/invoicer/invoicer.js', 'public/js').sourceMaps();
+mix.react('resources/assets/js/invoicer/invoicer.js', 'public/js').sourceMaps(productionToo=false);
+mix.react('resources/assets/js/video_review/video_review.js', 'public/js').sourceMaps(productionToo=false);

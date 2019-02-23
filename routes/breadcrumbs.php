@@ -334,6 +334,12 @@ try {
 		$bc->push('Manage Filetypes', route('filetypes.index'));
 	});
 
+	// Video Review
+	Breadcrumbs::register('video_review', function (BreadcrumbsGenerator $bc) {
+		$bc->parent('home');
+		$bc->push('Video Review', route('video_review'));
+	});
+
 } catch (\DaveJamesMiller\Breadcrumbs\Facades\DuplicateBreadcrumbException $e) {
 	echo "Duplicate Breadcrumb Route Exception " . $e->getMessage();
 }
