@@ -2,11 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use Auth;
 use Closure;
+use Auth;
 use App\Helpers\Roles;
 
-class teacherFilter
+class videoReviewerFilter
 {
     /**
      * Handle an incoming request.
@@ -20,10 +20,10 @@ class teacherFilter
         if (Auth::guest()) {
             return redirect()->guest('login');
         } else {
-            if(!Roles::isTeacher()) {
-	            return redirect()
-		            ->to('\\')
-		            ->with(['error' => "You are not a Teacher"]);
+            if(!Roles::isVideoReviewer()) {
+                return redirect()
+	                ->to('\\')
+                    ->with(['error' => "You do not have permission to review videos."]);
             }
         }
         return $next($request);

@@ -22,6 +22,11 @@ class Roles {
 		return Roles::is(UserTypes::Teacher,UserTypes::Admin,UserTypes::SuperAdmin);
 	}
 
+	public static function isVideoReviewer()
+	{
+		return Roles::is(UserTypes::VideoReviewer,UserTypes::Admin,UserTypes::SuperAdmin);
+	}
+
 	public static function is()
 	{
 		// Check for args

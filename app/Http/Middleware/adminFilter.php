@@ -21,7 +21,9 @@ class adminFilter
             return redirect()->guest('login');
         } else {
             if(!Roles::isAdmin()) {
-                return "You do not have permission to admin.";
+	            return redirect()
+		            ->to('\\')
+		            ->with(['error' => "You are not an Admin"]);
             }
         }
         return $next($request);

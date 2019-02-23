@@ -429,6 +429,14 @@ Route::middleware([ 'auth' ])->group( function() {
         Route::resource('students', 'StudentsController');
     });
 
+	/* -----------------------------------------------------------------------------
+	|                            Video Reviewer Routes                             |
+	------------------------------------------------------------------------------*/
+	Route::middleware([ 'videoReviewerFilter' ])->group( function () {
+		Route::get('video_review/{year?}', ['as' => 'video_review', 'uses' => 'VideoReviewController@index']);
+
+	});
+
 });
 
 
