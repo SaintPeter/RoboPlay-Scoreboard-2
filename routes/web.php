@@ -433,11 +433,13 @@ Route::middleware([ 'auth' ])->group( function() {
 	|                            Video Reviewer Routes                             |
 	------------------------------------------------------------------------------*/
 	Route::middleware([ 'videoReviewerFilter' ])->group( function () {
-		Route::get('video_review/{year?}', ['as' => 'video_review', 'uses' => 'VideoReviewController@index']);
+		Route::get('video_review/{year?}/{any?}', ['as' => 'video_review', 'uses' => 'VideoReviewController@index'])
+			->where('any',".*");
 
 		Route::prefix('/api/')->name('api.')->group(function() {
 			Route::get('video_review/{year?}/review_status', ['as' => 'video_review.status', 'uses' => 'VideoReviewController@review_status']);
-
+			Route::get('video_review/{year}/get_next', ['as' => 'video_review.get_next', 'uses' => 'VideoReviewController@get_next']);
+			Route::get('video_review/{year}/fetch_video/{id}', ['as' => 'video_review.fetch_video', 'uses' => 'VideoReviewController@fetch_video']);
 		});
 	});
 

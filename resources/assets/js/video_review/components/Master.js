@@ -6,6 +6,7 @@ import { Row, Col, Panel, Button } from 'react-bootstrap';
 
 import YearSelect from './YearSelect';
 import ReviewSelector from './ReviewSelector';
+import VideoReview from './VideoReview';
 
 class MasterApp extends Component {
     constructor(props) {
@@ -39,6 +40,7 @@ class MasterApp extends Component {
                       <Switch>
                           <Route exact path="/" component={PromptSelectYear} />
                           <Route exact path="/:year?" component={ReviewSelector} />
+                          <Route exact path="/:year/:id" component={VideoReview}/>
                       </Switch>
                   </Row>
                 </div>

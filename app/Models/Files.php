@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Model;
 class Files extends \Eloquent {
 	protected $guarded = [ 'id' ];
 	protected $with = [ 'filetype' ];
+	protected $appends = ['public_url'];
 
 	public static function boot()
     {
@@ -64,6 +65,10 @@ class Files extends \Eloquent {
 		} else {
 		 	return url($this->path());
 		}
+	}
+
+	public function getPublicUrlAttribute() {
+		return $this->url();
 	}
 
 	public function full_path() {

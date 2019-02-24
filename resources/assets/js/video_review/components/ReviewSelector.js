@@ -19,6 +19,10 @@ class ReviewSelectorApp extends Component {
       thisYear = yearList[yearList.length - 1]
     }
 
+    this.state = {
+      fetchingVideo: false
+    };
+
     props.setActiveYear(thisYear);
     props.loadReviewStatus();
   }
@@ -29,6 +33,27 @@ class ReviewSelectorApp extends Component {
       this.props.loadReviewStatus();
     }
   }
+
+  fetchReviewVideo = (e) => {
+    this.setState({ fetchingVideo: true });
+
+    window.axios.get(`/api/video_review/${this.props.activeYear}/get_next`)
+      .then((response) => {
+        console.log("Video Response Fetched");
+        this.setState({ fetchingVideo: false });
+        return response.data;
+      })
+      .then((data) => {
+        if(data.error) {
+          console.log("Video Response had and error, oh noes!\n" + data.message)
+        } else {
+          this.props.history.push(`/${this.props.activeYear}/${data.id}`)
+        }
+      })
+      .catch((err) => {
+        console.log('Error Occured while fetching video: ' + err)
+      });
+  };
 
 
 
@@ -42,8 +67,14 @@ class ReviewSelectorApp extends Component {
           </Panel.Heading>
           <Panel.Body>
             <div className="text-center">
-              <Button bsStyle="primary" onClick={() => { }}>
-                Review Video
+              <Button bsStyle="primary" onClick={this.fetchReviewVideo}>
+                Review Video &nbsp;
+                {
+                  this.state.fetchingVideo ?
+                  <i className="fa fa-spinner fa-pulse fa-fw">{null}</i>
+                  :
+                  null
+                }
               </Button>
             </div>
           </Panel.Body>

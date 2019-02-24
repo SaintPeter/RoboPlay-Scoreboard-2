@@ -6,15 +6,23 @@ use DB;
 use View;
 
 use App\Models\ {
-	Video_review_categories,
-	CompYear
+	Video,
+	CompYear,
+	Video_review_categories
 };
+
+use App\Enums\VideoReviewStatus;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class VideoReviewController extends Controller
 {
     public function index($year = 0) {
-	    $year = CompYear::yearOrMostRecent($year);
+    	if(!$year) {
+		    $year = CompYear::yearOrMostRecent($year);
+		    return redirect()->route('video_review', [ $year ]);
+	    }
+
 	    $yearList = json_encode(CompYear::orderBy('year')->pluck('year'));
 	    $problemList = Video_review_categories::with('details')
 		    ->orderBy('order')
@@ -40,4 +48,44 @@ class VideoReviewController extends Controller
 
 	    return response()->json($reviewStatus->keyBy('year'));
     }
+
+    public function get_next($year) {
+	    try {
+		    $random_video = DB::table('videos')
+			    ->where([
+				    ['year', '=', $year],
+				    ['review_status', '=', VideoReviewStatus::Unreviewed]
+			    ])
+			    ->select('id')->get()->random();
+	    } catch (\InvalidArgumentException $ex) {
+		    return response()->json([
+			    'error' => True,
+			    'message' => 'No More Videos to Review'
+		    ]);
+	    }
+
+	    return response()->json([
+	    	'error' => False,
+		    'id' => $random_video->id
+	    ]);
+    }
+
+    public function fetch_video($year, $id) {
+    	try {
+		    $video = Video::with('problems', 'files')
+			    ->findOrFail($id)
+			    ->toArray();
+	    } catch(ModelNotFoundException $ex) {
+    		return response()->json([
+			    'error' => True,
+		        'message' => "Cannot Find Video"
+		    ]);
+	    }
+
+    	$video['error'] = False;
+    	$video['message'] = "";
+
+    	return response()->json($video);
+    }
+
 }
