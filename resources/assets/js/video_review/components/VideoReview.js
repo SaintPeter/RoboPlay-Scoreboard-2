@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import YouTube from 'react-youtube';
-import { Col } from 'react-bootstrap';
+import { Col, Panel } from 'react-bootstrap';
 
 import {setActiveYear} from "../reducers/activeYear";
 
@@ -61,9 +61,20 @@ class VideoReviewApp extends Component {
       </Col>
     } else {
       return <Col xs={12}>
-        <pre>
-          { JSON.stringify(this.state.video, null, 2) }
-        </pre>
+        <Panel>
+          <Panel.Heading>
+            <h3 style={{marginTop: 5}}>{this.state.video.name}</h3>
+          </Panel.Heading>
+          <Panel.Body>
+            <YouTube
+              videoId={this.state.video.yt_code}
+              opts={{ width: '100%', height: '100%' }}
+              className="embed-responsive-item"
+              containerClassName="embed-responsive embed-responsive-16by9"
+
+            />
+          </Panel.Body>
+        </Panel>
       </Col>
     }
 
