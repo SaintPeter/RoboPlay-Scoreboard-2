@@ -5,6 +5,7 @@ import YouTube from 'react-youtube';
 import { Col, Panel } from 'react-bootstrap';
 
 import {setActiveYear} from "../reducers/activeYear";
+import  FileList  from "./FileList";
 
 class VideoReviewApp extends Component {
   constructor(props) {
@@ -40,9 +41,9 @@ class VideoReviewApp extends Component {
           this.setState({ video: data });
         }
       })
-      .catch((err) => {
-        console.log('Error Occurred while fetching video: ' + err)
-      });
+      // .catch((err) => {
+      //   console.log('Error Occurred while fetching video: ' + err)
+      // });
   }
 
   render() {
@@ -75,9 +76,9 @@ class VideoReviewApp extends Component {
             />
           </Panel.Body>
         </Panel>
+        <FileList files={this.state.video.files} />
       </Col>
     }
-
   }
 }
 
