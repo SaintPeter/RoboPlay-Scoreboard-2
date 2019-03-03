@@ -11,9 +11,7 @@ import VideoReview from './VideoReview';
 class MasterApp extends Component {
     constructor(props) {
         super(props);
-        document.title = "Invoice Review";
         this.state = {
-            settingsVisible: false
         }
     }
 

@@ -7,47 +7,64 @@ class FileListApp extends Component {
   constructor(props) {
     super(props);
     if (Array.isArray(props.files)) {
+      let filesByCat = this.createCatFileList(props.files);
+
       this.state = {
-        filesByCat: props.files.reduce((carry, file) => {
-          if (!carry.hasOwnProperty(file.filetype.name)) {
-            carry[file.filetype.name] = [];
-          }
-          carry[file.filetype.name].push(file);
-          return carry;
-        }, {}),
+        filesByCat: filesByCat,
+        lightboxFiles: this.createLightboxFileList(filesByCat)
       }
     } else {
       this.state = {
         filesByCat: {},
+        lightboxFiles: []
       }
     }
     this.state['showModal'] = false;
-    this.state['showCat'] = '';
-    this.state['showIndex'] = -1;
+    this.state['showIndex'] = 0;
   }
 
   componentWillReceiveProps(newProps, oldProps) {
     if (newProps.files != oldProps.files) {
+      let filesByCat = this.createCatFileList(newProps.files);
+
       this.setState({
-        filesByCat: newProps.files.reduce((carry, file) => {
-          if (!carry.hasOwnProperty(file.filetype.name)) {
-            carry[file.filetype.name] = [];
-          }
-          carry[file.filetype.name].push(file);
-          return carry;
-        }, {})
+        filesByCat: filesByCat,
+        lightboxFiles: this.createLightboxFileList(filesByCat)
       })
     }
   }
 
-  showFile(e, cat, file_index) {
+  createCatFileList(files) {
+    return files.reduce((carry, file) => {
+      if (!carry.hasOwnProperty(file.filetype.name)) {
+        carry[file.filetype.name] = [];
+      }
+      carry[file.filetype.name].push(file);
+      return carry;
+    }, {})
+  }
+
+  createLightboxFileList(catFiles) {
+    let index = 0;
+    return Object.keys(catFiles).reduce((catCarry, cat) => {
+      catFiles[cat].forEach((file) => {
+        if (file.filetype.viewer == 'lytebox') {
+          file.index = index;
+          catCarry.push(file);
+          index++;
+        }
+      });
+      return catCarry;
+    }, []);
+  }
+
+  showFile(e, file_index) {
     e.preventDefault();
     e.nativeEvent.stopImmediatePropagation();
 
-    console.log("Show file:", cat, file_index);
+    console.log("Show file:", file_index);
     this.setState({
       showModal: true,
-      showCat: cat,
       showIndex: file_index
     });
   }
@@ -55,24 +72,24 @@ class FileListApp extends Component {
   file_display(files) {
     return Object.keys(this.state.filesByCat).map((cat, index) => {
       return <Panel eventKey={index} key={cat} defaultExpanded>
-        <Panel.Heading>
+        <Panel.Heading key={cat + '_heading'}>
           <Panel.Title toggle key={cat}>
             {cat} ({this.state.filesByCat[cat].length})
           </Panel.Title>
         </Panel.Heading>
-        <Panel.Collapse key={cat}>
+        <Panel.Collapse key={cat + '_collapse'}>
           <ListGroup>
-            {this.state.filesByCat[cat].map((file, file_index) => {
+            {this.state.filesByCat[cat].map((file) => {
               return <ListGroupItem key={file.id}>
                 {
                   file.filetype.viewer == 'lytebox' ?
-                    <a href={file.public_url} onClick={(e) => this.showFile(e, cat, file_index)}>
+                    <a href={file.public_url} onClick={(e) => this.showFile(e, file.index)} key={file.id}>
                       <i className={"fa " + file.filetype.icon}>{null}</i>
                       &nbsp;
                       {file.filename}
                     </a>
                     :
-                    <span>
+                    <span key={file.id}>
                     <i className={"fa " + file.filetype.icon}>{null}</i>
                       &nbsp;
                       {file.filename}
@@ -98,22 +115,50 @@ class FileListApp extends Component {
   }
 
   nextModal() {
+    if (this.state.showIndex < this.state.lightboxFiles.length - 1) {
+      this.setState({showIndex: this.state.showIndex + 1});
+    } else {
+      // Wrap around
+      this.setState({showIndex: 0});
+    }
+  }
 
+  prevModal() {
+    if (this.state.showIndex > 0) {
+      this.setState({showIndex: this.state.showIndex - 1});
+    } else {
+      // Wrap around
+      this.setState({showIndex: this.state.lightboxFiles.length - 1});
+    }
   }
 
 
-  ModalViewer(cat, index) {
-    if (this.state.filesByCat.hasOwnProperty(cat) && this.state.filesByCat[cat].length - 1 >= index) {
-      const file = this.state.filesByCat[cat][index];
-      return <Modal bsSize="large" show={this.state.showModal} onHide={() => this.hideModal()}>
-        <Modal.Header closeButton>{null}</Modal.Header>
+  ModalViewer(selIndex) {
+    if (this.state.lightboxFiles.length > 0) {
+      return <Modal bsSize="large" show={this.state.showModal} onHide={() => this.hideModal()} key={"somekey"}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            {this.state.lightboxFiles[selIndex].filename}
+          </Modal.Title>
+        </Modal.Header>
         <Modal.Body>
           <div className="embed-responsive embed-responsive-4by3">
-            <iframe src={file.public_url} className="embed-responsive-item"/>
+            {this.state.lightboxFiles.map((file, index) => {
+              return this.embedFile(file, index == selIndex);
+
+            })}
           </div>
         </Modal.Body>
         <Modal.Footer>
-          {file.filename}
+          <div className="text-center">
+            <span className="pull-left" onClick={() => this.prevModal()}>
+              <i className="fa fa-arrow-left fa-2x">{null}</i>
+            </span>
+            { selIndex + 1 } / { this.state.lightboxFiles.length }
+            <span className="pull-right" onClick={() => this.nextModal()}>
+              <i className="fa fa-arrow-right fa-2x">{null}</i>
+            </span>
+          </div>
         </Modal.Footer>
       </Modal>
     } else {
@@ -122,19 +167,33 @@ class FileListApp extends Component {
 
   }
 
+  embedFile(file, show) {
+    if(file.filetype.type != 'video') {
+      return <iframe
+        key={file.id}
+        src={file.public_url}
+        className={"embed-responsive-item" + (show ? '' : ' hidden')}
+      />
+    } else {
+      return <video key={file.id}
+        controls={true}
+        className={"embed-responsive-item" + (show ? '' : ' hidden')}
+      >
+        <source src={file.public_url} />
+      </video>
+    }
+  }
+
   render() {
     if (Array.isArray(this.props.files) && this.props.files.length) {
       return [
-        this.ModalViewer(this.state.showCat, this.state.showIndex),
-        <PanelGroup id="1" xs={6}>
+        this.ModalViewer(this.state.showIndex),
+        <PanelGroup id="1" md={6} key={"some_panel_group"}>
           {this.file_display()}
         </PanelGroup>]
     } else {
-      return <Panel>
-        <Panel.Heading>
-          <h3>Files (0)</h3>
-        </Panel.Heading>
-        <Panel.Body>
+      return <Panel key={"empty_panel"}>
+        <Panel.Body key={"empty_panel_body"}>
           No Files Found
         </Panel.Body>
       </Panel>

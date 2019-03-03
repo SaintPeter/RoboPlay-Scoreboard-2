@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use DB;
 use View;
 
-use App\Models\ {
-	Video,
-	CompYear,
-	Video_review_categories
+use App\Models\{
+	Video, CompYear, Video_review_categories, Video_review_details
 };
 
 use App\Enums\VideoReviewStatus;
@@ -28,9 +26,10 @@ class VideoReviewController extends Controller
 		    ->orderBy('order')
 		    ->get()
 		    ->toJson();
+	    $problemDetailList = Video_review_details::all()->toJson();
 
     return View::make('video_review.index')
-		    ->with(compact('year','yearList','problemList'));
+		    ->with(compact('year','yearList','problemList', 'problemDetailList'));
 
     }
 

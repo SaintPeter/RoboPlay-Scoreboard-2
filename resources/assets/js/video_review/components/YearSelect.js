@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 class YearSelectApp extends Component {
 
   render() {
-    return <div className="pull-right">
+    return <div className="pull-right" style={{marginBottom: 5}}>
       <ul className="nav nav-pills">
         {
           yearList.map(thisYear => {

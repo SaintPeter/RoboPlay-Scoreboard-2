@@ -2,10 +2,11 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import YouTube from 'react-youtube';
-import { Col, Panel } from 'react-bootstrap';
+import { Col, Panel, Button } from 'react-bootstrap';
 
 import {setActiveYear} from "../reducers/activeYear";
 import  FileList  from "./FileList";
+import AddProblemModal from "./AddProblemModal";
 
 class VideoReviewApp extends Component {
   constructor(props) {
@@ -15,7 +16,9 @@ class VideoReviewApp extends Component {
       loading: true,
       video: {},
       error: false,
-      message: ""
+      message: "",
+      showProblemModal: false,
+      problems: []
     };
 
     if(!this.props.activeYear) {
@@ -46,38 +49,65 @@ class VideoReviewApp extends Component {
       // });
   }
 
+  showProblemModal(e) {
+    e ? e.preventDefault() : null;
+    this.setState({showProblemModal: true})
+  }
+
+  addProblemHandler(data) {
+    this.setState({problems: this.state.problems.concat(data)})
+  }
+
+  hideProblemModal(e) {
+    e ? e.preventDefault() : null;
+    this.setState({showProblemModal: false})
+  }
+
   render() {
     if(this.state.loading) {
-      return <Col xs={12}>
+      return <Col xs={12} key={"top_level_column"}>
         <h2 className="text-center">
           Loading . . .<br />
           <i className="fa fa-spinner fa-pulse fa-fw">{null}</i>
         </h2>
       </Col>
     } else if(this.state.error) {
-      return <Col xs={12}>
+      return <Col xs={12} key={"top_level_column"}>
         <h2 className="text-center">
           Error Loading Video
         </h2>
       </Col>
     } else {
-      return [ <Col xs={12}>
-        <Panel>
-          <Panel.Heading>
-            <h3 style={{marginTop: 5}}>{this.state.video.name}</h3>
+      return [ <Col xs={12} key={"top_level_column"}>
+        <AddProblemModal
+          show={this.state.showProblemModal}
+          hideHandler={(e) => this.hideProblemModal(e)}
+          addProblemHandler={(data) => this.addProblemHandler(data)}
+        />
+        <Panel key={"video_viewer"}>
+          <Panel.Heading key={"video_header"}>
+            <h3 style={{marginTop: 5}} key={"video_title" + this.state.video.yt_code}>
+              {this.state.video.name}
+              <span className="pull-right">
+                <Button onClick={(e) => this.showProblemModal(e)}>
+                  <i className="fa fa-plus">{null}</i>&nbsp;
+                  Add Problem
+                </Button>
+              </span>
+            </h3>
           </Panel.Heading>
-          <Panel.Body>
+          <Panel.Body key={"video_body"}>
             <YouTube
               videoId={this.state.video.yt_code}
               opts={{ width: '100%', height: '100%' }}
               className="embed-responsive-item"
               containerClassName="embed-responsive embed-responsive-16by9"
-
+              key={"video_continer_" + this.state.video.yt_code}
             />
           </Panel.Body>
         </Panel>
       </Col>,
-      <Col xs={12} md={6}>
+      <Col xs={12} md={6} key={"filelist_col"}>
         <FileList files={this.state.video.files} />
       </Col> ]
     }

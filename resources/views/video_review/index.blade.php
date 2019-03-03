@@ -14,6 +14,7 @@
         var yearList = {!! $yearList !!};
         var isAdmin = {!! Roles::isAdmin() !!};
         var problemList = {!! $problemList !!};
+        var problemDetailList = {!! $problemDetailList !!};
     </script>
 
     <style>
