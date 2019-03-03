@@ -61,7 +61,7 @@ class VideoReviewApp extends Component {
         </h2>
       </Col>
     } else {
-      return <Col xs={12}>
+      return [ <Col xs={12}>
         <Panel>
           <Panel.Heading>
             <h3 style={{marginTop: 5}}>{this.state.video.name}</h3>
@@ -76,8 +76,10 @@ class VideoReviewApp extends Component {
             />
           </Panel.Body>
         </Panel>
+      </Col>,
+      <Col xs={12} md={6}>
         <FileList files={this.state.video.files} />
-      </Col>
+      </Col> ]
     }
   }
 }
