@@ -120,15 +120,29 @@ class VideoReviewController extends Controller
 		    }
 	    });
 
+    	// Update review status plus owner
     	if($stats['updated'] || $stats['new']) {
-		    Video::where('id','=',$id)->update(['review_status' => VideoReviewStatus::Reviewed]);
+		    Video::where('id','=',$id)
+			    ->update([
+				    'review_status' => VideoReviewStatus::Reviewed,
+				    'reviewer_id'=> $req->user()->id
+			    ]
+		    );
 	    }
 
     	return response()->json($stats);
     }
 
+    // Update a video to show that it has been reviewed and by whom
     public function save_no_problems(Request $req, $id) {
-		return response()->json(['result' => Video::where('id','=',$id)->update(['review_status' => VideoReviewStatus::Passed])]);
+		return response()->json([
+			'result' => Video::where('id','=',$id)
+				->update([
+					'review_status' => VideoReviewStatus::Passed,
+					'reviewer_id'=> $req->user()->id
+					]
+				)
+		]);
     }
 
 }

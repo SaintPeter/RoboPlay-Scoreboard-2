@@ -68,5 +68,9 @@ class User extends Authenticatable
 	public function password_resets() {
 		return $this->hasOne('App\Models\PasswordResets', 'email','email');
 	}
+
+	public function reviewed_videos() {
+		return $this->hasMany(Video::class, 'reviewer_id');
+	}
     
 }

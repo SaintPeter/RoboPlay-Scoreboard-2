@@ -15,6 +15,7 @@ class AddReviewStatusToVideosTable extends Migration
     {
         Schema::table('videos', function (Blueprint $table) {
             $table->tinyInteger('review_status')->default(0)->after('audit');
+            $table->integer('reviewer_id')->nullable()->after('review_status');
         });
     }
 
@@ -27,6 +28,7 @@ class AddReviewStatusToVideosTable extends Migration
     {
         Schema::table('videos', function (Blueprint $table) {
             $table->dropColumn('review_status');
+	        $table->dropColumn('reviewer_id');
         });
     }
 }

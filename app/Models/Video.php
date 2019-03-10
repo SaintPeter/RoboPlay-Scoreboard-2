@@ -153,6 +153,10 @@ class Video extends Model {
 		return $this->hasMany(Video_review_problems::class);
 	}
 
+	public function reviewer() {
+		return $this->belongsTo(User::class,'reviewer_id');
+	}
+
 	// Methods
 	public function student_count()
 	{
