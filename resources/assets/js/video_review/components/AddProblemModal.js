@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import { Modal, Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+import { Alert, Modal, Button, FormGroup, FormControl, ControlLabel, Checkbox } from 'react-bootstrap';
+import { formatTimestamp } from "../utils";
 
 class AddProblemModalApp extends Component {
 
@@ -9,14 +10,50 @@ class AddProblemModalApp extends Component {
     super(props);
 
     this.state = {
-      problemData: {}
+      problemData: {
+        comment: '',
+        video_review_details_id: 0,
+        timestamp: -1
+      },
+      saveTimestamp: false
+    };
+
+    this.interval = null;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // Reset Save Timestamp on show
+    if(this.props.show != nextProps.show && nextProps.show) {
+      this.setState({
+        error: false,
+        message: '',
+        saveTimestamp: false,
+        problemData: {
+          comment: '',
+          video_review_details_id: 0,
+          timestamp: -1
+        }
+      });
     }
   }
 
   saveProblem() {
-    console.log("Problem Data:", this.state.problemData);
-    this.props.addProblemHandler(this.state.problemData);
-    this.props.hideHandler();
+    if(this.state.problemData.hasOwnProperty("video_review_details_id") &&
+      problemDetailList.hasOwnProperty(this.state.problemData.video_review_details_id))
+    {
+      console.log("Problem Data:", this.state.problemData, " Save Timestamp: ", this.state.saveTimestamp);
+      this.props.addProblemHandler(this.state.problemData, this.state.saveTimestamp);
+      this.props.hideHandler();
+    } else {
+      this.setState({
+        error: true,
+        message: "You must select a problem!"
+      })
+    }
+  }
+
+  timestampToggle(e) {
+    this.setState({saveTimestamp: !!e.target.value});
   }
 
   changeHandler(e, fieldName) {
@@ -47,12 +84,25 @@ class AddProblemModalApp extends Component {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        {
+          (this.state.error) ?
+          <Alert bsStyle="warning">
+            {this.state.message}
+          </Alert>
+          :
+            null
+        }
         <form>
           <FormGroup>
             <ControlLabel>Type</ControlLabel>
             <FormControl componentClass="select" onChange={(e) => this.changeHandler(e, 'video_review_details_id')}>
               {this.problemList()}
             </FormControl>
+          </FormGroup>
+          <FormGroup>
+            <Checkbox onChange={e => this.timestampToggle(e)} value={true}>
+              Save Timestamp &mdash; <span>{formatTimestamp(this.props.timestamp)}</span>
+            </Checkbox>
           </FormGroup>
           <FormGroup>
             <ControlLabel>Comment</ControlLabel>

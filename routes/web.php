@@ -440,6 +440,8 @@ Route::middleware([ 'auth' ])->group( function() {
 			Route::get('video_review/{year?}/review_status', ['as' => 'video_review.status', 'uses' => 'VideoReviewController@review_status']);
 			Route::get('video_review/{year}/get_next', ['as' => 'video_review.get_next', 'uses' => 'VideoReviewController@get_next']);
 			Route::get('video_review/{year}/fetch_video/{id}', ['as' => 'video_review.fetch_video', 'uses' => 'VideoReviewController@fetch_video']);
+			Route::post('video_review/save_problems/{id}', [ 'uses' => 'VideoReviewController@save_problems']);
+			Route::get('video_review/save_no_problems/{id}', [ 'uses' => 'VideoReviewController@save_no_problems']);
 		});
 	});
 

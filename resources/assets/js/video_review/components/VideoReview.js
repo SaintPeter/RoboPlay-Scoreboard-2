@@ -5,8 +5,9 @@ import YouTube from 'react-youtube';
 import { Col, Panel, Button } from 'react-bootstrap';
 
 import {setActiveYear} from "../reducers/activeYear";
-import  FileList  from "./FileList";
+import FileList  from "./FileList";
 import AddProblemModal from "./AddProblemModal";
+import ProblemList from "./ProblemList";
 
 class VideoReviewApp extends Component {
   constructor(props) {
@@ -18,8 +19,12 @@ class VideoReviewApp extends Component {
       error: false,
       message: "",
       showProblemModal: false,
-      problems: []
+      problems: [],
+      timestamp: 0,
     };
+
+    this.timePoll = null;
+    this.playerReference = null;
 
     if(!this.props.activeYear) {
       props.setActiveYear(props.match.params.year);
@@ -54,13 +59,67 @@ class VideoReviewApp extends Component {
     this.setState({showProblemModal: true})
   }
 
-  addProblemHandler(data) {
+  addProblemHandler(data, saveTimestamp) {
+    // Default values
+    data['timestamp'] = saveTimestamp ? this.state.timestamp : -1;
+    data['comment'] = data.hasOwnProperty('comment') ? data['comment'] : '';
+
     this.setState({problems: this.state.problems.concat(data)})
+  }
+
+  changeTimeHandler(e, time, thisRef) {
+    e ? e.preventDefault() : null;
+    if(thisRef.playerReference) {
+      thisRef.playerReference.seekTo(time)
+    }
   }
 
   hideProblemModal(e) {
     e ? e.preventDefault() : null;
     this.setState({showProblemModal: false})
+  }
+
+  tickHandler(e) {
+    const seconds = e.target.getCurrentTime();
+    if(seconds != this.state.timestamp) {
+      this.setState({timestamp: seconds});
+    }
+  }
+
+  readyHandler(e) {
+    this.playerReference = e.target;
+    if(!this.timePoll) {
+      this.timePoll = setInterval(() => {
+        this.tickHandler(e);
+      }, 1500)
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timePoll);
+  }
+
+  cancelHandler() {
+    console.log("Canceled Review");
+    this.props.history.push(`/${this.props.activeYear}/`)
+  }
+
+  saveProblemsHandler() {
+    if(this.state.problems.length) {
+      console.log("Save Problems");
+      window.axios.post(`/api/video_review/save_problems/${this.props.match.params.id}`,{ problems: this.state.problems })
+        .then((result) => {
+          console.log("Problems for video saved");
+          this.props.history.push(`/${this.props.activeYear}/`)
+        })
+    } else {
+      console.log("Save No Problems");
+      window.axios.get(`/api/video_review/save_no_problems/${this.props.match.params.id}`)
+        .then((result) => {
+          console.log("No Problems for video saved");
+          this.props.history.push(`/${this.props.activeYear}/`)
+        })
+    }
   }
 
   render() {
@@ -82,7 +141,8 @@ class VideoReviewApp extends Component {
         <AddProblemModal
           show={this.state.showProblemModal}
           hideHandler={(e) => this.hideProblemModal(e)}
-          addProblemHandler={(data) => this.addProblemHandler(data)}
+          addProblemHandler={(data, saveTimestamp) => this.addProblemHandler(data, saveTimestamp)}
+          timestamp={this.state.timestamp}
         />
         <Panel key={"video_viewer"}>
           <Panel.Heading key={"video_header"}>
@@ -103,13 +163,23 @@ class VideoReviewApp extends Component {
               className="embed-responsive-item"
               containerClassName="embed-responsive embed-responsive-16by9"
               key={"video_continer_" + this.state.video.yt_code}
+              onReady={e => this.readyHandler(e)}
             />
           </Panel.Body>
         </Panel>
       </Col>,
       <Col xs={12} md={6} key={"filelist_col"}>
         <FileList files={this.state.video.files} />
-      </Col> ]
+      </Col>,
+      <Col xs={12} md={6} key={"problemlist_col"}>
+        <ProblemList
+          problems={this.state.problems}
+          changeTimeHandler={(e, time) => this.changeTimeHandler(e, time, this)}
+          cancelHandler={() => this.cancelHandler()}
+          saveHandler={() => this.saveProblemsHandler()}
+        />
+      </Col>
+      ]
     }
   }
 }

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Video_review_problems extends Model
 {
+	public $guarded = ['id'];
 
 	public function video() {
 		return $this->belongsTo(Videos::class);
