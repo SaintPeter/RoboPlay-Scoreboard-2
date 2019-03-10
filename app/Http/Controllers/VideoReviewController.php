@@ -145,4 +145,28 @@ class VideoReviewController extends Controller
 		]);
     }
 
+    // List of videos reviewed by user with problems
+	public function reviewed_videos($year, $id) {
+    	$videos = Video::with('problems','problems.detail','reviewer')
+	        ->where('reviewer_id','=', $id)
+		    ->where('year','=', $year)
+		    ->orderBy('review_status')
+		    ->get()
+		    ->toArray();
+
+    	return response()->json($videos);
+	}
+
+	// List of all reviewed videos for a given year
+	public function all_reviewed_videos($year) {
+		$videos = Video::with('problems','problems.detail','reviewer')
+			->where('review_status','>', VideoReviewStatus::Unreviewed)  // Exclude un-reviewed videos
+			->where('year','=', $year)
+			->orderBy('review_status')
+			->get()
+			->toArray();
+
+		return response()->json($videos);
+	}
+
 }

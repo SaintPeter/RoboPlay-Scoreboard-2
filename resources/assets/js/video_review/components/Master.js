@@ -34,13 +34,11 @@ class MasterApp extends Component {
                       <YearSelect />
                     </Col>
                   </Row>
-                  <Row>
-                      <Switch>
-                          <Route exact path="/" component={PromptSelectYear} />
-                          <Route exact path="/:year?" component={ReviewSelector} />
-                          <Route exact path="/:year/:id" component={VideoReview}/>
-                      </Switch>
-                  </Row>
+                  <Switch>
+                      <Route exact path="/" component={PromptSelectYear} />
+                      <Route exact path="/:year?" component={ReviewSelector} />
+                      <Route exact path="/:year/:id" component={VideoReview}/>
+                  </Switch>
                 </div>
             </BrowserRouter>
 
@@ -50,13 +48,15 @@ class MasterApp extends Component {
 
 class PromptSelectYear extends Component {
   render() {
-    return <Col md={6} mdOffset={3}>
-      <Panel>
-        <Panel.Body>
-          Select a Year
-        </Panel.Body>
-      </Panel>
-    </Col>
+    return <Row>
+      <Col md={6} mdOffset={3}>
+        <Panel>
+          <Panel.Body>
+            Select a Year
+          </Panel.Body>
+        </Panel>
+      </Col>
+    </Row>
   }
 }
 

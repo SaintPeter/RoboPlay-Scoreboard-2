@@ -15,6 +15,13 @@
         var isAdmin = {!! Roles::isAdmin() !!};
         var problemList = {!! $problemList !!};
         var problemDetailList = {!! $problemDetailList !!};
+        var reviewStatuses = {
+          0: 'Unreviewed',
+          1: 'Reviewed',
+          2: 'Disqualified',
+          3: 'Passed'
+        };
+        var userId = {!! Auth::user()->id !!};
     </script>
 
     <style>

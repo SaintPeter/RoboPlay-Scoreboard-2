@@ -3,8 +3,9 @@ import {connect} from 'react-redux';
 
 import {setActiveYear} from "../reducers/activeYear";
 import {loadReviewStatus} from "../reducers/reviewStatus";
+import { ReviewedList } from "./ReviewedList";
 
-import { Button, Col, Panel } from 'react-bootstrap'
+import { Button, Col, Row, Panel } from 'react-bootstrap'
 
 class ReviewSelectorApp extends Component {
   constructor(props) {
@@ -20,18 +21,51 @@ class ReviewSelectorApp extends Component {
     }
 
     this.state = {
-      fetchingVideo: false
+      fetchingVideo: false,
+      fetchingReviewed: true,
+      reviewedVideos: []
     };
 
     props.setActiveYear(thisYear);
     props.loadReviewStatus();
+    this.loadReviewedVideos(thisYear, true);
   }
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.match.params.year != this.props.match.params.year && nextProps.match.params.year) {
       this.props.setActiveYear(nextProps.match.params.year);
       this.props.loadReviewStatus();
+      this.loadReviewedVideos(nextProps.match.params.year);
     }
+  }
+
+  loadReviewedVideos(year, skip_setstate = false) {
+    let url = '';
+    if(isAdmin) {
+      console.log("Fetching All Reviewed Videos");
+      url = `/api/video_review/all_reviewed_videos/${year}`;
+    } else {
+      console.log("Fetching Reviewed Videos for user: ", $userId);
+      url = `/api/video_review/reviewed_videos/${year}/${userId}`;
+    }
+
+    if(!skip_setstate) {
+      this.setState({
+        fetchingReviewed: true,
+      });
+    }
+
+    window.axios.get(url)
+      .then((response) => {
+        console.log("Videos Fetched");
+        return response.data;
+      })
+      .then((data) => {
+        this.setState({
+          fetchingReviewed: false,
+          reviewedVideos: data
+        });
+      });
   }
 
   fetchReviewVideo = (e) => {
@@ -55,36 +89,49 @@ class ReviewSelectorApp extends Component {
       });
   };
 
-
+  editVideoHandler = (id) => {
+    this.props.history.push(`/${this.props.activeYear}/${id}`)
+  };
 
   render() {
-    return <div>
-      <Col md={3}>&nbsp;</Col>,
-      <Col md={3}>
-        <Panel>
-          <Panel.Heading>
-            Review
-          </Panel.Heading>
-          <Panel.Body>
-            <div className="text-center">
-              <Button bsStyle="primary" onClick={this.fetchReviewVideo}>
-                Review Video &nbsp;
-                {
-                  this.state.fetchingVideo ?
-                  <i className="fa fa-spinner fa-pulse fa-fw">{null}</i>
-                  :
-                  null
-                }
-              </Button>
-            </div>
-          </Panel.Body>
-        </Panel>
-      </Col>
-      <Col md={2}>
-        <StatusTable data={this.props.reviewStatus} year={this.props.activeYear}/>
-      </Col>
-      <Col md={3}>&nbsp;</Col>
-    </div>
+    return [
+      <Row key="review_video_top">
+        <Col md={3}>&nbsp;</Col>,
+        <Col md={3}>
+          <Panel>
+            <Panel.Heading>
+              Review
+            </Panel.Heading>
+            <Panel.Body>
+              <div className="text-center">
+                <Button bsStyle="primary" onClick={this.fetchReviewVideo}>
+                  Review Video &nbsp;
+                  {
+                    this.state.fetchingVideo ?
+                      <i className="fa fa-spinner fa-pulse fa-fw">{null}</i>
+                      :
+                      null
+                  }
+                </Button>
+              </div>
+            </Panel.Body>
+          </Panel>
+        </Col>
+        <Col md={2}>
+          <StatusTable data={this.props.reviewStatus} year={this.props.activeYear}/>
+        </Col>
+        <Col md={3}>&nbsp;</Col>
+      </Row>,
+      <Row key="review_video_review_list">
+        <Col md={6} mdOffset={3}>
+          <ReviewedList
+            list={this.state.reviewedVideos}
+            loading={this.state.fetchingReviewed}
+            editVideoHandler={this.editVideoHandler}
+          />
+        </Col>
+      </Row>
+    ]
   }
 }
 

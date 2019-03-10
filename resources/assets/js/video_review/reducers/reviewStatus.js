@@ -17,7 +17,7 @@ export const loadReviewStatus = () => (dispatch, getState) => {
       return response.data;
     })
     .then((data) => {
-      console.log('Saving Invoice Data');
+      console.log('Setting Review Status');
       dispatch(setReviewStatus(year, data));
     })
     .then(() => Promise.resolve('Data Saved'))

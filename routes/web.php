@@ -442,6 +442,12 @@ Route::middleware([ 'auth' ])->group( function() {
 			Route::get('video_review/{year}/fetch_video/{id}', ['as' => 'video_review.fetch_video', 'uses' => 'VideoReviewController@fetch_video']);
 			Route::post('video_review/save_problems/{id}', [ 'uses' => 'VideoReviewController@save_problems']);
 			Route::get('video_review/save_no_problems/{id}', [ 'uses' => 'VideoReviewController@save_no_problems']);
+			Route::get('video_review/reviewed_videos/{year}/{id}', [ 'uses' => 'VideoReviewController@reviewed_videos']);
+
+			// Admin Specific features
+			Route::middleware(['adminFilter'])->group( function() {
+				Route::get('video_review/all_reviewed_videos/{year}', [ 'uses' => 'VideoReviewController@all_reviewed_videos']);
+			});
 		});
 	});
 

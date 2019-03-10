@@ -2,12 +2,13 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import YouTube from 'react-youtube';
-import { Col, Panel, Button } from 'react-bootstrap';
+import { Row, Col, Panel, Button } from 'react-bootstrap';
 
 import {setActiveYear} from "../reducers/activeYear";
 import FileList  from "./FileList";
 import AddProblemModal from "./AddProblemModal";
 import ProblemList from "./ProblemList";
+import PriorProblemList from "./PriorProblemList";
 
 class VideoReviewApp extends Component {
   constructor(props) {
@@ -104,6 +105,12 @@ class VideoReviewApp extends Component {
     this.props.history.push(`/${this.props.activeYear}/`)
   }
 
+  deleteHandler(index) {
+    this.setState({
+      problems: this.state.problems.filter((_,i) => i !== index)
+    })
+  }
+
   saveProblemsHandler() {
     if(this.state.problems.length) {
       console.log("Save Problems");
@@ -124,62 +131,72 @@ class VideoReviewApp extends Component {
 
   render() {
     if(this.state.loading) {
-      return <Col xs={12} key={"top_level_column"}>
-        <h2 className="text-center">
-          Loading . . .<br />
-          <i className="fa fa-spinner fa-pulse fa-fw">{null}</i>
-        </h2>
-      </Col>
+      return <Row>
+        <Col xs={12} key={"top_level_column"}>
+          <h2 className="text-center">
+            Loading . . .<br />
+            <i className="fa fa-spinner fa-pulse fa-fw">{null}</i>
+          </h2>
+        </Col>
+      </Row>
     } else if(this.state.error) {
-      return <Col xs={12} key={"top_level_column"}>
-        <h2 className="text-center">
-          Error Loading Video
-        </h2>
-      </Col>
+      return <Row>
+        <Col xs={12} key={"top_level_column"}>
+          <h2 className="text-center">
+            Error Loading Video
+          </h2>
+        </Col>
+      </Row>
     } else {
-      return [ <Col xs={12} key={"top_level_column"}>
-        <AddProblemModal
-          show={this.state.showProblemModal}
-          hideHandler={(e) => this.hideProblemModal(e)}
-          addProblemHandler={(data, saveTimestamp) => this.addProblemHandler(data, saveTimestamp)}
-          timestamp={this.state.timestamp}
-        />
-        <Panel key={"video_viewer"}>
-          <Panel.Heading key={"video_header"}>
-            <h3 style={{marginTop: 5}} key={"video_title" + this.state.video.yt_code}>
-              {this.state.video.name}
-              <span className="pull-right">
+      return <Row>
+        <Col xs={12} key={"top_level_column"}>
+          <AddProblemModal
+            show={this.state.showProblemModal}
+            hideHandler={(e) => this.hideProblemModal(e)}
+            addProblemHandler={(data, saveTimestamp) => this.addProblemHandler(data, saveTimestamp)}
+            timestamp={this.state.timestamp}
+          />
+          <Panel key={"video_viewer"}>
+            <Panel.Heading key={"video_header"}>
+              <h3 style={{marginTop: 5}} key={"video_title" + this.state.video.yt_code}>
+                {this.state.video.name}
+                <span className="pull-right">
                 <Button onClick={(e) => this.showProblemModal(e)}>
                   <i className="fa fa-plus">{null}</i>&nbsp;
                   Add Problem
                 </Button>
               </span>
-            </h3>
-          </Panel.Heading>
-          <Panel.Body key={"video_body"}>
-            <YouTube
-              videoId={this.state.video.yt_code}
-              opts={{ width: '100%', height: '100%' }}
-              className="embed-responsive-item"
-              containerClassName="embed-responsive embed-responsive-16by9"
-              key={"video_continer_" + this.state.video.yt_code}
-              onReady={e => this.readyHandler(e)}
-            />
-          </Panel.Body>
-        </Panel>
-      </Col>,
-      <Col xs={12} md={6} key={"filelist_col"}>
-        <FileList files={this.state.video.files} />
-      </Col>,
-      <Col xs={12} md={6} key={"problemlist_col"}>
-        <ProblemList
-          problems={this.state.problems}
-          changeTimeHandler={(e, time) => this.changeTimeHandler(e, time, this)}
-          cancelHandler={() => this.cancelHandler()}
-          saveHandler={() => this.saveProblemsHandler()}
-        />
-      </Col>
-      ]
+              </h3>
+            </Panel.Heading>
+            <Panel.Body key={"video_body"}>
+              <YouTube
+                videoId={this.state.video.yt_code}
+                opts={{width: '100%', height: '100%'}}
+                className="embed-responsive-item"
+                containerClassName="embed-responsive embed-responsive-16by9"
+                key={"video_continer_" + this.state.video.yt_code}
+                onReady={e => this.readyHandler(e)}
+              />
+            </Panel.Body>
+          </Panel>
+        </Col>
+        <Col xs={12} md={6} key={"filelist_col"}>
+          <FileList files={this.state.video.files}/>
+        </Col>
+        <Col xs={12} md={6} key={"problemlist_col"}>
+          <PriorProblemList
+            problems={this.state.video.problems}
+            changeTimeHandler={(e, time) => this.changeTimeHandler(e, time, this)}
+          />
+          <ProblemList
+            problems={this.state.problems}
+            changeTimeHandler={(e, time) => this.changeTimeHandler(e, time, this)}
+            cancelHandler={() => this.cancelHandler()}
+            saveHandler={() => this.saveProblemsHandler()}
+            deleteHandler={(i) => this.deleteHandler(i)}
+          />
+        </Col>
+      </Row>
     }
   }
 }

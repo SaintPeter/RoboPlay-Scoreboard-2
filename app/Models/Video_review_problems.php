@@ -20,4 +20,8 @@ class Video_review_problems extends Model
 		return $this->belongsTo(User::class,'resolver_id');
 	}
 
+	public function detail() {
+		return $this->belongsTo(Video_review_details::class, 'video_review_details_id');
+	}
+
 }

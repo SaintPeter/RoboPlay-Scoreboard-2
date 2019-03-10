@@ -1,50 +1,23 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import { Panel, ListGroup, Button} from 'react-bootstrap';
-import { formatTimestamp } from "../utils";
+import { Panel, ListGroup, Button, Row, Col} from 'react-bootstrap';
+import { formatTimestamp, lookupDetailType, formatTime } from "../utils";
 
 class ProblemListApp extends Component {
 
-  lookup(problem) {
-    let id = problem.video_review_details_id;
-    return problemDetailList.hasOwnProperty(id) ? problemDetailList[id].reason : 'Unknown Problem';
-  }
 
-  formatTime(problem) {
-    if(problem.hasOwnProperty('timestamp') && problem.timestamp >= 0) {
-      return (
-        <a onClick={(e) => this.props.changeTimeHandler(e, problem.timestamp)}
-           className="pull-right"
-           title="Go to Timestamp"
-           style={{cursor: "pointer"}}
-        >
-          {formatTimestamp(problem.timestamp)}
-        </a>
-      )
-    } else {
-      return null;
-    }
-  }
-
-  listProblems() {
-    return <ListGroup>
-      { this.props.problems.map((problem, index) => {
-        return <li className="list-group-item" key={index}>
-          <h4>{this.lookup(problem)}{this.formatTime(problem)}</h4>
-          {problem.comment}
-          </li>
-      })}
-    </ListGroup>
-  }
-
-  render() {
+    render() {
     if(Array.isArray(this.props.problems) && this.props.problems.length) {
     return <Panel>
       <Panel.Heading key={"problem_header"}>
         <Panel.Title>Problems</Panel.Title>
       </Panel.Heading>
-      {this.listProblems()}
+      <DetailList
+        problems={this.props.problems}
+        deleteHandler={this.props.deleteHandler}
+        changeTimeHandler={this.props.changeTimeHandler}
+      />
       <Panel.Footer key={"problems_footer"} className="text-right">
         <Button bsStyle="info" onClick={this.props.cancelHandler}>Cancel</Button>
         &nbsp;
@@ -69,6 +42,25 @@ class ProblemListApp extends Component {
     }
   }
 }
+
+const DetailList = (props) => {
+  return <ListGroup>
+    { props.problems.map((problem, index) => {
+      return <li className="list-group-item" key={index}>
+        <Row>
+          <Col xs={10}>
+
+            <h4>{lookupDetailType(problem)}{formatTime(problem, props.changeTimeHandler)}</h4>
+            {problem.comment}
+          </Col>
+          <Col xs={2}className="btn" onClick={() => props.deleteHandler(index)}>
+            <i className="fa fa-times fa-2x" style={{color: 'red'}}>{null}</i>
+          </Col>
+        </Row>
+      </li>
+    })}
+  </ListGroup>
+};
 
 // Map Redux state to component props
 function mapStateToProps(state) {
