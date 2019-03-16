@@ -27,10 +27,6 @@
 			<input type="text" class="form-control" id="students[{{ $index }}][last_name]" name="students[{{ $index }}][last_name]" placeholder="Last Name" value="{{ $student['last_name'] }}">
 		</div>
 		<div class="form-group">
-			<label class="sr-only" for="students[{{$index}}][ssid]">Social Security</label>
-			<input type="text" class="form-control" id="students[{{ $index }}][ssid]" name="students[{{ $index }}][ssid]" placeholder="State Student ID" value="{{ $student['ssid'] }}">
-		</div>
-		<div class="form-group">
 			<label class="sr-only" for="students[{{$index}}][gender]">Gender</label>
 			{!! Form::select("students[$index][gender]", [ 0 => '- Pick Gender -', 'Male' => 'Male', 'Female' => 'Female' ], $student['gender'], [ 'class' => 'form-control' ] )  !!}
 		</div>
