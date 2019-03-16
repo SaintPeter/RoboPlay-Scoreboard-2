@@ -2,11 +2,27 @@
 <script>
     var savedIndex = 0;
 
-$(function() {
+$(document).on('ready', function() {
+    @if(isset($limit_student_count))
+    // If the page is loaded with 5 or more, disable Add Students button
+    if($('div[class*="student_"]').length >= {{ $limit_student_count }}) {
+      $('#add_student').prop('disabled', true);
+    } else {
+      $('#add_student').prop('disabled', false);
+    }
+    @endif
+
 	// Setup Delete Student buttons
 	$(document).on('click', '.remove_student', function() {
 		var index = parseInt($(this).data('index'),10);
 		$('.student_' + index).remove();
+        @if(isset($limit_student_count))
+        if($('div[class*="student_"]').length >= {{ $limit_student_count }}) {
+          $('#add_student').prop('disabled', true);
+        } else {
+          $('#add_student').prop('disabled', false);
+        }
+        @endif
 	});
 
 
@@ -15,6 +31,13 @@ $(function() {
 		$.get( '/ajax/blank_student/' + savedIndex,  {'_token': '{{csrf_token()}}'}, function(data) {
 			$('#student_form').append(data);
 			savedIndex++;
+			@if(isset($limit_student_count))
+            if($('div[class*="student_"]').length >= {{ $limit_student_count }}) {
+              $('#add_student').prop('disabled', true);
+            } else {
+              $('#add_student').prop('disabled', false);
+            }
+            @endif
 		});
 	});
 
@@ -87,6 +110,13 @@ $(function() {
 					    }
 
 						$('#student_form').append(responseText);
+                        @if(isset($limit_student_count))
+                        if($('div[class*="student_"]').length >= {{ $limit_student_count }}) {
+                          $('#add_student').prop('disabled', true);
+                        } else {
+                          $('#add_student').prop('disabled', false);
+                        }
+                        @endif
 					},
 					error: function(xhR, statusText, errorThrown) {
 					    alert('An unknown error occured on the server.');

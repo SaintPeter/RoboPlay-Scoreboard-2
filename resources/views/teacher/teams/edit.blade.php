@@ -26,7 +26,7 @@
 </style>
 @endsection
 
-@include('students.partial.js', [ 'type' => 'teams' ])
+@include('students.partial.js', [ 'type' => 'teams', 'limit_student_count' => 5 ])
 
 @section('main')
 {!! Form::model($team, array('method' => 'PATCH', 'route' => array('teacher.teams.update', $team->id), 'role'=>"form", 'class' => 'col-md-8'))  !!}
