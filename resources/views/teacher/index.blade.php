@@ -6,6 +6,10 @@
 	background-color: lightgreen !important;
 }
 
+.Pending {
+    background-color: darkorange !important;
+}
+
 .Unpaid, .unconfirmed {
 	background-color: pink !important;
 }
@@ -51,7 +55,10 @@
 <script>
 	var delete_id = 0;
 
-    $(function() {
+    $(document).on('ready', function() {
+        $(".video_delete_button").prop('disabled', false);
+        $(".team_delete_button").prop('disabled', false);
+
 	    $("#tshirt").on('change', function(e) {
 	        $.post('{{ route('teacher.save_tshirt') }}', { 'tshirt': $(this).val(), '_token': '{{csrf_token()}}' }, function(data) {
                 // Flash the tshirt field to show it has been written
@@ -172,7 +179,7 @@
 
 <h3>Manage Challenge Teams</h3>
 @if( $teams->count() < $invoice->team_count AND $invoice->team_count > 0)
-	@if(/* $invoice->paid == */ 1)
+	@if($invoice->paid != 0)
 		<p>{{ link_to_route('teacher.teams.create', 'Add Challenge Team',array(), array('class' => 'btn btn-primary')) }}</p>
 	@else
 		<p>Payment Not Recieved</p>
@@ -201,7 +208,7 @@
 	                <td>{{ link_to_route('teacher.teams.edit', 'Edit', array($team->id), array('class' => 'btn btn-info')) }}
 	                	&nbsp;
 	                    {!! Form::open(array('method' => 'DELETE', 'route' => array('teacher.teams.destroy', $team->id), 'id' => 'team_delete_form_' . $team->id, 'style' => 'display: inline-block;'))  !!}
-	                        {!! Form::submit('Delete', array('class' => 'btn btn-danger team_delete_button', 'delete_id' => $team->id))  !!}
+	                        {!! Form::submit('Delete', array('class' => 'btn btn-danger team_delete_button', 'delete_id' => $team->id, 'disabled' => 'disabled'))  !!}
 	                    {!! Form::close()  !!}
 	                </td>
 				</tr>
@@ -215,7 +222,7 @@
 
 	<h3>Manage Videos</h3>
 	@if( $videos->count() < $invoice->video_count AND $invoice->video_count > 0 )
-		@if( /* $invoice->paid == */  1)
+        @if($invoice->paid != 0)
 			<p>{{ link_to_route('teacher.videos.create', 'Add Video', [], [ 'class' => 'btn btn-primary' ]) }}</p>
 		@else
 			<p>Payment Not Recieved</p>
@@ -263,7 +270,7 @@
                             </button>
                             &nbsp;
 		                    {!! Form::open(['method' => 'DELETE', 'route' => ['teacher.videos.destroy', $video->id], 'id' => 'video_delete_form_' . $video->id, 'style' => 'display: inline-block;'])  !!}
-		                        {!! Form::submit('Delete', ['class' => 'btn btn-sm btn-danger video_delete_button', 'delete_id' => $video->id])  !!}
+		                        {!! Form::submit('Delete', ['class' => 'btn btn-sm btn-danger video_delete_button', 'delete_id' => $video->id, 'disabled' => 'disabled'])  !!}
 		                    {!! Form::close()  !!}
 	                	</td>
 					</tr>
@@ -274,12 +281,12 @@
 		</tbody>
 	</table>
 
-<div id="video-dialog-confirm" style="display:none;" title="Delete video?">
+<div id="video-dialog-confirm" style="display: none;" title="Delete video?">
 <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
 	This video and all scores will be permanently deleted and cannot be recovered. Are you sure?</p>
 </div>
 
-<div id="team-dialog-confirm" title="Delete Team?">
+<div id="team-dialog-confirm" title="Delete Team?" style="display: none;">
 <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
 	This team and all scores will be permanently deleted and cannot be recovered. Are you sure?</p>
 </div>

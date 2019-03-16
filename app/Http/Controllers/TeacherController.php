@@ -29,7 +29,8 @@ class TeacherController extends Controller {
 	 */
 	public function index()
 	{
-	    $year = CompYear::current()->year;
+		$comp_year = CompYear::current();
+	    $year = $comp_year->year;
 	    $invoice = Invoices::where('year', $year)
 	                       ->where('user_id', Auth::user()->id)
 	                       ->with( [ 'videos' => function($q) use ($year) {
@@ -70,15 +71,27 @@ class TeacherController extends Controller {
 			'3XL' => '3XL - Triple Extra Large'
 		];
 
+		switch($invoice->paid) {
+			case 0:
+				$paid = 'Unpaid'; break;
+			case 1:
+				$paid = 'Paid'; break;
+			case 2:
+				$paid ='Pending'; break;
+		}
+
 		$school = $invoice->school;
-		$paid = $invoice->paid==1 ? 'Paid' : 'Unpaid';
 		$teams = $invoice->teams;
 		$videos = $invoice->videos;
+
+		$reg_days = Carbon::now()->diffInDays($comp_year->reminder_end);
+		$edit_days = Carbon::now()->diffInDays($comp_year->edit_end);
 
 //dd(DB::getQueryLog());
 
 		View::share('title', 'Manage Teams');
-        return View::make('teacher.index', compact('invoice', 'teams', 'videos', 'math_teams', 'school', 'paid', 'tshirt_sizes'));
+        return View::make('teacher.index', compact('invoice', 'teams', 'videos',
+	        'math_teams', 'school', 'paid', 'tshirt_sizes', 'reg_days', 'edit_days', 'comp_year'));
 
 	}
 
