@@ -477,7 +477,7 @@ class DisplayController extends Controller {
 
 		if($req->has('clear_cache')) {
 			Cache::flush("all_scores_score_list_$compyear_id");
-}
+		}
 
 		// Get score list and calculate totals
 		$score_list = Cache::remember("all_scores_score_list_$compyear_id", 5 * 60, function() use ($divisions, $frozen, $freeze_time){
