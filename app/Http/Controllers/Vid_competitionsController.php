@@ -32,7 +32,7 @@ class Vid_competitionsController extends Controller {
 	 */
 	public function index()
 	{
-		$vid_competitions = $this->vid_competition->all();
+		$vid_competitions = $this->vid_competition->orderBy('event_end', 'desc')->get();
 
 		View::share('title', 'Video Competitions');
 		return View::make('vid_competitions.index', compact('vid_competitions'));

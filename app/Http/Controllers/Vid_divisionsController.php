@@ -33,7 +33,7 @@ class Vid_divisionsController extends Controller {
 	 */
 	public function index()
 	{
-		$vid_divisions = $this->vid_division->all();
+		$vid_divisions = $this->vid_division->orderBy('competition_id', 'desc')->orderBy('display_order')->get();
 
 		View::share('title', 'Video Divisions');
 		return View::make('vid_divisions.index', compact('vid_divisions'));
@@ -48,7 +48,7 @@ class Vid_divisionsController extends Controller {
 	{
 		//Breadcrumbs::addCrumb('Add Division', 'create');
 		View::share('title', 'Add Division');
-		$competitions = Vid_competition::pluck('name','id')->all();
+		$competitions = Vid_competition::orderBy('event_end','desc')->pluck('name','id')->all();
 
 		return View::make('vid_divisions.create')
 					->with('competitions', $competitions);
@@ -104,7 +104,7 @@ class Vid_divisionsController extends Controller {
 		//Breadcrumbs::addCrumb('Edit Division', 'create');
 		View::share('title', 'Edit Division');
 		$vid_division = $this->vid_division->find($id);
-		$competitions = Vid_competition::pluck('name','id')->all();
+		$competitions = Vid_competition::orderBy('event_end','desc')->pluck('name','id')->all();
 
 		if (is_null($vid_division))
 		{
@@ -132,7 +132,7 @@ class Vid_divisionsController extends Controller {
 			$vid_division = $this->vid_division->find($id);
 			$vid_division->update($input);
 
-			return redirect()->route('vid_divisions.show', $id);
+			return redirect()->route('vid_divisions.index');
 		}
 
 		return redirect()->route('vid_divisions.edit', $id)
