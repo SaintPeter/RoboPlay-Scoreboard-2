@@ -44,12 +44,16 @@ class YouTubeRulesServiceProvider extends ServiceProvider
 
 		if(!isset($data)) {
 			try {
-				$result = $this->curlhelper("https://www.googleapis.com/youtube/v3/videos/?part=status&id=" . $code . "&alt=json&key=" . env('YOUTUBE_API_KEY'));
+				$url = "https://www.googleapis.com/youtube/v3/videos?part=status&id=" . $code . "&alt=json&key=" . env('YOUTUBE_API_KEY');
+				$result = $this->curlhelper($url);
 			} catch (\Exception $e) {
 				return false;
 			}
 			$data = json_decode($result);
 			//dd($code, $data);
+		}
+		if(property_exists($data, 'error')) {
+			return false;
 		}
 		if(count($data->items) > 0) {
 			return $data->items[0]->status->$option;
