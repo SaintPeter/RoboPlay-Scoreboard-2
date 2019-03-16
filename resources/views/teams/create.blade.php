@@ -93,7 +93,7 @@
 
 
 @section('main')
-{!! Form::open(array('route' => 'teams.store', 'role'=>"form", 'class' => 'col-md-6'))  !!}
+{!! Form::open(array('route' => 'teams.store', 'role'=>"form", 'class' => 'col-md-8'))  !!}
     <input type="hidden" name="teacher_id" id="teacher_id" />
     <div class="form-group">
         {!! Form::label('name', 'Team Name:')  !!}

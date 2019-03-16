@@ -93,7 +93,7 @@
 @include('students.partial.js', [ 'type' => 'teams', 'use_teacher_id' => 'true' ])
 
 @section('main')
-{!! Form::model($team, array('method' => 'PATCH', 'route' => array('teams.update', $team->id), 'class' => 'col-md-6'))  !!}
+{!! Form::model($team, array('method' => 'PATCH', 'route' => array('teams.update', $team->id), 'class' => 'col-md-8'))  !!}
     <input type="hidden" name="teacher_id" id="teacher_id" />
 	<div class="form-group">
 		{!! Form::label('name', 'Team Name:')  !!}
