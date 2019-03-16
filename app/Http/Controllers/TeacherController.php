@@ -193,7 +193,6 @@ class TeacherController extends Controller {
 			"First Name" => 'first_name',
 			"Middle/Nick Name" => 'middle_name',
 			"Last Name" => 'last_name',
-			"SSID" => 'ssid',
 			"Gender" => 'gender',
 			"Ethnicity" => 'ethnicity_id',
 			"Grade" => 'grade',
