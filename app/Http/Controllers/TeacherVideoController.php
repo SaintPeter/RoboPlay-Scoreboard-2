@@ -6,6 +6,7 @@ use Auth;
 use View;
 use Session;
 use Validator;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Enums\VideoCheckStatus;
 
@@ -138,11 +139,12 @@ class TeacherVideoController extends Controller {
 	public function show($id)
 	{
 		View::share('title', 'Video Preview');
-		//Breadcrumbs::addCrumb('Manage Teams and Videos', 'teacher');
-		//Breadcrumbs::addCrumb('Video Preview', 'teacher/videos/create');
 		$video = Video::with('school')->findOrFail($id);
 
-		return View::make('teacher.videos.show', compact('video'));
+		$comp_year = CompYear::where('year', $video->year)->first();
+		$edit_days = Carbon::now()->diffInDays($comp_year->edit_end, false);
+
+		return View::make('teacher.videos.show', compact('video', 'edit_days'));
 	}
 
 	/**

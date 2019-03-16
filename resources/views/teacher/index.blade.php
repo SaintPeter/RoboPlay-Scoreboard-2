@@ -165,28 +165,48 @@
 @endsection
 
 @section('main')
-@if($invoice->team_count > 0)
 <div class="row">
+    <div class="col-md-6">
+        <h3>Note</h3>
+        @if($reg_days >= 0)
+            <p>You have until <strong>{{ $comp_year->reminder_end->format('M jS') }}</strong> (<strong>{{ $reg_days }}</strong> days) to register new Teams and Videos</p>
+        @else
+            <p class="text-danger">Warning:  Changes to students and t-shirt sizes will not change ordered shirts</p>
+        @endif
+        @if($edit_days >= 0)
+            <p>You have until <strong>{{ $comp_year->edit_end->format('M jS') }}</strong> (<strong>{{ $edit_days }}</strong> days) to edit Team and Video metadata</p>
+        @else
+            <p class="text-danger">Team and Video metadata may no longer be edited</p>
+        @endif
+    </div>
     <div class="col-sm-6 col-xs-8">
+    @if($invoice->team_count > 0)
         <h3>T-Shirt Size</h3>
         <p>All Challenge Team Teachers recieve a t-shirt</p>
-        <div class="form-group">
-            {!! Form::select('tshirt', $tshirt_sizes, $invoice->user->tshirt, [ 'id' => "tshirt", 'class' => 'form-control' ])  !!}
+        <div class="row">
+            <div class="form-group col-sm-6">
+                {!! Form::select('tshirt', $tshirt_sizes, $invoice->user->tshirt, [ 'id' => "tshirt", 'class' => 'form-control' ])  !!}
+            </div>
         </div>
+    @endif
     </div>
 </div>
-@endif
 
 <h3>Manage Challenge Teams</h3>
-@if( $teams->count() < $invoice->team_count AND $invoice->team_count > 0)
-	@if($invoice->paid != 0)
-		<p>{{ link_to_route('teacher.teams.create', 'Add Challenge Team',array(), array('class' => 'btn btn-primary')) }}</p>
-	@else
-		<p>Payment Not Recieved</p>
-	@endif
+@if($reg_days >= 0)
+    @if( $teams->count() < $invoice->team_count AND $invoice->team_count > 0)
+        @if($invoice->paid != 0)
+            <p>{{ link_to_route('teacher.teams.create', 'Add Challenge Team',array(), array('class' => 'btn btn-primary')) }}</p>
+        @else
+            <p>Payment Not Recieved</p>
+        @endif
+    @else
+        <p>Team Limit Reached</p>
+    @endif
 @else
-	<p>Team Limit Reached</p>
+    <p>No new teams may be added after {{ $comp_year->reminder_end->format('M d') }}</p>
 @endif
+
 
 <table class="table table-striped table-bordered">
 	<thead>
@@ -205,7 +225,10 @@
 					<td>{{{ $team->name }}}</td>
 					<td>{!! join('<br />', $team->student_list()) !!}</td>
 					<td>{{ $team->division->longname() }}</td>
-	                <td>{{ link_to_route('teacher.teams.edit', 'Edit', array($team->id), array('class' => 'btn btn-info')) }}
+	                <td>
+                        @if($edit_days >= 0)
+                        {{ link_to_route('teacher.teams.edit', 'Edit', array($team->id), array('class' => 'btn btn-info')) }}
+                        @endif
 	                	&nbsp;
 	                    {!! Form::open(array('method' => 'DELETE', 'route' => array('teacher.teams.destroy', $team->id), 'id' => 'team_delete_form_' . $team->id, 'style' => 'display: inline-block;'))  !!}
 	                        {!! Form::submit('Delete', array('class' => 'btn btn-danger team_delete_button', 'delete_id' => $team->id, 'disabled' => 'disabled'))  !!}
@@ -221,6 +244,7 @@
 </table>
 
 	<h3>Manage Videos</h3>
+@if($reg_days >= 0)
 	@if( $videos->count() < $invoice->video_count AND $invoice->video_count > 0 )
         @if($invoice->paid != 0)
 			<p>{{ link_to_route('teacher.videos.create', 'Add Video', [], [ 'class' => 'btn btn-primary' ]) }}</p>
@@ -230,6 +254,9 @@
 	@else
 		<p>Video Limit Reached</p>
 	@endif
+@else
+    <p>No new videos may be added after {{ $comp_year->reminder_end->format('M d') }}</p>
+@endif
 
 	<table class="table table-striped table-bordered">
 		<thead>
@@ -261,9 +288,11 @@
 						<td>
 							{{ link_to_route('teacher.videos.show', 'Preview', [$video->id], ['class' => 'btn btn-sm btn-primary']) }}
 							&nbsp;
-		                    {{ link_to_route('teacher.videos.edit', 'Edit', [$video->id], ['class' => 'btn btn-sm btn-info']) }}
+                            @if($edit_days >= 0)
+                                {{ link_to_route('teacher.videos.edit', 'Edit', [$video->id], ['class' => 'btn btn-sm btn-info']) }}
 		                    &nbsp;
-		                    {{ link_to_route('uploader.index', 'Upload', [$video->id], ['class' => 'btn btn-sm btn-success']) }}
+		                        {{ link_to_route('uploader.index', 'Upload', [$video->id], ['class' => 'btn btn-sm btn-success']) }}
+                            @endif
 		                    &nbsp;
                             <button data-id="{{ $video->id }}" class="validate_video btn btn-sm btn-warning" title="Validate">
                                 Validate

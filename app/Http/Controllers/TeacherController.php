@@ -84,8 +84,8 @@ class TeacherController extends Controller {
 		$teams = $invoice->teams;
 		$videos = $invoice->videos;
 
-		$reg_days = Carbon::now()->diffInDays($comp_year->reminder_end);
-		$edit_days = Carbon::now()->diffInDays($comp_year->edit_end);
+		$reg_days = Carbon::now()->diffInDays($comp_year->reminder_end,false);
+		$edit_days = Carbon::now()->diffInDays($comp_year->edit_end, false);
 
 //dd(DB::getQueryLog());
 

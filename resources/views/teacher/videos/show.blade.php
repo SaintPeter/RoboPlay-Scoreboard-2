@@ -108,9 +108,11 @@
 				@endif
 			</td>
             <td>
-            	{{ link_to_route('teacher.videos.edit', 'Edit', array($video->id), array('class' => 'btn btn-info')) }}
-				&nbsp;
-                {{ link_to_route('uploader.index', 'Upload', array($video->id), array('class' => 'btn btn-success')) }}
+                @if($edit_days >= 0)
+                    {{ link_to_route('teacher.videos.edit', 'Edit', array($video->id), array('class' => 'btn btn-info')) }}
+                    &nbsp;
+                    {{ link_to_route('uploader.index', 'Upload', array($video->id), array('class' => 'btn btn-success')) }}
+                @endif
 
                 <button data-id="{{ $video->id }}" class="validate_video btn btn-warning btn-margin" title="Validate">
                     Validate

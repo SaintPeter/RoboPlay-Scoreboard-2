@@ -100,7 +100,7 @@ class Team extends Model {
 				$student_list[] = $student->fullName();
 			}
 		} else {
-			$student_list = [ 'No Students' ];
+			$student_list = [ 'Warning: No Students' ];
 		}
 
 		return $student_list;
