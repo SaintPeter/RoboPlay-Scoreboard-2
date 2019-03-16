@@ -311,6 +311,8 @@ class DivisionsController extends Controller {
 
 	public function clear_compyear_scores($compyear_id) {
 		$count = 0;
+		// Clear the cache
+		Cache::flush("all_scores_score_list_$compyear_id");
 		$compYear = \App\Models\CompYear::with('divisions')->find($compyear_id);
 		$divisionList = $compYear->divisions->pluck('id', 'id')->all();
 		$count = Score_run::whereIn('division_id', $divisionList)->delete();
