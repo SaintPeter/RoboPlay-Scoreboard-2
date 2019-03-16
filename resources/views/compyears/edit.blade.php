@@ -22,8 +22,8 @@
 <div>
 	<h3>Validation Errors</h3>
 	<ul>
-		{{ implode('', $errors->all('<li class="error">:message</li>')) }}
-	</ul>
+		{!! implode('', $errors->all('<li class="error">:message</li>'))  !!}
+    </ul>
 </div>
 @endif
 
@@ -48,17 +48,17 @@
     <div class="row">
         <div class="form-group col-md-4">
             {!! Form::label('reminder_start', 'Reminders Start Date:')  !!}
-            {!! Form::text('reminder_start', null, [ 'class'=>'form-control date' ])  !!}
+            {!! Form::text('reminder_start', null, [ 'class'=>'form-control date', 'autocomplete' => 'off' ])  !!}
         </div>
 
         <div class="form-group col-md-4">
             {!! Form::label('reminder_end', 'Reminders End Date:')  !!}
-            {!! Form::text('reminder_end', null, [ 'class'=>'form-control date' ])  !!}
+            {!! Form::text('reminder_end', null, [ 'class'=>'form-control date', 'autocomplete' => 'off' ])  !!}
         </div>
 
         <div class="form-group col-md-4">
-            {!! Form::label('edit_end', 'Team Editing End Date:')  !!}
-            {!! Form::text('edit_end', null, [ 'class'=>'form-control date' ])  !!}
+            {!! Form::label('edit_end', 'Teacher Editing End Date:')  !!}
+            {!! Form::text('edit_end', null, [ 'class'=>'form-control date', 'autocomplete' => 'off' ])  !!}
         </div>
     </div>
 

@@ -53,6 +53,10 @@ class Invoices extends \Eloquent {
 		return $this->belongsTo('App\Models\User', 'user_id', 'id' );
 	}
 
+	public function teacher() {
+		return $this->belongsTo('App\Models\User', 'user_id', 'id' );
+	}
+
 	public function school() {
 	    return $this->belongsTo('App\Models\School');
 	}

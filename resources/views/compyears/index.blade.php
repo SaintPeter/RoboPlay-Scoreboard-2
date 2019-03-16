@@ -49,9 +49,9 @@
             <td>{{ $invoice_types[$compyear->invoice_type] }} <br>Id: {{  $compyear->invoice_type_id  }}</td>
             <td>
                 Reminders:<br>
-                {!! Carbon\Carbon::parse($compyear->reminder_start)->format('M&\n\b\s\p;j') !!}&nbsp;-&nbsp;{!! Carbon\Carbon::parse($compyear->reminder_end)->format('M&\n\b\s\p;j') !!} <br>
+                {!! $compyear->reminder_start->format('M&\n\b\s\p;j') !!}&nbsp;-&nbsp;{!! $compyear->reminder_end->format('M&\n\b\s\p;j') !!} <br>
                 Last Edit:<br>
-                {!! Carbon\Carbon::parse($compyear->edit_end)->format('M&\n\b\s\p;j') !!}
+                {!! $compyear->edit_end->format('M&\n\b\s\p;j') !!}
             </td>
 			<td>
 				{{ link_to_route('compyears.edit', 'Edit', array($compyear->id), array('class' => 'btn btn-info btn-margin')) }}

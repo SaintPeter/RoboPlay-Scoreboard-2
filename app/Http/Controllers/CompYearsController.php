@@ -112,6 +112,10 @@ class CompYearsController extends Controller {
 		$vid_competition_list = Vid_competition::all()->pluck('name', 'id')->all();
 		$vid_selected = $compyear->vid_competitions()->pluck('yearable_id')->all();
 
+		$compyear->reminder_start->setToStringFormat('Y-m-d');
+		$compyear->reminder_end->setToStringFormat('Y-m-d');
+		$compyear->edit_end->setToStringFormat('Y-m-d');
+
 		return View::make('compyears.edit', compact('compyear','competition_list', 'vid_competition_list', 'comp_selected', 'vid_selected', 'invoice_types'));
 	}
 

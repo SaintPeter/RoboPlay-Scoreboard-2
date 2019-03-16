@@ -30,15 +30,9 @@ class CompYear extends \Eloquent {
 		'edit_end' => 'required|date'
 	];
 
-	protected  $casts = [
-		'reminder_start' => 'date:Y-m-d',
-		'reminder_end' => 'date:Y-m-d',
-		'edit_end' => 'date:Y-m-d'
-	];
-
-	// Don't forget to fill this array
 	protected $fillable = ['year', 'invoice_type', 'invoice_type_id'];
 	protected $dates = ['reminder_start', 'reminder_end', 'edit_end'];
+	protected $dateFormat = "Y-m-d";
 
 	// Get the year requested or the most recent
 	public static function yearOrMostRecent($year) {
@@ -49,12 +43,20 @@ class CompYear extends \Eloquent {
 	    }
 	}
 
+	// Get the CompYear or most recent
+	public static function CompYearOrMostRecent($year) {
+		if($year > 0 AND CompYear::where('year', $year)->count() > 0) {
+			return CompYear::where('year', $year)->first();
+		} else {
+			return CompYear::orderBy('year', 'desc')->first();
+		}
+	}
+
 	// Return the most recent instance of CompYear
 	public static function mostRecent() {
 		return CompYear::orderBy('year', 'desc')->first();
 	}
 
-	// Get the current Comp Year
 	public static function current() {
 		return CompYear::orderBy('year', 'desc')->first();
 	}
