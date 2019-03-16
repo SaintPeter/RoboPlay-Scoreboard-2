@@ -1,5 +1,22 @@
 @extends('layouts.scaffold')
 
+
+
+@section('script')
+<script>
+    $(document).on('ready', function() {
+    now = new Date();
+    min = new Date(now.getFullYear(),0,1);
+    max = new Date(now.getFullYear(),11,31);
+    $( ".date" ).datepicker({
+      dateFormat: "yy-mm-dd",
+      minDate: min,
+      maxDate: max
+    });
+  });
+</script>
+@endsection
+
 @section('main')
 @if ($errors->any())
 <div>
@@ -26,6 +43,23 @@
     	    {!! Form::label('invoice_type_id', "Invoice Type Id")  !!}
     	    {!! Form::text('invoice_type_id', null, [ 'class'=>'form-control col-md-1' ])  !!}
     	</div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-4">
+            {!! Form::label('reminder_start', 'Reminders Start Date:')  !!}
+            {!! Form::text('reminder_start', null, [ 'class'=>'form-control date' ])  !!}
+        </div>
+
+        <div class="form-group col-md-4">
+            {!! Form::label('reminder_end', 'Reminders End Date:')  !!}
+            {!! Form::text('reminder_end', null, [ 'class'=>'form-control date' ])  !!}
+        </div>
+
+        <div class="form-group col-md-4">
+            {!! Form::label('edit_end', 'Team Editing End Date:')  !!}
+            {!! Form::text('edit_end', null, [ 'class'=>'form-control date' ])  !!}
+        </div>
     </div>
 
 	<div class="form-group">

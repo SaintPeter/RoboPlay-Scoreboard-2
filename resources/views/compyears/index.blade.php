@@ -33,6 +33,7 @@
 			<th>Video Competitions</th>
 			<th>Video Divisions</th>
 			<th>Invoice Type</th>
+            <th>Dates</th>
 			<th>Actions</th>
 		</tr>
 	</thead>
@@ -46,6 +47,12 @@
 			<td>{!! join('<br />', $compyear->vid_competitions()->pluck('name')->all()) !!}</td>
 			<td>{!! join('<br />', $compyear->vid_divisions()->pluck('name')->all()) !!}</td>
             <td>{{ $invoice_types[$compyear->invoice_type] }} <br>Id: {{  $compyear->invoice_type_id  }}</td>
+            <td>
+                Reminders:<br>
+                {!! Carbon\Carbon::parse($compyear->reminder_start)->format('M&\n\b\s\p;j') !!}&nbsp;-&nbsp;{!! Carbon\Carbon::parse($compyear->reminder_end)->format('M&\n\b\s\p;j') !!} <br>
+                Last Edit:<br>
+                {!! Carbon\Carbon::parse($compyear->edit_end)->format('M&\n\b\s\p;j') !!}
+            </td>
 			<td>
 				{{ link_to_route('compyears.edit', 'Edit', array($compyear->id), array('class' => 'btn btn-info btn-margin')) }}
 				{!! Form::open(array('method' => 'DELETE', 'route' => array('compyears.destroy', $compyear->id), 'style' => 'display: inline-block'))  !!}

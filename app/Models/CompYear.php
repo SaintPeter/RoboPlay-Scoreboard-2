@@ -24,11 +24,21 @@ use Illuminate\Database\Eloquent\Model;
 class CompYear extends \Eloquent {
 	// Add your validation rules here
 	public static $rules = [
-		'year' => 'required|numeric|digits:4'
+		'year' => 'required|numeric|digits:4',
+		'reminder_start' => 'required|date',
+		'reminder_end' => 'required|date',
+		'edit_end' => 'required|date'
+	];
+
+	protected  $casts = [
+		'reminder_start' => 'date:Y-m-d',
+		'reminder_end' => 'date:Y-m-d',
+		'edit_end' => 'date:Y-m-d'
 	];
 
 	// Don't forget to fill this array
 	protected $fillable = ['year', 'invoice_type', 'invoice_type_id'];
+	protected $dates = ['reminder_start', 'reminder_end', 'edit_end'];
 
 	// Get the year requested or the most recent
 	public static function yearOrMostRecent($year) {
@@ -37,6 +47,11 @@ class CompYear extends \Eloquent {
 	    } else {
 	        return CompYear::orderBy('year', 'desc')->first()->year;
 	    }
+	}
+
+	// Return the most recent instance of CompYear
+	public static function mostRecent() {
+		return CompYear::orderBy('year', 'desc')->first();
 	}
 
 	// Get the current Comp Year

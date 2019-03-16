@@ -133,12 +133,15 @@ return [
 		"ssid"		=> "State Student ID",
 		'tshirt'    => "T-shirt Size",
 		'gender'	=> "Gender",
-		'ethnicity'	=> 'Enthicity',
+		'ethnicity'	=> 'Ethnicity',
 		'ethnicity_id' => 'Ethnicity',
 		'math_level_id' => 'Math Level',
 		'grade'		=> 'Grade',
 		'email'		=> 'E-mail',
-		'score_map' => 'Score Map'
+		'score_map' => 'Score Map',
+		'reminder_start' => "Reminders Start Date",
+		'reminder_end' => "Reminders End Date",
+		'edit_end' => "Edit End Date"
 	),
 
 ];
