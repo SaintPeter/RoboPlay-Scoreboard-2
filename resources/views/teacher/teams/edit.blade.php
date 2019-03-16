@@ -68,7 +68,6 @@
 			{!! Form::button('Add Student', [ 'class' => 'btn btn-success', 'id' => 'add_student', 'title' => 'Add Student' ])  !!}
 			{!! Form::button('Mass Upload Students', [ 'class' => 'btn btn-success', 'id' => 'mass_upload_students', 'title' => 'Upload Students' ])  !!}
 			{!! Form::button('Choose Students', [ 'class' => 'btn btn-success', 'id' => 'choose_students', 'title' => 'Choose Students' ] )  !!}
-			<p><strong>Note:</strong>T-shirt sizes are only required if you have chosen the Complete Package </p>
 		</div>
 
 		{!! Form::submit('Submit', array('class' => 'btn btn-primary '))  !!}
