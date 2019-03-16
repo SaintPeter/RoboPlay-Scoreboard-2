@@ -30,9 +30,8 @@ class CompYear extends \Eloquent {
 		'edit_end' => 'required|date'
 	];
 
-	protected $fillable = ['year', 'invoice_type', 'invoice_type_id'];
+	protected $fillable = ['year', 'invoice_type', 'invoice_type_id', 'reminder_start', 'reminder_end', 'edit_end'];
 	protected $dates = ['reminder_start', 'reminder_end', 'edit_end'];
-	protected $dateFormat = "Y-m-d";
 
 	// Get the year requested or the most recent
 	public static function yearOrMostRecent($year) {
