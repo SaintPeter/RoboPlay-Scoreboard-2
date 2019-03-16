@@ -56,7 +56,7 @@
         </div>
 
         <div class="form-group col-md-4">
-            {!! Form::label('edit_end', 'Teacher Editing End Date:')  !!}
+            {!! Form::label('edit_end', 'Teacher Edit End Date:')  !!}
             {!! Form::text('edit_end', null, [ 'class'=>'form-control date', 'autocomplete' => 'off' ])  !!}
         </div>
     </div>
