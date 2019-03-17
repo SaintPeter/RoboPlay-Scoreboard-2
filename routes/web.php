@@ -105,6 +105,7 @@ Route::post('ajax/import_students_csv',  				[ 'as' => 'ajax.import_students_csv
 /* ------------------------------ User ------------------------------------- */
 // All items in this route group require login
 
+/** @noinspection PhpParamsInspection */
 Route::middleware([ 'auth' ])->group( function() {
 
     Route::get('testlogin', function() {
@@ -120,6 +121,7 @@ Route::middleware([ 'auth' ])->group( function() {
 	/* -----------------------------------------------------------------------------
 	|                              Admin Routes                                     |
 	------------------------------------------------------------------------------*/
+	/** @noinspection PhpParamsInspection */
     Route::middleware([ 'adminFilter' ])->group( function () {
         // Export Functions
         Route::get('challenge_students_csv', [ 'uses' => 'DisplayController@challenge_students_csv' ] );
@@ -207,6 +209,7 @@ Route::middleware([ 'auth' ])->group( function() {
 	    Route::get('invoicer/{year?}',                      [ 'as' => 'invoicer', 'uses' => 'InvoiceReview@invoicer' ] )
 		    ->where('year',"\d{4}");
 
+	    /** @noinspection PhpParamsInspection */
 	    Route::prefix('/api/')->namespace('Api')->name('api.')->group(function() {
 		    Route::get('invoicer/invoice_list/{year}',                  [ 'as' => 'invoice_list', 'uses' => 'InvoiceApiController@invoice_json']);
 		    Route::get('invoicer/save_team_div/{team_id}/{div_id}',     [ 'as' => 'invoicer.save_team_div', 'uses' => 'InvoiceApiController@save_team_division' ]);
@@ -317,6 +320,7 @@ Route::middleware([ 'auth' ])->group( function() {
     |                              Judge Routes                                     |
     ------------------------------------------------------------------------------*/
 
+	/** @noinspection PhpParamsInspection */
     Route::middleware([ 'judgeFilter' ])->group( function () {
         // Delete individual score
         Route::get('team/{team_id}/delete_score/{score_run_id}', [
@@ -375,6 +379,7 @@ Route::middleware([ 'auth' ])->group( function() {
             'as' => 'video.judge.clear_scores',
             'uses' => 'ScoreVideosController@clear_scores' ]);
 
+	    /** @noinspection PhpParamsInspection */
         Route::prefix('/api/')->namespace('Api')->name('api.')->group(function() {
 	        Route::get('challenges/{year}/{level}', ['as' => 'challenges', 'uses' => 'ScoreApiController@challenges']);
 	        Route::get('challenge/{challenge_id}',  ['as' => 'challenge', 'uses' => 'ScoreApiController@challenge']);
@@ -388,6 +393,7 @@ Route::middleware([ 'auth' ])->group( function() {
 	/* -----------------------------------------------------------------------------
 	|                            Teacher Routes                                     |
 	------------------------------------------------------------------------------*/
+	/** @noinspection PhpParamsInspection */
     Route::middleware([ 'teacherFilter' ])->group( function ()
     {
 	    Route::resource('teacher/teams', 'TeacherTeamsController', [ 'names' => 'teacher.teams']);
@@ -432,10 +438,12 @@ Route::middleware([ 'auth' ])->group( function() {
 	/* -----------------------------------------------------------------------------
 	|                            Video Reviewer Routes                             |
 	------------------------------------------------------------------------------*/
+	/** @noinspection PhpParamsInspection */
 	Route::middleware([ 'videoReviewerFilter' ])->group( function () {
 		Route::get('video_review/{year?}/{any?}', ['as' => 'video_review', 'uses' => 'VideoReviewController@index'])
 			->where('any',".*");
 
+		/** @noinspection PhpParamsInspection */
 		Route::prefix('/api/')->name('api.')->group(function() {
 			Route::get('video_review/{year?}/review_status', ['as' => 'video_review.status', 'uses' => 'VideoReviewController@review_status']);
 			Route::get('video_review/{year}/get_next', ['as' => 'video_review.get_next', 'uses' => 'VideoReviewController@get_next']);
@@ -445,6 +453,7 @@ Route::middleware([ 'auth' ])->group( function() {
 			Route::get('video_review/reviewed_videos/{year}/{id}', [ 'uses' => 'VideoReviewController@reviewed_videos']);
 
 			// Admin Specific features
+			/** @noinspection PhpParamsInspection */
 			Route::middleware(['adminFilter'])->group( function() {
 				Route::get('video_review/all_reviewed_videos/{year}', [ 'uses' => 'VideoReviewController@all_reviewed_videos']);
 			});
@@ -452,39 +461,3 @@ Route::middleware([ 'auth' ])->group( function() {
 	});
 
 });
-
-
-/*// Basic Login Page
-Route::get('login', [ 'as' => 'login', function()
-{
-	if(Auth::check()) {
-		return Redirect::to('/');
-	} else {
-		return View::make('login');
-	}
-}]);
-
-// Post Login Page
-Route::post('login', function() {
-	// get POST data
-	$userdata = [
-	    'user_login' => Input::get('username' ],
-	    'user_pass' => Input::get('password')
-	);
-
-	if (Auth::attempt($userdata, false))
-	{
-		// Update Judge Info
-		Judge::do_sync();
-
-		//ddd(Redirect::intended('/'));
-	    // Go where we intended to go, or back to the home page
-		return Redirect::intended('/');
-	}
-	else
-	{
-	    // authentication failed
-		return Redirect::to('login')
-			->with('login_errors', true);
-	}
-});*/
