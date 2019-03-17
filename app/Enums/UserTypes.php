@@ -30,7 +30,7 @@ final class UserTypes extends Enum
      * @param  int  $value
      * @return string
      */
-    public static function getDescription(int $value): string
+    public static function getDescription($value): string
     {
         switch ($value) {
 	        case self::NoRoles:
