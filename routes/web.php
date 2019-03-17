@@ -29,8 +29,7 @@ Route::get('/', [ 'as' => 'home', function()
 		    ->get();
     });
 
-    $noajax = [ 'data-ajax' => "false" ];
-    return View::make('home', compact('compyears', 'noajax', 'today'));
+    return View::make('home', compact('compyears', 'today'));
 }]);
 
 Route::get('file_viewer/{file_id}', [ 'as' => 'file_viewer', function($file_id) {

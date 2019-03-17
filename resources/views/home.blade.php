@@ -50,16 +50,16 @@
 			<h2>{{ $compyear->year }}</h2>
 			<ul data-role="listview" data-theme="c">
 				@if(!$compyear->competitions->isEmpty() )
-					<li>{{ link_to_route('display.all_scores',  'Combined Scoreboard', $compyear->id, $noajax) }} </li>
+					<li>{{ link_to_route('display.all_scores',  'Combined Scoreboard', $compyear->id) }} </li>
 					@if(Roles::isAdmin())
-					    <li>{{ link_to_route('display.compyearscore.top',  'Statewide Leading Teams', $compyear->id, $noajax) }} </li>
+					    <li>{{ link_to_route('display.compyearscore.top',  'Statewide Leading Teams', $compyear->id) }} </li>
 					@endif
 					@foreach($compyear->competitions as $comp)
 						@if($comp->isDone())
-						    <li>{{ link_to_route('display.compscore', $comp->name . ' - Scoreboard', $comp->id, $noajax) }} </li>
+						    <li>{{ link_to_route('display.compscore', $comp->name . ' - Scoreboard', $comp->id) }} </li>
 						@endif
 						@if(Roles::isAdmin())
-						    <li>{{ link_to_route('display.compscore.top', $comp->name . ' - Local Leading Teams', $comp->id, $noajax) }} </li>
+						    <li>{{ link_to_route('display.compscore.top', $comp->name . ' - Local Leading Teams', $comp->id) }} </li>
 						@endif
 					@endforeach
 				@else
@@ -67,7 +67,7 @@
 				@endif
 				@if(!$compyear->vid_competitions->isEmpty())
 					@foreach($compyear->vid_competitions as $comp)
-						<li>{{ link_to_route('display.video_list', $comp->name . ' Video List', $comp->id, $noajax) }} </li>
+						<li>{{ link_to_route('display.video_list', $comp->name . ' Video List', $comp->id) }} </li>
 					@endforeach
 				@else
 					<li>No Video Competitions</li>
@@ -83,11 +83,18 @@
 @if(Roles::isJudge())
 <h2>Judge Menu</h2>
 <ul data-role="listview" data-inset="true">
-	{{-- <li>{{ link_to_route('score.choose_competition', 'Score Challenges (PHP)', null, $noajax) }}</li> --}}
-    <li>{{ link_to_route('scorer', 'Score Challenges', null, $noajax) }}</li>
-	<li>{{ link_to_route('video.judge.index', 'Score Videos', null, $noajax) }}</li>
+    <li>{{ link_to_route('scorer', 'Score Challenges') }}</li>
+	<li>{{ link_to_route('video.judge.index', 'Score Videos') }}</li>
 	<li><a href="{{ asset('docs/Video_Judge_Instructions_2016.pdf') }}" target="_blank"><i class="fa fa-video-camera"></i>&nbsp;Video Judging Guide</a></li>
 </ul>
+@endif
+
+@if(Roles::isVideoReviewer())
+    <h2>Video Review</h2>
+    <ul data-role="listview" data-inset="true">
+        <li>{{ link_to_route('video_review', 'Review Videos') }}</li>
+        <li><a href="{{ asset('docs/Video_Judge_Instructions_2016.pdf') }}" target="_blank"><i class="fa fa-video-camera"></i>&nbsp;Video Review Guide</a></li>
+    </ul>
 @endif
 
 @if(Roles::isTeacher())
@@ -115,30 +122,30 @@
 @if(Roles::isAdmin())
 <h2>Video Admin</h2>
 <ul data-role="listview" data-inset="true">
-	<li>{{ link_to_route('video_scores.manage.index', 'Manage Video Scores', [], $noajax) }}</li>
-	<li>{{ link_to_route('video_scores.manage.summary', 'Video Score Summary', [], $noajax) }}</li>
+	<li>{{ link_to_route('video_scores.manage.index', 'Manage Video Scores') }}</li>
+	<li>{{ link_to_route('video_scores.manage.summary', 'Video Score Summary') }}</li>
 </ul>
 
 <h2>Admin Menu</h2>
 <ul data-role="listview" data-inset="true">
 	<li data-role="list-divider">Competition Year</li>
-	<li>{{ link_to('compyears', 'Competition Years', $noajax) }}</li>
+	<li>{{ link_to('compyears', 'Competition Years') }}</li>
 	<li data-role="list-divider">Challenge Competition</li>
-	<li>{{ link_to('competitions', 'Competitions', $noajax) }}</li>
-	<li>{{ link_to('divisions', 'Competition Divisions', $noajax) }}</li>
-	<li>{{ link_to('challenges', 'Manage Challenges', $noajax) }}</li>
-	<li>{{ link_to('teams', 'Manage Teams', $noajax) }}</li>
+	<li>{{ link_to('competitions', 'Competitions') }}</li>
+	<li>{{ link_to('divisions', 'Competition Divisions') }}</li>
+	<li>{{ link_to('challenges', 'Manage Challenges') }}</li>
+	<li>{{ link_to('teams', 'Manage Teams') }}</li>
 	<li data-role="list-divider">Video Competition</li>
-	<li>{{ link_to('vid_competitions', 'Video Competitions', $noajax) }}</li>
-	<li>{{ link_to('vid_divisions', 'Video Competition Divisions', $noajax) }}</li>
-	<li>{{ link_to('videos', 'Manage Videos', $noajax) }}</li>
+	<li>{{ link_to('vid_competitions', 'Video Competitions') }}</li>
+	<li>{{ link_to('vid_divisions', 'Video Competition Divisions') }}</li>
+	<li>{{ link_to('videos', 'Manage Videos') }}</li>
 	<li data-role="list-divider">Other Management</li>
-	<li>{{ link_to('invoice_review', 'Invoice Review', $noajax) }}</li>
-	<li>{{ link_to_route('data_export', 'Data Export', null, $noajax) }}</li>
-	<li>{{ link_to_route('schedule.index', 'Schedule Editor', null, $noajax) }}</li>
-	<li>{{ link_to_route('filetypes.index', 'Filetype Editor', null, $noajax) }}</li>
-    <li>{{ link_to_route('rubric.index', 'Rubric Editor', null, $noajax) }}</li>
-	<li>{{ link_to_route('list_users', 'User List', null, $noajax) }}</li>
+	<li>{{ link_to_route('invoicer', 'Invoice Review') }}</li>
+	<li>{{ link_to_route('data_export', 'Data Export') }}</li>
+	<li>{{ link_to_route('schedule.index', 'Schedule Editor') }}</li>
+	<li>{{ link_to_route('filetypes.index', 'Filetype Editor') }}</li>
+    <li>{{ link_to_route('rubric.index', 'Rubric Editor') }}</li>
+	<li>{{ link_to_route('list_users', 'User List') }}</li>
 </ul>
 @endif
 

@@ -9,6 +9,11 @@
 		{{-- HTML::style('/css/custom-theme/jquery-ui-1.12.0.custom.css') --}}
 		{{ HTML::style('//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css') }}
 		{{ HTML::script('//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js') }}
+        <script>
+          $(document).on("mobileinit", function() {
+            $.mobile.ajaxEnabled = false;
+          });
+        </script>
         {{ HTML::script('//code.jquery.com/ui/1.12.1/jquery-ui.min.js') }}
         {{ HTML::script('//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js') }}
 
