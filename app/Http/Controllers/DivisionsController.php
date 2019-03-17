@@ -38,10 +38,11 @@ class DivisionsController extends Controller {
 	 */
 	public function index()
 	{
-		$divisions = $this->division->with('competition', 'challenges')
-						  ->orderBy('competition_id')
-						  ->orderBy('display_order')
-						  ->get();
+		$divisions = $this->division
+			->with('competition', 'challenges')
+			->orderBy(DB::raw('YEAR(created_at)'),'desc')
+			->orderBy('display_order')
+			->get();
 
 		View::share('title', 'Competition Divisions');
 		return View::make('divisions.index', compact('divisions'));
@@ -57,7 +58,7 @@ class DivisionsController extends Controller {
 		//Breadcrumbs::addCrumb('Add Division', route('divisions.create'));
 		View::share('title', 'Add Competition Division');
 
-		$competitions = Competition::pluck('name','id')->all();
+		$competitions = Competition::orderBy(DB::raw('YEAR(event_date)'),'desc')->pluck('name','id')->all();
 
 		return View::make('divisions.create')
 				   ->with('competitions', $competitions);
