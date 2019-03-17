@@ -41,6 +41,7 @@ class DivisionsController extends Controller {
 		$divisions = $this->division
 			->with('competition', 'challenges')
 			->orderBy(DB::raw('YEAR(created_at)'),'desc')
+			->orderBy('competition_id')
 			->orderBy('display_order')
 			->get();
 
