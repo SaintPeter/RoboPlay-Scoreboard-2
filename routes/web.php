@@ -1,9 +1,12 @@
 <?php
 
+use Illuminate\Support\Facades\ {
+	Cache, Route
+};
+use Illuminate\Http\Request;
 use App\Models\{
 	CompYear, Files
 };
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,9 +21,13 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/', [ 'as' => 'home', function()
+Route::get('/', [ 'as' => 'home', function(Request $req)
 {
     $today = Carbon\Carbon::now()->setTimezone('America/Los_Angeles')->startOfDay();
+
+    if($req->has('clear_cache')) {
+    	Cache::clear('home');
+    }
 
     $compyears = Cache::remember('home', 24 * 60, function () {
     	return CompYear::orderBy('year', 'desc')
