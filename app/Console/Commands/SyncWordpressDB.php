@@ -46,11 +46,11 @@ class SyncWordpressDB extends Command
 
 	    if (!$process->isSuccessful()) {
 	    	$exception = new ProcessFailedException($process);
-		    $this->error($exception->getMessage());
+		    $this->error("Process Failed\n" . $exception->getMessage());
 		    return 1;
 	    }
 
-	    $this->info($process->getOutput());
+	    $this->info("Process Succeeded\n" . $process->getOutput());
 	    return 0;
     }
 }

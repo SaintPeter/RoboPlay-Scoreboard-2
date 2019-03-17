@@ -311,7 +311,7 @@ class InvoiceReview extends Controller {
 		if($online) {
 			return redirect()->route('invoice_review', $year)->with('message', $message);
 		} else {
-			return $message;
+			return str_replace("<br>", "\n", $message);
 		}
 	}
 

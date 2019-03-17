@@ -3,6 +3,7 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use App\Models\CompYear;
 
 class SyncInvoices extends Command {
 
@@ -11,7 +12,7 @@ class SyncInvoices extends Command {
 	 *
 	 * @var string
 	 */
-	protected $name = 'invoices:sync';
+	protected $signature = 'scoreboard:invoice_sync {year=0 : Invoice Year to Sync}';
 
 	/**
 	 * The console command description.
@@ -35,9 +36,10 @@ class SyncInvoices extends Command {
 	 *
 	 * @return mixed
 	 */
-	public function fire()
+	public function handle()
 	{
-		$result = App::make('InvoiceReview')->invoice_sync($this->argument('year'),false);
+		$year = CompYear::yearOrMostRecent($this->argument('year'));
+		$result = App::make('\App\Http\Controllers\InvoiceReview')->invoice_sync($year,false);
 		$this->info(date("r") . " - " . $result);
 	}
 
@@ -49,7 +51,7 @@ class SyncInvoices extends Command {
 	protected function getArguments()
 	{
 		return array(
-			array('year', InputArgument::REQUIRED, 'The invoice year to sync.'),
+			array('year', InputArgument::OPTIONAL, 'The invoice year to sync.'),
 		);
 	}
 
