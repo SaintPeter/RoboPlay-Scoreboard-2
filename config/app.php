@@ -232,6 +232,7 @@ return [
 	    'UserTypes' => App\Enums\UserTypes::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
 	    'VideoFlag' => App\Enums\VideoFlag::class,
+	    'VideoType' => App\Enums\VideoType::class,
 	    'VideoStatus' => App\Enums\VideoCheckStatus::class,
 	    'VideoReviewStatus' => App\Enums\VideoReviewStatus::class,
         'View' => Illuminate\Support\Facades\View::class,

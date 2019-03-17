@@ -102,9 +102,6 @@ $(document).uitooltip({
 </script>
 @endsection
 
-@inject('videotype', 'App\Enums\VideoType')
-@inject('videoflag', 'App\Enums\VideoFlag') 
-
 @section('main')
 {!! Form::open([ 'route' => 'video.judge.dispatch', 'method' => 'get' ])  !!}
 @if(count($comp_list))
@@ -128,12 +125,12 @@ $(document).uitooltip({
 					<br />
 				All judges may judge these videos.</p>
 				<div class="text-center button_box">
-					@if($scored_count[$videotype::General] >= $total_count[$videotype::General] AND $total_count[$videotype::General] > 0)
+					@if($scored_count[VideoType::General] >= $total_count[VideoType::General] AND $total_count[VideoType::General] > 0)
 						<button class="btn btn-primary btn-margin disabled">Score Videos</button>
 					@else
 						<button class="btn btn-primary btn-margin">Score Videos</button>
 					@endif
-					<p>Scored: {{ $scored_count[$videotype::General] }} of {{ $total_count[$videotype::General] }}</p>
+					<p>Scored: {{ $scored_count[VideoType::General] }} of {{ $total_count[VideoType::General] }}</p>
 				</div>
 			</div>
 		</div>
@@ -146,12 +143,12 @@ $(document).uitooltip({
 			<p>These videos contain a custom designed part and will be scored on the design and use of that part.<br /><br />
 			Judges should have a background in mechanical design or robotics.</p>
 			<div class="text-center button_box">
-					@if($scored_count[$videotype::Custom] >= $total_count[$videotype::Custom] AND $total_count[$videotype::Custom] > 0)
+					@if($scored_count[VideoType::Custom] >= $total_count[VideoType::Custom] AND $total_count[VideoType::Custom] > 0)
 						<input id="judge_custom" name="judge_custom" disabled class="disabled" type="checkbox" data-toggle="toggle" data-onstyle="info" data-on="Will Judge" data-off="Won't Judge" {{ $judge_custom }}>
 					@else
 						<input id="judge_custom" name="judge_custom" type="checkbox" data-toggle="toggle" data-onstyle="info" data-on="Will Judge" data-off="Won't Judge" {{ $judge_custom }}>
 					@endif
-				<p>Scored: {{ $scored_count[$videotype::Custom] }} of {{ $total_count[$videotype::Custom] }}</p>
+				<p>Scored: {{ $scored_count[VideoType::Custom] }} of {{ $total_count[VideoType::Custom] }}</p>
 			</div>
 		</div>
 	</div>
@@ -164,12 +161,12 @@ $(document).uitooltip({
 			<p>These videos will be judged primarily on the content of the source code written to produce them.<br /><br />
 			   Judges should have a background in reading source code.</p>
 			<div class="text-center button_box">
-					@if($scored_count[$videotype::Compute] >= $total_count[$videotype::Compute] AND $total_count[$videotype::Compute] > 0)
+					@if($scored_count[VideoType::Compute] >= $total_count[VideoType::Compute] AND $total_count[VideoType::Compute] > 0)
 						<input id="judge_compute" name="judge_compute" disabled class="disabled" type="checkbox" data-toggle="toggle" data-onstyle="success" data-on="Will Judge" data-off="Won't Judge" {{ $judge_compute }}>
 					@else
 						<input id="judge_compute" name="judge_compute" type="checkbox" data-toggle="toggle" data-onstyle="success" data-on="Will Judge" data-off="Won't Judge" {{ $judge_compute }}>
 					@endif
-				<p>Scored: {{ $scored_count[$videotype::Compute] }} of {{ $total_count[$videotype::Compute] }}</p>
+				<p>Scored: {{ $scored_count[VideoType::Compute] }} of {{ $total_count[VideoType::Compute] }}</p>
 			</div>
 		</div>
 	</div>
@@ -195,14 +192,14 @@ $(document).uitooltip({
 					</tr>
 					@foreach($video_list as $vid_title => $scores)
 						<tr class="score_row">
-							 @if($scores['flag'] == $videoflag::Normal)
+							 @if($scores['flag'] == VideoFlag::Normal)
 							    <td class="{{ $scores['comments'] ? 'comment' : '' }}" title="{{ $scores['comments'] }}">
 									<a href="{{ route('video.judge.edit', [ $scores['video_id'] ]) }}">
 										<span class="glyphicon glyphicon-edit"></span>
 										<strong>{{ $vid_title }}</strong>
 									</a>
 								</td>
-							@elseif($scores['flag'] == $videoflag::Review)
+							@elseif($scores['flag'] == VideoFlag::Review)
 								<td class="comment text-warning" title="<strong>Video Under Review</strong><br>{{ $scores['comments'] }}">
 									<span class="glyphicon glyphicon-exclamation-sign"></span>
 									<strong>{{ $vid_title }}</strong>
