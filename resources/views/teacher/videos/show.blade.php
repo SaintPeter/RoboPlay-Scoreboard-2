@@ -81,7 +81,8 @@
 			<th>Name</th>
 			<th>Students</th>
 			<th>Custom Parts</th>
-			<th>Status</th>
+			<th>Validation</th>
+            <th>Review</th>
 			<th>County/District/School</th>
 			<th>Actions</th>
 		</tr>
@@ -97,7 +98,9 @@
                     {{ VideoStatus::getDescription($video->status) }}
                 </span>
             </td>
-
+            <td>
+                {{ VideoReviewStatus::getDescription($video->review_status) }}
+            </td>
 			<td>
 				@if(isset($video->school))
 					<strong>C:</strong> {{ $video->school->county }}<br />

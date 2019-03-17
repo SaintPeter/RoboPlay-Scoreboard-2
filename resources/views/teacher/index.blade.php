@@ -119,7 +119,7 @@
             var video_id = $(this).data('id');
             $.get('/validate_video/' + video_id, function(data) {
                 $('#validation_results_' + video_id).remove();
-                $('#video_row_' + video_id).after('<tr id="validation_results_' + video_id + '"><td colspan="7">' + data + "</td></tr>");
+                $('#video_row_' + video_id).after('<tr id="validation_results_' + video_id + '"><td colspan="8">' + data + "</td></tr>");
             });
         });
 	});
@@ -261,12 +261,13 @@
 	<table class="table table-striped table-bordered">
 		<thead>
 			<tr>
-				<th>Name/Division</th>
+				<th>Name/Comp/Div</th>
 				<th>Students</th>
 				<th>YouTube</th>
 				<th>Custom Parts</th>
 				<th>Files</th>
-				<th>Status</th>
+				<th>Validation</th>
+                <th>Review</th>
 				<th class="narrow">Actions</th>
 			</tr>
 		</thead>
@@ -275,7 +276,11 @@
 			@if ($videos->count())
 				@foreach ($videos as $video)
 					<tr id="video_row_{{ $video->id }}">
-						<td>{{{ $video->name }}}<br />{{{ $video->vid_division->longname() }}}</td>
+						<td>
+                            {{{ $video->name }}}<br />
+                            {{{ $video->vid_division->competition->name }}}<br>
+                            {{{ $video->vid_division->name }}}
+                        </td>
 						<td>{!!  join('<br />', $video->student_list()) !!}</td>
 						<td><a href="http://youtube.com/watch?v={{{ $video->yt_code }}}" target="_new">YouTube</a></td>
 						<td>{{{ $video->has_custom==1 ? 'Yes' : 'No' }}}</td>
@@ -285,6 +290,9 @@
                                 {{ VideoStatus::getDescription($video->status) }}
                             </span>
 						</td>
+                        <td>
+                            {{ VideoReviewStatus::getDescription($video->review_status) }}
+                        </td>
 						<td>
 							{{ link_to_route('teacher.videos.show', 'Preview', [$video->id], ['class' => 'btn btn-sm btn-primary']) }}
 							&nbsp;
@@ -293,13 +301,13 @@
 		                    &nbsp;
 		                        {{ link_to_route('uploader.index', 'Upload', [$video->id], ['class' => 'btn btn-sm btn-success']) }}
                             @endif
-		                    &nbsp;
+		                    &nbsp;<br>
                             <button data-id="{{ $video->id }}" class="validate_video btn btn-sm btn-warning" title="Validate">
                                 Validate
                             </button>
                             &nbsp;
 		                    {!! Form::open(['method' => 'DELETE', 'route' => ['teacher.videos.destroy', $video->id], 'id' => 'video_delete_form_' . $video->id, 'style' => 'display: inline-block;'])  !!}
-		                        {!! Form::submit('Delete', ['class' => 'btn btn-sm btn-danger video_delete_button', 'delete_id' => $video->id, 'disabled' => 'disabled'])  !!}
+		                        {!! Form::submit('Delete', ['class' => 'btn btn-sm btn-danger video_delete_button btn-margin', 'delete_id' => $video->id, 'disabled' => 'disabled'])  !!}
 		                    {!! Form::close()  !!}
 	                	</td>
 					</tr>
