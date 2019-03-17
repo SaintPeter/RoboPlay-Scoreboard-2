@@ -289,7 +289,8 @@ class TeacherVideoController extends Controller {
 
 	public function validate_video(Request $req, $video_id) {
 		try {
-			list($status, $results) = $this->check_video_files($video_id, true);
+			$video = Video::with('files', 'files.filetype')->findOrFail($video_id);
+			list($status, $results) = $this->check_video_files($video, true);
 		} catch (\Exception $e) {
 			return response('Cannot Find Video', 404 );
 		}
@@ -307,9 +308,8 @@ class TeacherVideoController extends Controller {
 	 * @param $video_id
 	 * @return (\App\Enums\VideoCheckStatus, array)
 	 */
-	public static function check_video_files($video_id, $write_results = false) {
+	public static function check_video_files($video, $write_results = false, $errors_only = false) {
 		// Get the video and associated files
-		$video = Video::with('files', 'files.filetype')->findOrFail($video_id);
 		$files = $video->files;
 
 		$counts = [
@@ -367,6 +367,22 @@ class TeacherVideoController extends Controller {
 		}
 
 		$results = [];
+
+		// Check Content Tags
+		if($video->has_story or $video->has_task or $video->has_choreo or $video->has_custom) {
+			$results[] = [
+				'status' => 'PASS',
+				'message' => 'Content Tags Present'
+			];
+		} else {
+			$results[] = [
+				'status' => 'WARNING',
+				'message' => 'Content Tags Missing',
+				'note' => 'While not required, videos should have at least one tag for Storyline, Choreography, ' .
+					'Interesting Task, or Custom part. These tags help the judges to understand the video\'s intent.'
+			];
+			$warning = true;
+		}
 
 		// Video File Present
 		if($counts['video'] > 0) {
@@ -475,6 +491,12 @@ class TeacherVideoController extends Controller {
 			$status = VideoCheckStatus::Warnings;
 		} else {
 			$status = VideoCheckStatus::Pass;
+		}
+
+		if($errors_only) {
+			$results = array_filter($results, function($result) {
+				return $result['status'] != "PASS";
+			});
 		}
 
 		if($write_results) {
