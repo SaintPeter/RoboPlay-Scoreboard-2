@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
-	    $schedule->command('scoreboard:db_sync')
+	    $schedule->command('scoreboard:sync_db')
 		    ->hourlyAt(0)
 		    ->appendOutputTo(base_path('logs/invoice_sync.log'));
 	    $schedule->command('scoreboard:invoice_sync')
