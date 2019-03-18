@@ -37,7 +37,6 @@ tr.score_row:nth-child(odd){
 @section('main')
 @include('partials.year_select')
 @include('partials.scorenav', [ 'nav' => 'reported', 'year' => $year])
-@inject('videoflag','App\Enums\VideoFlag')
 
 {!! Form::open([ 'route' => 'video_scores.manage.process_report' ])  !!}
 <table class="table-bordered reported">
@@ -84,7 +83,7 @@ tr.score_row:nth-child(odd){
 				<td>{{ $comment->comment }}</td>
 				<td>{{ $comment->resolution }}</td>
 				<td class="text-center">
-					@if($comment->video->flag == $videoflag::Normal)
+					@if($comment->video->flag == VideoFlag::Normal)
 						Absolved
 						<a href="{{ route('video_scores.manage.unresolve', [ $comment->id ]) }}" class="pull-right">
 							<span class="glyphicon glyphicon-refresh" title="Unresolve"></span>

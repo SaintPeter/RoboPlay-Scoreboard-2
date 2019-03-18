@@ -22,8 +22,6 @@
 </script>
 @endsection
 
-@inject('userTypes',"App\Enums\UserTypes")
-
 @section('main')
 {{ link_to_route('create_user',"Add User", null,[ 'class' => 'btn btn-primary pull-right btn-margin' ]) }}
 {{ link_to_route('create_users',"Mass Add Users", null,[ 'class' => 'btn btn-info pull-right btn-margin' ]) }}
@@ -60,7 +58,7 @@
 
             </td>
 			<td>{{ $user->id }}</td>
-			<td>{{ join(',',$userTypes::getAllDescriptions($user->roles)) }}</td>
+			<td>{{ join(',',UserTypes::getAllDescriptions($user->roles)) }}</td>
 			<td>
                 <a href="{{ route('edit_user', [ $user->id ])}}" class="btn btn-sm btn-success" title="Edit User">
                     <i class="fa fa-edit"></i>
