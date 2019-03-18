@@ -26,15 +26,21 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
-	    $schedule->command('scoreboard:db_sync')->hourlyAt(0);
-	    $schedule->command('scoreboard:invoice_sync')->hourlyAt(5);
+	    $schedule->command('scoreboard:db_sync')
+		    ->hourlyAt(0)
+		    ->appendOutputTo(base_path('logs/invoice_sync.log'));
+	    $schedule->command('scoreboard:invoice_sync')
+		    ->hourlyAt(5)
+		    ->appendOutputTo(base_path('logs/invoice_sync.log'));
 
 	    $schedule->command('scoreboard:send_reg_reminders')
 		    ->mondays()
-		    ->dailyAt("8:30");
+		    ->dailyAt("8:30")
+	        ->appendOutputTo(base_path('logs/reminders.log'));
 	    $schedule->command('scoreboard:send_reg_reminders')
 		    ->thursdays()
-		    ->dailyAt("8:30");
+		    ->dailyAt("8:30")
+		    ->appendOutputTo(base_path('logs/reminders.log'));;
     }
 
     /**

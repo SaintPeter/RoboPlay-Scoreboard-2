@@ -67,6 +67,7 @@ class SendRegReminders extends Command
 			    ->where('paid','<>', 0)
 			    ->get();
 
+		    $reminder_count = 0;
 		    foreach($invoices as $invoice) {
 		    	/*
 			    Checks:
@@ -153,12 +154,14 @@ class SendRegReminders extends Command
 						    'teams' => $teams,
 						    'videos' => $videos
 					    ]));
+				    $reminder_count++;
 			    }
 		    }
 
+		    $this->info(Carbon::now()->toRfc850String() . " - {$reminder_count} Reminders Sent");
 		    return true;
 	    } else {
-	    	$this->info("Not in defined time range.  Use --force to force.");
+	    	$this->info(Carbon::now()->toRfc850String() . " - Not in defined time range.  Use --force to force.");
 	    	return false;
 	    }
     }
