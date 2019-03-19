@@ -40,7 +40,7 @@ class SyncWordpressDB extends Command
      */
     public function handle()
     {
-	    $process = new Process([base_path('/db_sync/') . 'remote_export_invoice.sh']);
+	    $process = new Process([base_path('db_sync/') . 'remote_export_invoice.sh']);
 	    $process->setTimeout(120);
 	    $process->run();
 
