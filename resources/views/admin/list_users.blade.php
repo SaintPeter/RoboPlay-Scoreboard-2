@@ -28,8 +28,8 @@
 <table class="table table-striped table-bordered" id="user_table">
 	<thead>
 		<tr>
-			<th>Name</th>
-			<th>E-mail</th>
+			<th>Name / E-mail</th>
+            <th>Last Login</th>
             <th>Password</th>
 			<th>User Id</th>
 			<th>Roles</th>
@@ -39,8 +39,13 @@
 	<tbody>
 		@foreach($users as $user)
 		<tr>
-			<td>{{ $user->name }}</td>
-			<td>{{ $user->email }}</td>
+			<td>
+                {{ $user->name }}<br>
+                <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
+            </td>
+            <td>
+                {{ $user->last_login_formatted() }}
+            </td>
             <td>
                 @if($user->password)
                     @if($user->password_resets)

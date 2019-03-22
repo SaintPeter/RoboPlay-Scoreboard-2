@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -45,6 +46,9 @@ class User extends Authenticatable
         'id', 'name', 'email', 'password', 'tshirt', 'roles',
     ];
 
+    // Date Mutators
+    protected $dates = [ 'last_login' ];
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -71,6 +75,19 @@ class User extends Authenticatable
 
 	public function reviewed_videos() {
 		return $this->hasMany(Video::class, 'reviewer_id');
+	}
+
+	/**
+	 * @return string
+	 */
+	public function last_login_formatted() {
+		if($this->attributes['last_login']) {
+			$last_login = $this->last_login->format('M j, Y');
+			$days = $this->last_login->diffInDays(Carbon::now());
+			return "$last_login ($days days)";
+		} else {
+			return 'Never';
+		}
 	}
     
 }
