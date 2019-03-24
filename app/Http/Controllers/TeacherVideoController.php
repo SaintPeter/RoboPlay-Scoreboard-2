@@ -363,6 +363,12 @@ class TeacherVideoController extends Controller {
 							'message' => "Unable to read/parse file"
 						];
 					}
+					if(!preg_match("/\d+/", $file->filename)) {
+						$code_results[] = [
+							'filename' => $file->filename,
+							'message' => 'Filename missing scene/sequence number'
+						];
+					}
 			}
 		}
 
@@ -466,7 +472,7 @@ class TeacherVideoController extends Controller {
 				$results[] = [
 					'status' => 'FAIL',
 					'message' => count($code_results) . ' of ' . $counts['code'] . ' code files have issues',
-					'note' => 'This is a new feature.  If you believe you have the proper headers, please ' .
+					'note' => 'This is a new feature.  If you believe your code is formatted properly, please ' .
 						      'contact the Video Coordinator',
 					'files' => $code_results
 				];
@@ -474,7 +480,7 @@ class TeacherVideoController extends Controller {
 			} else {
 				$results[] = [
 					'status' => 'PASS',
-					'message' => $counts['code'] . ' of ' . $counts['code'] . ' code files have proper headers',
+					'message' => $counts['code'] . ' of ' . $counts['code'] . ' code files are formatted properly',
 				];
 			}
 		} else {
