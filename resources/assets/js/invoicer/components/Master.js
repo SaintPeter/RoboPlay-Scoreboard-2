@@ -1,12 +1,13 @@
 import  React, { Component} from 'react';
 import { BrowserRouter , Route, Switch, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Button } from 'react-bootstrap';
+import { Button, DropdownButton, MenuItem } from 'react-bootstrap';
 
 import InvoiceList from './InvoiceList'
 import YearSelect from './YearSelect'
 import {toggleShowAllTeams} from "../reducers/showAllTeams";
 import {toggleShowAllVideos} from "../reducers/showAllVideos";
+import {setInvoiceFilter} from "../reducers/filterInvoiceBy";
 
 class MasterApp extends Component {
     constructor(props) {
@@ -18,13 +19,18 @@ class MasterApp extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        document.title = this.props.title;
+        //document.title = this.props.title;
     }
 
     componentDidMount() {
     }
 
     componentWillUnmount() {
+    }
+
+    filterHandler(newMode, e) {
+      e.preventDefault();
+      this.props.setInvoiceFilter(newMode);
     }
 
     render(){
@@ -38,6 +44,11 @@ class MasterApp extends Component {
                   <Button bsStyle="success" onClick={this.props.toggleShowAllVideos}>
                     { this.props.showAllVideos ? 'Hide Videos' : 'Show Videos'}
                   </Button>
+                  &nbsp;&nbsp;
+                  <FilterByDropdown
+                    selected={this.props.filterInvoiceBy}
+                    onClick={(newMode,e) => this.filterHandler(newMode,e)}
+                  />
                   <YearSelect />
                   <Switch>
                       <Route exact path="/:year?" component={InvoiceList} />
@@ -49,11 +60,32 @@ class MasterApp extends Component {
     }
 }
 
+function FilterByDropdown(props) {
+  const lookup = {
+    "ALL": "Show All",
+    "UNCHECKED_TEAMS": "Show Unchecked Teams",
+    "UNCHECKED_VIDEOS": "Show Unchecked Videos"
+  };
+
+  return <DropdownButton
+    id="FilterSelectDropdown"
+    title={lookup[props.selected]}
+    onSelect={props.onClick}
+  >
+    {
+      Object.keys(lookup).map((val) => {
+        return <MenuItem eventKey={val} key={val} active={val == props.selected}>{lookup[val]}</MenuItem>
+      })
+    }
+  </DropdownButton>
+}
+
 // Map Redux state to component props
 function mapStateToProps(state) {
     return {
       showAllTeams: state.showAllTeams,
-      showAllVideos: state.showAllVideos
+      showAllVideos: state.showAllVideos,
+      filterInvoiceBy: state.filterInvoiceBy,
     }
 }
 
@@ -61,7 +93,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
       toggleShowAllTeams: () => dispatch(toggleShowAllTeams()),
-      toggleShowAllVideos: () => dispatch(toggleShowAllVideos())
+      toggleShowAllVideos: () => dispatch(toggleShowAllVideos()),
+      setInvoiceFilter: (mode) => dispatch(setInvoiceFilter(mode)),
     }
 }
 

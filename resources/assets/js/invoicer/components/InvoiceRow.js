@@ -78,16 +78,8 @@ class InvoiceRowApp extends Component {
       <td>
         {row.school_name}
       </td>
-      <td>{row.team_count}&nbsp;(
-        <span style={{color: 'red'}}>{row.teams_unchecked}</span>
-        &nbsp;/&nbsp;
-        <span style={{color: 'green'}}>{row.teams_checked})</span>
-      </td>
-      <td>{row.video_count}&nbsp;(
-        <span style={{color: 'red'}}>{row.videos_unchecked}</span>
-        &nbsp;/&nbsp;
-        <span style={{color: 'green'}}>{row.videos_checked})</span>
-      </td>
+      <TeamCount row={row} />
+      <VideoCount row={row} />
       <td>T:&nbsp;{row.team_student_count}&nbsp;V:&nbsp;{row.video_student_count}</td>
       <td>{row.notes}</td>
       <td className="text-center">
@@ -141,6 +133,72 @@ class InvoiceRowApp extends Component {
         >Teams</button>
       </td>
     </tr>
+  }
+}
+
+function TeamCount(props) {
+  if(props.row.team_count) {
+    let checked = "";
+    let unchecked = "";
+    if(props.row.teams_checked) {
+      checked = <span style={{color: 'green'}}>{props.row.teams_checked}</span>;
+    }
+    if(props.row.teams_unchecked) {
+      unchecked = <span style={{color: 'red'}}>{props.row.teams_unchecked}</span>;
+    }
+
+    if(checked && unchecked) {
+      return <td>
+        {props.row.team_count}&nbsp;({unchecked}&nbsp;/&nbsp;{checked})
+      </td>
+    } else if(checked) {
+      return <td>
+        {props.row.team_count}&nbsp;({checked})
+      </td>
+    } else if(unchecked){
+      return <td>
+        {props.row.team_count}&nbsp;({unchecked})
+      </td>
+    } else {
+      return <td>
+        {props.row.team_count}&nbsp;(0)
+      </td>
+    }
+  } else {
+    return <td>None</td>
+  }
+}
+
+function VideoCount(props) {
+  if(props.row.video_count) {
+    let checked = "";
+    let unchecked = "";
+    if(props.row.videos_checked) {
+      checked = <span style={{color: 'green'}}>{props.row.videos_checked}</span>;
+    }
+    if(props.row.videos_unchecked) {
+      unchecked = <span style={{color: 'red'}}>{props.row.videos_unchecked}</span>;
+    }
+
+    if(checked && unchecked) {
+      return <td>
+        {props.row.video_count}&nbsp;({unchecked}&nbsp;/&nbsp;{checked})
+      </td>
+    } else if(checked) {
+      return <td>
+        {props.row.video_count}&nbsp;({checked})
+      </td>
+    } else if(unchecked) {
+      return <td>
+        {props.row.video_count}&nbsp;({unchecked})
+      </td>
+    } else {
+      return <td>
+        {props.row.video_count}&nbsp;(0)
+      </td>
+    }
+  } else {
+    return <td>None</td>
   }
 }
 

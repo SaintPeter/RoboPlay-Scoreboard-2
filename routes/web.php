@@ -216,13 +216,16 @@ Route::middleware([ 'auth' ])->group( function() {
 		    ->where('year',"\d{4}");
 
 	    /** @noinspection PhpParamsInspection */
-	    Route::prefix('/api/')->namespace('Api')->name('api.')->group(function() {
-		    Route::get('invoicer/invoice_list/{year}',                  [ 'as' => 'invoice_list', 'uses' => 'InvoiceApiController@invoice_json']);
-		    Route::get('invoicer/save_team_div/{team_id}/{div_id}',     [ 'as' => 'invoicer.save_team_div', 'uses' => 'InvoiceApiController@save_team_division' ]);
-		    Route::get('invoicer/toggle_team/{id}',                     [ 'as' => 'invoicer.toggle_team',  'uses' => 'InvoiceApiController@toggle_team' ]);
-		    Route::get('invoicer/save_video_div/{video_id}/{div_id}',   [ 'as' => 'invoicer.save_video_div', 'uses' => 'InvoiceApiController@save_video_division' ]);
-		    Route::post('invoicer/update_paid_notes/{id}/{paid}',       [ 'as' => 'invoicer.update_paid_notes', 'uses' => 'InvoiceApiController@update_paid_notes']);
-		    Route::get('invoicer/sync_invoices/{year}',                 [ 'as' => 'invoicer.sync_invoices', 'uses' => 'InvoiceApiController@sync_invoices']);
+	    Route::prefix('/api/invoicer/')->namespace('Api')->name('api.')->group(function() {
+		    Route::get('invoice_list/{year}',                  'InvoiceApiController@invoice_json');
+		    Route::get('save_team_div/{team_id}/{div_id}',     'InvoiceApiController@save_team_division');
+		    Route::get('toggle_team/{id}',                     'InvoiceApiController@toggle_team');
+		    Route::get('toggle_video/{id}',                    'InvoiceApiController@toggle_video');
+		    Route::get('save_video_div/{video_id}/{div_id}',   'InvoiceApiController@save_video_division');
+		    Route::get('sync_invoices/{year}',                 'InvoiceApiController@sync_invoices');
+		    Route::get('last_sync_date/{year}',                'InvoiceApiController@last_sync_date');
+		    Route::post('update_paid_notes/{id}/{paid}',       'InvoiceApiController@update_paid_notes');
+		    Route::post('update_video_notes/{video_id}',       'InvoiceApiController@update_video_notes');
 	    });
 
 	    // Legacy

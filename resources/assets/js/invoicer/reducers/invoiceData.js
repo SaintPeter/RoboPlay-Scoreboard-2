@@ -36,10 +36,35 @@ export function updateTeamCheckedCounts(year, invoiceId,teamId) {
   }
 }
 
+export function toggleVideoChecked(year,invoiceId,videoId) {
+  return {
+    type: 'TOGGLE_VIDEO_CHECKED',
+    year,
+    invoiceId,
+    videoId
+  }
+}
+
+export function updateVideoCheckedCounts(year, invoiceId,videoId) {
+  return {
+    type: 'UPDATE_VIDEO_CHECKED_COUNTS',
+    year,
+    invoiceId,
+    videoId
+  }
+}
+
 export function toggleTeamCheckedAndRecalc(year,invoiceId,teamId) {
   return (dispatch) => {
     dispatch(toggleTeamChecked(year,invoiceId,teamId));
     dispatch(updateTeamCheckedCounts(year,invoiceId,teamId));
+  }
+}
+
+export function toggleVideoCheckedAndRecalc(year,invoiceId,videoId) {
+  return (dispatch) => {
+    dispatch(toggleVideoChecked(year,invoiceId,videoId));
+    dispatch(updateVideoCheckedCounts(year,invoiceId,videoId));
   }
 }
 
@@ -50,6 +75,25 @@ export function setVideoDivision(year,invoiceId,videoId,newDivision) {
     invoiceId,
     videoId,
     newDivision
+  }
+}
+
+function videoNotesShowWriting(year, invoiceId, videoId) {
+  return {
+    type: 'SET_VIDEO_WRITING',
+    year,
+    invoiceId,
+    videoId
+  }
+}
+
+function setVideoNotesClearWriting(year, invoiceId, videoId, notes) {
+  return {
+    type: 'SET_VIDEO_NOTES',
+    year,
+    invoiceId,
+    videoId,
+    notes
   }
 }
 
@@ -109,6 +153,33 @@ export const updateVideoDivision = (invoiceId,videoId,newDivision) => (dispatch,
   return window.axios.get('/api/invoicer/save_video_div/' + videoId + "/" + newDivision)
     .then((response) => {
       dispatch(setVideoDivision(year,invoiceId,videoId,newDivision));
+    })
+  // .catch((err) => {
+  //   console.log(`Error updating video ${videoId} to division ${newDivision}: ${err}`)
+  // })
+};
+
+export const updateVideoChecked = (invoiceId,videoId) => (dispatch, getState) => {
+  const year = getState().activeYear;
+  console.log(`Toggle Checked Year: ${year}, Video: ${videoId}`);
+
+  return window.axios.get('/api/invoicer/toggle_video/' + videoId)
+    .then((response) => {
+      dispatch(toggleVideoCheckedAndRecalc(year,invoiceId,videoId));
+    })
+  // .catch((err) => {
+  //   console.log(`Error updating video ${videoId} to division ${newDivision}: ${err}`)
+  // })
+};
+
+export const updateVideoNotes = (invoiceId, videoId, notes) => (dispatch, getState) => {
+  const year = getState().activeYear;
+  console.log(`Write Video Notes: ${year}, Video: ${videoId}, Notes: '${notes}'`);
+
+  dispatch(videoNotesShowWriting(year,invoiceId,videoId));
+  return window.axios.post('/api/invoicer/update_video_notes/' + videoId, {notes})
+    .then((response) => {
+      dispatch(setVideoNotesClearWriting(year, invoiceId, videoId, notes));
     })
   // .catch((err) => {
   //   console.log(`Error updating video ${videoId} to division ${newDivision}: ${err}`)
@@ -190,8 +261,76 @@ const invoiceData = (state = {}, action) => {
          }
       }};
       return update(state, stateUpdate);
+    case 'TOGGLE_VIDEO_CHECKED':
+      let videoIndex = state[action.year].video_data[action.invoiceId].findIndex(video => video.id === action.videoId);
+
+      if(videoIndex < 0) {
+        console.log(`Error: Unable to find video ${action.videoId} in Invoice ${action.invoiceId}`);
+        return state;
+      }
+      stateUpdate = { [action.year]: {
+          video_data: {
+            [action.invoiceId]:{
+              [videoIndex]:{
+                $toggle: ['status']
+              }
+            }
+          }
+        }};
+      return update(state,stateUpdate);
+    case 'UPDATE_VIDEO_CHECKED_COUNTS':
+      const videoCounts = state[action.year].video_data[action.invoiceId].reduce((carry, video) => {
+        carry[video.status ? 1 : 0]++;
+        return carry;
+      },[0,0]);
+      stateUpdate = { [action.year]: {
+          invoices: {
+            [action.invoiceId]: {
+              videos_checked: { $set: videoCounts[1] },
+              videos_unchecked: { $set: videoCounts[0] }
+            }
+          }
+        }};
+      return update(state, stateUpdate);
+    case 'SET_VIDEO_WRITING':
+      videoIndex = state[action.year].video_data[action.invoiceId].findIndex(video => video.id === action.videoId);
+
+      if(videoIndex < 0) {
+        console.log(`Error: Unable to find video ${action.videoId} in Invoice ${action.invoiceId}`);
+        return state;
+      }
+      stateUpdate = { [action.year]: {
+          video_data: {
+            [action.invoiceId]:{
+              [videoIndex]:{
+                $merge: { 'writing': true }
+              }
+            }
+          }
+        }};
+      return update(state, stateUpdate);
+    case 'SET_VIDEO_NOTES':
+      videoIndex = state[action.year].video_data[action.invoiceId].findIndex(video => video.id === action.videoId);
+
+      if(videoIndex < 0) {
+        console.log(`Error: Unable to find video ${action.videoId} in Invoice ${action.invoiceId}`);
+        return state;
+      }
+      stateUpdate = { [action.year]: {
+          video_data: {
+            [action.invoiceId]:{
+              [videoIndex]:{
+                $merge: {
+                  'writing': false,
+                  'notes': action.notes
+                }
+              }
+            }
+          }
+        }};
+      return update(state, stateUpdate);
     case 'SET_VIDEO_DIVISION':
-      const videoIndex = state[action.year].video_data[action.invoiceId].findIndex(video => video.id === action.videoId);
+      videoIndex = state[action.year].video_data[action.invoiceId].findIndex(video => video.id === action.videoId);
 
       if(videoIndex < 0) {
         console.log(`Error: Unable to find video ${action.videoId} in Invoice ${action.invoiceId}`);

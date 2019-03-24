@@ -15,7 +15,12 @@
     </script>
 
     <style>
-
+        .animate_color {
+            transition: background-color 0.5s ease;
+        }
+        .writing_color {
+            background-color: #90EE90;
+        }
     </style>
 
 </head>

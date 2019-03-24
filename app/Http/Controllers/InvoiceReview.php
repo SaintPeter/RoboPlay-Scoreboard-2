@@ -141,8 +141,13 @@ class InvoiceReview extends Controller {
 	}
 
 
-	public function invoice_sync($year = 0, $online = true)
+	public function invoice_sync($year = 0, $online = true, $sync_db = false)
 	{
+		// If we are to sync the db, do it first
+		if($sync_db) {
+			$result = Artisan::call('scoreboard:sync_db');
+		}
+
 		$message = "Invoice Type Not Found";
 	    $comp_year = CompYear::where('year', $year)->firstOrFail();
 	    $userList = [];

@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 
 import {setActiveYear} from "../reducers/activeYear";
 import {fetchInvoiceData} from "../reducers/invoiceData";
+import {setInvoiceFilter} from "../reducers/filterInvoiceBy";
 
 import VideoRow from "./VideoRow";
 import InvoiceRow from "./InvoiceRow";
@@ -21,24 +22,70 @@ class InvoiceListApp extends Component {
       // Otherwise select the most recent year
       thisYear = yearList[yearList.length - 1]
     }
+    
+    this.state = {
+      'invoiceKeys': []
+    };
 
     props.setActiveYear(thisYear);
-    props.fetchInvoiceData(thisYear);
+    props.fetchInvoiceData(thisYear)
+      .then(() => {
+        this.setState({'invoiceKeys': this.filterInvoices('ALL')});
+      });
   }
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.match.params.year != this.props.match.params.year && nextProps.match.params.year) {
       this.props.setActiveYear(nextProps.match.params.year);
-      this.props.fetchInvoiceData(nextProps.match.params.year);
+      this.props.fetchInvoiceData(nextProps.match.params.year).then(() => {
+        this.setState({'invoiceKeys': this.filterInvoices(nextProps.filterInvoiceBy)});
+      });
+    }
+    if(nextProps.filterInvoiceBy != this.props.filterInvoiceBy) {
+      this.setState({'invoiceKeys': this.filterInvoices(nextProps.filterInvoiceBy)});
     }
   }
+  
+  filterInvoices = (filterBy) => {
+    if(this.props.invoiceData.hasOwnProperty(this.props.activeYear)) {
+      const invoiceList = this.props.invoiceData[this.props.activeYear].invoices;
+      switch(filterBy) {
+        case 'UNCHECKED_TEAMS':
+          return Object.keys(invoiceList).filter((invoiceId) => {
+            return invoiceList[invoiceId].teams_unchecked > 0;
+          },{})
+            .sort((a,b) => {
+              return invoiceList[b].teams_unchecked - invoiceList[a].teams_unchecked;
+            });
+        case 'UNCHECKED_VIDEOS':
+          return Object.keys(invoiceList).filter((invoiceId) => {
+            return invoiceList[invoiceId].videos_unchecked > 0;
+          },{})
+            .sort((a,b) => {
+              return invoiceList[b].videos_unchecked - invoiceList[a].videos_unchecked;
+            });
+        case 'ALL':
+        default:
+          return Object.keys(invoiceList);
+      }  
+    }
+  };
 
   render() {
-    const invoiceData = this.props.invoiceData[this.props.activeYear] ? this.props.invoiceData[this.props.activeYear] : {};
+    let invoiceData = {};
+    let vid_divisions = {};
+    let team_divisions = {};
+    
+    if(this.props.invoiceData.hasOwnProperty(this.props.activeYear)) {
+      invoiceData = this.props.invoiceData[this.props.activeYear];
+      vid_divisions = this.props.invoiceData[this.props.activeYear].vid_divisions;
+      team_divisions = this.props.invoiceData[this.props.activeYear].team_divisions;
+    } 
+    
     const teamData  = invoiceData.hasOwnProperty('team_data') ? invoiceData.team_data : {};
     const videoData = invoiceData.hasOwnProperty('video_data') ? invoiceData.video_data : {};
 
-    if(invoiceData.hasOwnProperty('invoices') && Object.keys(invoiceData.invoices).length) {
+    if(this.state.invoiceKeys.length) {
       return <table className="table">
         <thead>
         <tr>
@@ -54,24 +101,24 @@ class InvoiceListApp extends Component {
         </tr>
         </thead>
         <tbody>
-          {Object.entries(invoiceData.invoices).map(invoice => {
+          {this.state.invoiceKeys.map(invoiceId => {
+            let invoice = invoiceData.invoices[invoiceId];
             return [
-              <InvoiceRow key={invoice[0]} rowData={invoice[1]} year={this.props.activeYear}/>,
+              <InvoiceRow key={invoiceId} rowData={invoice} year={this.props.activeYear}/>,
               <VideoRow
-                key={'video_invoice_'+invoice[0]}
-                invoiceId={invoice[0]}
-                rowData={videoData[invoice[1].id]}
-                divData={invoiceData.vid_divisions}
+                key={'video_invoice_'+invoiceId}
+                invoiceId={invoiceId}
+                rowData={videoData[invoiceId]}
+                divData={vid_divisions}
               />,
               <TeamRow
-                key={'team_invoice_'+invoice[0]}
-                invoiceId={invoice[0]}
-                rowData={teamData[invoice[1].id]}
-                divData={invoiceData.team_divisions}
+                key={'team_invoice_'+invoiceId}
+                invoiceId={invoiceId}
+                rowData={teamData[invoiceId]}
+                divData={team_divisions}
               />
             ]
           })}
-
         </tbody>
       </table>
     } else {
@@ -80,16 +127,14 @@ class InvoiceListApp extends Component {
   }
 }
 
-
-
-
 // Map Redux state to component props
 function mapStateToProps(state) {
   return {
     activeYear: state.activeYear,
     invoiceData: state.invoiceData,
     showVideosList: state.showVideosList,
-    showTeamsList: state.showTeamsList
+    showTeamsList: state.showTeamsList,
+    filterInvoiceBy: state.filterInvoiceBy,
   }
 }
 

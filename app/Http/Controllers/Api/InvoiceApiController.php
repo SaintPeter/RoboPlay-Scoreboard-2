@@ -7,6 +7,7 @@ use DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Enums\VideoReviewStatus;
 
 use App\Models\ {
 	Team,
@@ -84,6 +85,7 @@ class InvoiceApiController extends Controller
 					'vid_division_id' => $video->vid_division_id,
 					'student_count' => $video->students->count(),
 					'status' => $video->audit,
+					'review_status' => VideoReviewStatus::getDescription($video->review_status),
 					'notes' => $video->notes ? $video->notes : '',
 				];
 				$video_student_count += $video->students->count();
@@ -163,9 +165,31 @@ class InvoiceApiController extends Controller
 		return 'true';
 	}
 
+	public function toggle_video($video_id) {
+		$video = Video::findOrFail($video_id);
+		$video->update(['audit' => !$video->audit ]);
+		return 'true';
+	}
+
+	public function update_video_notes(Request $req, $video_id) {
+		$video = Video::findOrFail($video_id);
+		$video->update(['notes' => $req->input('notes', '') ]);
+		return 'true';
+	}
+
 	public function update_paid_notes(Request $req, $invoice_id, $paid) {
 		$invoice = Invoices::findOrFail($invoice_id);
 		$invoice->update(['paid' => $paid, 'notes' => $req->input('notes', '')]);
 		return 'true';
+	}
+
+	function last_sync_date($year) {
+		$last_sync_date = Invoices::where('year',$year)->max('updated_at');
+		if(isset($last_sync_date)) {
+			$last_sync = $last_sync_date->format('D, F j, g:s a');
+		} else {
+			$last_sync = "Never";
+		}
+		return response()->json($last_sync);
 	}
 }
