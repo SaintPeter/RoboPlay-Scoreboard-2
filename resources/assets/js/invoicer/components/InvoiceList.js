@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
-import { Link } from 'react-router-dom';
 import {connect} from "react-redux";
 
 import {Row, Col} from "react-bootstrap";
 
 import {setActiveYear} from "../reducers/activeYear";
 import {fetchInvoiceData} from "../reducers/invoiceData";
-import {setInvoiceFilter} from "../reducers/filterInvoiceBy";
 
 import VideoRow from "./VideoRow";
 import InvoiceRow from "./InvoiceRow";
@@ -95,7 +93,6 @@ class InvoiceListApp extends Component {
         <thead>
         <tr>
           <th>Teacher</th>
-          <th>Username</th>
           <th>School</th>
           <th>Teams</th>
           <th>Videos</th>

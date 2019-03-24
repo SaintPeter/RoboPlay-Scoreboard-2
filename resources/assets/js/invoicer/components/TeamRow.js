@@ -21,7 +21,7 @@ class TeamRowApp extends Component {
 
     if (teamData && teamData.length > 0 && (this.props.showAllTeams || this.props.showTeamsList.hasOwnProperty(this.props.invoiceId))) {
       return <tr key={"teams_" + this.props.invoiceId}>
-        <td colSpan="8" className="team_section" id="teams{{ $invoice->id }}">
+        <td colSpane="7" className="team_section" id="teams{{ $invoice->id }}">
           <table className="table pull-right">
             <thead>
             <tr>

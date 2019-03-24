@@ -20,7 +20,7 @@ class VideoRowApp extends Component {
 
     if(videos && videos.length > 0 && (this.props.showAllVideos || this.props.showVideosList.hasOwnProperty(this.props.invoiceId))) {
       return <tr key={"invoice_" + this.props.invoiceId}>
-        <td colSpan={8}>
+        <td colSpan={7}>
           <table className="table">
             <thead>
               <tr>
@@ -98,7 +98,7 @@ class VideoNotes extends Component {
   render() {
     let writeClass = this.props.video.writing ? " writing_color" : "";
     return <tr>
-      <td colSpan="8" className="video_notes_section">
+      <td colSpane="7" className="video_notes_section">
         <label>Notes</label>
         <textarea style={{'clear':'both', 'width':'100%'}}
                   className={"animate_color" + writeClass}

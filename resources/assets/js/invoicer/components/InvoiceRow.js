@@ -46,9 +46,9 @@ class InvoiceRowApp extends Component {
   render() {
     const row = this.props.rowData;
     return <tr key={row.id}>
-      <td>
+      <td title={`Username: ${row.email}`}>
         <a href={"mailto:" + row.email} target="_blank" title="E-mail User">{row.user_name}</a>
-
+        &nbsp;
         <small style={{'whiteSpace': 'nowrap'}}>(
           <a href={"/switch_user/" + row.user_id} title="Switch to this User">
             <i className="fa fa-arrow-circle-right" />
@@ -71,9 +71,6 @@ class InvoiceRowApp extends Component {
           }
           )
         </small>
-      </td>
-      <td>
-        {row.email}
       </td>
       <td>
         {row.school_name}
