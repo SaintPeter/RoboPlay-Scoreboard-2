@@ -7,6 +7,7 @@ import showTeamsList from "./showTeamsList";
 import showAllVideos from "./showAllVideos";
 import showAllTeams from "./showAllTeams";
 import filterInvoiceBy from "./filterInvoiceBy";
+import yearLoading from "./yearLoading";
 
 const reducer = combineReducers({
   activeYear,
@@ -15,7 +16,8 @@ const reducer = combineReducers({
   showTeamsList,
   showAllVideos,
   showAllTeams,
-  filterInvoiceBy
+  filterInvoiceBy,
+  yearLoading
 });
 
 export default reducer;

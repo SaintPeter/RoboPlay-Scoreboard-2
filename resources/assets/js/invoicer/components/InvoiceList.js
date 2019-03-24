@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import {connect} from "react-redux";
 
+import {Row, Col} from "react-bootstrap";
+
 import {setActiveYear} from "../reducers/activeYear";
 import {fetchInvoiceData} from "../reducers/invoiceData";
 import {setInvoiceFilter} from "../reducers/filterInvoiceBy";
@@ -36,6 +38,9 @@ class InvoiceListApp extends Component {
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.match.params.year != this.props.match.params.year && nextProps.match.params.year) {
+      // Clear out invoice keys when year changes
+      this.setState({ 'invoiceKeys': []});
+
       this.props.setActiveYear(nextProps.match.params.year);
       this.props.fetchInvoiceData(nextProps.match.params.year).then(() => {
         this.setState({'invoiceKeys': this.filterInvoices(nextProps.filterInvoiceBy)});
@@ -122,7 +127,19 @@ class InvoiceListApp extends Component {
         </tbody>
       </table>
     } else {
-      return <div>No Data for this Year</div>
+      if(this.props.yearLoading) {
+        return <Row>
+          <Col md={3} mdOffset={4}>
+            <h3 className="text-center"><i className="fa fa-spinner fa-pulse fa-fw">{null}</i> Loading . . .</h3>
+          </Col>
+        </Row>
+      } else {
+        return <Row>
+          <Col md={3} mdOffset={4}>
+            <h3 className="text-center">No Data for this Year</h3>
+          </Col>
+        </Row>
+      }
     }
   }
 }
@@ -135,6 +152,7 @@ function mapStateToProps(state) {
     showVideosList: state.showVideosList,
     showTeamsList: state.showTeamsList,
     filterInvoiceBy: state.filterInvoiceBy,
+    yearLoading: state.yearLoading,
   }
 }
 

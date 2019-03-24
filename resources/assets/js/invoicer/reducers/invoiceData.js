@@ -1,4 +1,5 @@
 import update from 'immutability-helper';
+import {setYearLoading} from './yearLoading';
 
 export function setInvoiceData(year, data) {
   return {
@@ -189,6 +190,8 @@ export const updateVideoNotes = (invoiceId, videoId, notes) => (dispatch, getSta
 export const fetchInvoiceData = (year) => (dispatch, getState) => {
   //const {InvoiceData} = getState();
 
+  dispatch(setYearLoading(year, true));
+
   return window.axios.get('/api/invoicer/invoice_list/' + year)
     .then((response) => {
       console.log(`Invoice Data ${year} Fetched`);
@@ -197,6 +200,7 @@ export const fetchInvoiceData = (year) => (dispatch, getState) => {
     .then((data) => {
       console.log('Saving Invoice Data');
       dispatch(setInvoiceData(year, data));
+      dispatch(setYearLoading(year, false));
     })
     .then(() => Promise.resolve('Data Saved'))
     // .catch( (error) => {
