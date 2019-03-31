@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\Model;
 class Files extends \Eloquent {
 	protected $guarded = [ 'id' ];
 	protected $with = [ 'filetype' ];
-	protected $appends = ['public_url'];
+	protected $appends = ['viewer_url','download_url'];
 
 	public static function boot()
     {
@@ -51,7 +51,7 @@ class Files extends \Eloquent {
 	}
 
 	public function path() {
-		return "/uploads/video_" . $this->video_id . "/" . $this->filename;
+		return "uploads/video_" . $this->video_id . "/" . $this->filename;
 	}
 
 	public function url() {
@@ -67,12 +67,16 @@ class Files extends \Eloquent {
 		}
 	}
 
-	public function getPublicUrlAttribute() {
+	public function getViewerUrlAttribute() {
 		return $this->url();
 	}
 
+	public function getDownloadUrlAttribute() {
+		return url($this->path());
+	}
+
 	public function full_path() {
-		return public_path() . $this->path();
+		return public_path() . DIRECTORY_SEPARATOR . $this->path();
 	}
 
 	public function just_filename() {

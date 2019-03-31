@@ -83,7 +83,7 @@ class FileListApp extends Component {
               return <ListGroupItem key={file.id}>
                 {
                   file.filetype.viewer == 'lytebox' ?
-                    <a href={file.public_url} onClick={(e) => this.showFile(e, file.index)} key={file.id}>
+                    <a href={file.viewer_url} onClick={(e) => this.showFile(e, file.index)} key={file.id}>
                       <i className={"fa " + file.filetype.icon}>{null}</i>
                       &nbsp;
                       {file.filename}
@@ -96,7 +96,7 @@ class FileListApp extends Component {
                     </span>
                 }
                 <span className="pull-right">
-                       <a href={file.public_url} target="_blank">
+                       <a href={file.download_url} target="_blank">
                          <i className={"fa fa-arrow-circle-o-down"} title="Download File">{null}</i>
                        </a>
                   </span>
