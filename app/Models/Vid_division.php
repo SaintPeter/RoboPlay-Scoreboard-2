@@ -26,6 +26,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_division whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_division whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_division newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_division newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_division query()
  */
 class Vid_division extends Model {
 	protected $guarded = array();

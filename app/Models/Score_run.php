@@ -47,6 +47,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @mixin \Eloquent
  * @property int $judge_id
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Score_run whereJudgeId($value)
+ * @property int $abort
+ * @property-read \App\Models\Challenge $challenge
+ * @property-read \App\Models\Division $division
+ * @property-read \App\Models\Team $team
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Score_run newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Score_run newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Score_run query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Score_run whereAbort($value)
  */
 class Score_run extends Model {
 	use SoftDeletes;

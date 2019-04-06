@@ -14,6 +14,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Ethnicity whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Ethnicity whereName($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Ethnicity newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Ethnicity newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Ethnicity query()
  */
 class Ethnicity extends \Eloquent {
 	protected $table = 'ethnicities';

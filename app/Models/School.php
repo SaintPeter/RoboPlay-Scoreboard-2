@@ -25,6 +25,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\School whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\School whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\School newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\School newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\School query()
  */
 class School extends \Eloquent {
     protected $guarded = [];

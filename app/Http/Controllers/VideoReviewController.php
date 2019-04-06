@@ -3,16 +3,18 @@
 namespace App\Http\Controllers;
 
 use DB;
+use Mail;
 use View;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use App\Models\{
-	Video, CompYear, Video_review_categories, Video_review_details, Video_review_problems
+	Video, CompYear, Video_review_categories, Video_review_details, Video_review_problems, Invoices
 };
 
 use App\Enums\VideoReviewStatus;
-use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Mail\VideoDisqualification;
 
 class VideoReviewController extends Controller
 {
@@ -88,20 +90,19 @@ class VideoReviewController extends Controller
     	return response()->json($video);
     }
 
-    public function save_problems(Request $req, $id) {
+    public function save_problems(Request $req, $video_id) {
     	$problems = collect($req->input('problems', []));
 	    $videoDetail = Video_review_details::with('category')
 		    ->orderBy('order')
 		    ->get();
-
 
     	$stats = [
     		'updated' => 0,
 	        'new' => 0
 	    ];
 
-    	$problems->each(function ($problem) use ($id, $req, &$stats, $videoDetail) {
-    		$problem['video_id'] = $id;
+    	$problems->each(function ($problem) use ($video_id, $req, &$stats, $videoDetail) {
+    		$problem['video_id'] = $video_id;
 		    $problem['resolved'] = false;
 
 		    $problem['order'] = $videoDetail->find($problem['video_review_details_id'])->order;
@@ -122,7 +123,7 @@ class VideoReviewController extends Controller
 
     	// Update review status plus owner
     	if($stats['updated'] || $stats['new']) {
-		    Video::where('id','=',$id)
+		    Video::where('id','=',$video_id)
 			    ->update([
 				    'review_status' => VideoReviewStatus::Reviewed,
 				    'reviewer_id'=> $req->user()->id
@@ -144,6 +145,47 @@ class VideoReviewController extends Controller
 				)
 		]);
     }
+
+    // Mark a problem resolved
+	public function resolve_problem(Request $req, $video_id, $problem_id) {
+    	$video = Video::with('problems')->findOrFail($video_id);
+    	$problem = $video->problems->find($problem_id);
+
+    	if($problem) {
+	        $problem->resolved = true;
+	        $problem->resolver_id = $req->User()->id;
+	        $problem->save();
+	    }
+
+    	return response('true');
+	}
+
+	// Send disqualification message
+	public function send_dq($video_id) {
+    	$invoice = Invoices::with('teacher','videos')->whereHas('videos', function($query) use ($video_id) {
+    		return $query->where('id', $video_id);
+	    })->first();
+
+    	if($invoice) {
+    		Mail::to($invoice->teacher)
+			    ->queue(new VideoDisqualification($video_id));
+    		$video = $invoice->videos->find($video_id);
+    		if($video) {
+    			$video->review_status = VideoReviewStatus::Disqualified;
+    			$video->save();
+		    }
+    		return response('true');
+	    } else {
+    		return response('false');
+	    }
+	}
+
+	// Change video review status
+	public function set_review_status(Video $video, $status) {
+    	$video->review_status = intval($status);
+    	$video->save();
+    	return response('true');
+	}
 
     // List of videos reviewed by user with problems
 	public function reviewed_videos($year, $id) {

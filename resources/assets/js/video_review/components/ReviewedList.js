@@ -54,9 +54,14 @@ export class ReviewedList extends Component {
 
 const IssueCount = (props) => {
   const len = props.problems.length;
-  if(len) {
-    return <span>
-      {len} Issue{len > 1 ? "s" : null}
+  const stats = props.problems.reduce((carry, problem) => {
+    carry[problem.resolved ? 'resolved' : 'unresolved']++;
+    return carry;
+  }, {unresolved: 0, resolved: 0});
+
+  if(stats.unresolved || stats.resolved) {
+    return  <span>
+      {stats.unresolved} Unresolved, {stats.resolved} Resolved
     </span>
   }
   return null;

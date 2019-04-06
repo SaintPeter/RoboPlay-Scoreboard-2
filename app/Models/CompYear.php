@@ -20,6 +20,19 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\CompYear whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\CompYear whereYear($value)
  * @mixin \Eloquent
+ * @property \Illuminate\Support\Carbon $reminder_start
+ * @property \Illuminate\Support\Carbon $reminder_end
+ * @property \Illuminate\Support\Carbon $edit_end
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Competition[] $competitions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Division[] $divisions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Vid_competition[] $vid_competitions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Vid_division[] $vid_divisions
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\CompYear newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\CompYear newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\CompYear query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\CompYear whereEditEnd($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\CompYear whereReminderEnd($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\CompYear whereReminderStart($value)
  */
 class CompYear extends \Eloquent {
 	// Add your validation rules here

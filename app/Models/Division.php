@@ -28,6 +28,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Division whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Division whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Division newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Division newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Division query()
  */
 class Division extends Model {
 	protected $guarded = array();

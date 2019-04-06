@@ -19,6 +19,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_score_type whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_score_type whereName($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_score_type newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_score_type newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_score_type query()
  */
 class Vid_score_type extends \Eloquent {
 	protected $guarded = [ 'id' ];

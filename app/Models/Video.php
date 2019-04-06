@@ -54,6 +54,18 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video whereYear($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video whereYtCode($value)
  * @mixin \Eloquent
+ * @property int $status
+ * @property int $review_status
+ * @property int|null $reviewer_id
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Video_review_problems[] $problems
+ * @property-read \App\Models\User|null $reviewer
+ * @property-read \App\Models\User $teacher
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video whereReviewStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video whereReviewerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video whereStatus($value)
  */
 class Video extends Model {
 	protected $guarded = [ 'id', 'flag' ];
@@ -93,7 +105,6 @@ class Video extends Model {
         });
     }
 
-
 	public function setYtCodeAttribute($code)
 	{
 		if(preg_match('#(\.be/|/embed/|/v/|/watch\?v=)([A-Za-z0-9_-]{5,11})#', $code, $matches)) {
@@ -105,6 +116,14 @@ class Video extends Model {
 			}
 		}
 		$this->attributes['yt_code'] = $code;
+	}
+
+	public function url($timestamp = -1) {
+		$url = "https://youtu.be/" . $this->yt_code;
+		if($timestamp > -1) {
+			$url .= "?t=${timestamp}s";
+		}
+		return $url;
 	}
 
 	// Relationships

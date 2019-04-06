@@ -32,6 +32,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereWpId($value)
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Video_scores[] $video_scores
+ * @property \Illuminate\Support\Carbon|null $last_login
+ * @property-read \App\Models\PasswordResets $password_resets
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Video[] $reviewed_videos
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereLastLogin($value)
  */
 class User extends Authenticatable
 {

@@ -37,6 +37,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Frm_items whereUpdatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Frm_items whereUserId($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Frm_items newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Frm_items newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Frm_items query()
  */
 class Frm_items extends Model {
 	public $connection = 'mysql-wordpress';

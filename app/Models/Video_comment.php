@@ -26,6 +26,9 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property int $judge_id
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video_comment whereJudgeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video_comment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video_comment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video_comment query()
  */
 class Video_comment extends \Eloquent {
 	protected $guarded = [ 'id' ];

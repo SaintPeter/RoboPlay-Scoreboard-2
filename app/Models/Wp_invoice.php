@@ -52,6 +52,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_invoice whereVidDivisionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_invoice whereVideoCount($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_invoice newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_invoice newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_invoice query()
  */
 class Wp_invoice extends Model {
 	public $connection = 'mysql-wordpress';

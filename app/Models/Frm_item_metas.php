@@ -19,6 +19,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Frm_item_metas whereItemId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Frm_item_metas whereMetaValue($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Frm_item_metas newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Frm_item_metas newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Frm_item_metas query()
  */
 class Frm_item_metas extends Model {
 	public $connection = 'mysql-wordpress';

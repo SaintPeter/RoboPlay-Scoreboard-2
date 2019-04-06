@@ -33,6 +33,18 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Score_element whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Score_element whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property float $multiplier2
+ * @property int $enforce_limits
+ * @property string $score_map
+ * @property-read \App\Models\Challenge $challenge
+ * @property-read mixed $score_map_raw
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Score_element newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Score_element newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Score_element query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Score_element whereEnforceLimits($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Score_element whereMultiplier2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Score_element whereScoreMap($value)
  */
 class Score_element extends Model {
 	protected $fillable = [

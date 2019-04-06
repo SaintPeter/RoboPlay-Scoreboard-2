@@ -29,6 +29,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_user whereUserStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_user whereUserUrl($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_user newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_user newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_user query()
  */
 class Wp_user extends Model {
 	public $connection = 'mysql-wordpress';

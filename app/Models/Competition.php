@@ -35,6 +35,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Competition whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Competition whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Competition newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Competition newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Competition query()
  */
 class Competition extends Model {
 	protected $guarded = array();

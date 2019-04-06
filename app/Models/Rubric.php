@@ -33,6 +33,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Rubric whereVidScoreTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Rubric whereZero($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Rubric newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Rubric newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Rubric query()
  */
 class Rubric extends \Eloquent
 {

@@ -17,6 +17,9 @@ use Carbon\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schedule whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schedule whereStart($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schedule newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schedule newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schedule query()
  */
 class Schedule extends \Eloquent {
 	protected $fillable = [ 'start', 'end', 'display'];

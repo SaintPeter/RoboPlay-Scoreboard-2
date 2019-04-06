@@ -35,6 +35,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RandomList wherePopupFormat($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RandomList whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RandomList newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RandomList newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RandomList query()
  */
 class RandomList extends \Eloquent {
 	protected $fillable = [

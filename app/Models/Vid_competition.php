@@ -23,6 +23,11 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_competition whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_competition whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Rubric[] $rubric
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Video_scores[] $scores
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_competition newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_competition newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_competition query()
  */
 class Vid_competition extends Model {
 	protected $guarded = array();

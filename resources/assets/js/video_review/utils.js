@@ -1,3 +1,4 @@
+import React from 'react';
 
 export function formatTimestamp(time) {
   if(time) {

@@ -406,7 +406,7 @@ Route::middleware([ 'auth' ])->group( function() {
     Route::middleware([ 'teacherFilter' ])->group( function ()
     {
 	    Route::resource('teacher/teams', 'TeacherTeamsController', [ 'names' => 'teacher.teams']);
-	    Route::resource('teacher/videos', 'TeacherVideoController', ['names' => 'teacher.videos']);
+	    Route::resource('teacher/videos', 'TeacherVideoController', [ 'names' => 'teacher.videos']);
 
         Route::get('teacher/video/{video_id}/delete/{file_id}', [
             'as' => 'uploader.delete_file',
@@ -453,18 +453,24 @@ Route::middleware([ 'auth' ])->group( function() {
 			->where('any',".*");
 
 		/** @noinspection PhpParamsInspection */
-		Route::prefix('/api/')->name('api.')->group(function() {
-			Route::get('video_review/{year?}/review_status', ['as' => 'video_review.status', 'uses' => 'VideoReviewController@review_status']);
-			Route::get('video_review/{year}/get_next', ['as' => 'video_review.get_next', 'uses' => 'VideoReviewController@get_next']);
-			Route::get('video_review/{year}/fetch_video/{id}', ['as' => 'video_review.fetch_video', 'uses' => 'VideoReviewController@fetch_video']);
-			Route::post('video_review/save_problems/{id}', [ 'uses' => 'VideoReviewController@save_problems']);
-			Route::get('video_review/save_no_problems/{id}', [ 'uses' => 'VideoReviewController@save_no_problems']);
-			Route::get('video_review/reviewed_videos/{year}/{id}', [ 'uses' => 'VideoReviewController@reviewed_videos']);
+		Route::prefix('/api/video_review/')->name('api.')->group(function() {
+			Route::get('{year?}/review_status', ['as' => 'video_review.status', 'uses' => 'VideoReviewController@review_status']);
+			Route::get('{year}/get_next', ['as' => 'video_review.get_next', 'uses' => 'VideoReviewController@get_next']);
+			Route::get('{year}/fetch_video/{id}', ['as' => 'video_review.fetch_video', 'uses' => 'VideoReviewController@fetch_video']);
+			Route::get('save_no_problems/{id}', [ 'uses' => 'VideoReviewController@save_no_problems']);
+			Route::get('reviewed_videos/{year}/{id}', [ 'uses' => 'VideoReviewController@reviewed_videos']);
+			Route::get('resolve_problem/{video_id}/{problem_id}', [ 'uses' => 'VideoReviewController@resolve_problem']);
+			Route::post('save_problems/{id}', [ 'uses' => 'VideoReviewController@save_problems']);
 
 			// Admin Specific features
 			/** @noinspection PhpParamsInspection */
 			Route::middleware(['adminFilter'])->group( function() {
-				Route::get('video_review/all_reviewed_videos/{year}', [ 'uses' => 'VideoReviewController@all_reviewed_videos']);
+				Route::get('/send_dq/{video_id}', ['uses' => 'VideoReviewController@send_dq' ]);
+				Route::get('/set_review_status/{video}/{status}', ['uses' => 'VideoReviewController@set_review_status' ]);
+				Route::get('/all_reviewed_videos/{year}', [ 'uses' => 'VideoReviewController@all_reviewed_videos' ]);
+				Route::get('/dq_preview/{video_id}', function($video_id) {
+					return new App\Mail\VideoDisqualification($video_id);
+				});
 			});
 		});
 	});

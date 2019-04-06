@@ -23,6 +23,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RandomListElement whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RandomListElement whereRandomListId($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RandomListElement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RandomListElement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RandomListElement query()
  */
 class RandomListElement extends \Eloquent {
 	protected $fillable = [ 'd1', 'd2', 'd3', 'd4', 'd5', 'random_list_id'];

@@ -4,18 +4,30 @@ import {connect} from 'react-redux';
 import { Alert, Modal, Button, FormGroup, FormControl, ControlLabel, Checkbox } from 'react-bootstrap';
 import { formatTimestamp } from "../utils";
 
+const blankProblem = {
+  comment: '',
+  video_review_details_id: 0,
+  timestamp: -1,
+  written: false
+};
+
 class AddProblemModalApp extends Component {
 
   constructor(props) {
     super(props);
 
+    let problemData = Object.assign({}, blankProblem);
+    if(props.editMode) {
+      problemData = Object.assign({}, props.problemData, {written: false});
+    }
+
+
+
     this.state = {
-      problemData: {
-        comment: '',
-        video_review_details_id: 0,
-        timestamp: -1
-      },
-      saveTimestamp: false
+      problemData: problemData,
+      saveTimestamp: false,
+      error: false,
+      message: ''
     };
 
     this.interval = null;
@@ -24,16 +36,20 @@ class AddProblemModalApp extends Component {
   componentWillReceiveProps(nextProps) {
     // Reset Save Timestamp on show
     if(this.props.show != nextProps.show && nextProps.show) {
+      let problemData = Object.assign({}, blankProblem);
+      if(nextProps.editMode) {
+        problemData = Object.assign({}, nextProps.problemData, {written: false});
+      }
+
+      problemData.timestamp = nextProps.staticTimeStamp;
+
       this.setState({
-        error: false,
-        message: '',
+        problemData: problemData,
         saveTimestamp: false,
-        problemData: {
-          comment: '',
-          video_review_details_id: 0,
-          timestamp: -1
+        error: false,
+        message: ''
         }
-      });
+      );
     }
   }
 
@@ -80,7 +96,7 @@ class AddProblemModalApp extends Component {
     return <Modal show={this.props.show} onHide={(e) => this.props.hideHandler(e)}>
       <Modal.Header>
         <Modal.Title>
-          Add Problem
+          {this.props.editMode ? 'Edit' : 'Add'} Problem
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -95,18 +111,25 @@ class AddProblemModalApp extends Component {
         <form>
           <FormGroup>
             <ControlLabel>Type</ControlLabel>
-            <FormControl componentClass="select" onChange={(e) => this.changeHandler(e, 'video_review_details_id')}>
+            <FormControl
+              componentClass="select"
+              value={this.state.problemData.video_review_details_id}
+              onChange={(e) => this.changeHandler(e, 'video_review_details_id')}>
               {this.problemList()}
             </FormControl>
           </FormGroup>
           <FormGroup>
-            <Checkbox onChange={e => this.timestampToggle(e)} value={true}>
+            <Checkbox onChange={e => this.timestampToggle(e)} value={true} checked={this.state.saveTimestamp}>
               Save Timestamp &mdash; <span>{formatTimestamp(this.props.timestamp)}</span>
             </Checkbox>
           </FormGroup>
           <FormGroup>
             <ControlLabel>Comment</ControlLabel>
-            <FormControl componentClass="textarea" onChange={(e) => this.changeHandler(e, 'comment')} />
+            <FormControl
+              componentClass="textarea"
+              onChange={(e) => this.changeHandler(e, 'comment')}
+              value={this.state.problemData.comment}
+            />
           </FormGroup>
         </form>
       </Modal.Body>

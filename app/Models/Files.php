@@ -24,6 +24,11 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Files whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Files whereVideoId($value)
  * @mixin \Eloquent
+ * @property-read mixed $download_url
+ * @property-read mixed $viewer_url
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Files newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Files newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Files query()
  */
 class Files extends \Eloquent {
 	protected $guarded = [ 'id' ];

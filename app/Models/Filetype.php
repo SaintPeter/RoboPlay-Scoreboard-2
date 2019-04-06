@@ -24,6 +24,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filetype whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filetype whereViewer($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filetype newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filetype newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filetype query()
  */
 class Filetype extends \Eloquent {
 	protected $guarded = ['id'];

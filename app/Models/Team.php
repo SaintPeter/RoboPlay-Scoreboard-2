@@ -30,6 +30,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Team whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Team whereYear($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\User $teacher
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Team newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Team newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Team query()
  */
 class Team extends Model {
 	protected $guarded = array();

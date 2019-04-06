@@ -3,12 +3,13 @@ import {connect} from 'react-redux';
 
 import YouTube from 'react-youtube';
 import { Row, Col, Panel, Button } from 'react-bootstrap';
+import update from 'immutability-helper';
 
 import {setActiveYear} from "../reducers/activeYear";
 import FileList  from "./FileList";
 import AddProblemModal from "./AddProblemModal";
 import ProblemList from "./ProblemList";
-import PriorProblemList from "./PriorProblemList";
+import ReviewDqModal from "./ReviewDqModal";
 
 class VideoReviewApp extends Component {
   constructor(props) {
@@ -16,12 +17,17 @@ class VideoReviewApp extends Component {
 
     this.state = {
       loading: true,
-      video: {},
+      video: {
+        problems: []
+      },
       error: false,
       message: "",
       showProblemModal: false,
-      problems: [],
+      editMode: false,
+      editIndex: -1,
       timestamp: 0,
+      staticTimeStamp: 0,
+      reviewDqModalVisible: false,
     };
 
     this.timePoll = null;
@@ -47,6 +53,12 @@ class VideoReviewApp extends Component {
           this.setState({error: true, message: data.message});
           console.log("Video Response had and error, oh noes!\n" + data.message)
         } else {
+          if(data.hasOwnProperty('problems') && Array.isArray(data.problems)) {
+            data.problems = data.problems.map((item) => {
+              item['written'] = true;
+              return item;
+            })
+          }
           this.setState({ video: data });
         }
       })
@@ -56,8 +68,60 @@ class VideoReviewApp extends Component {
   }
 
   showProblemModal(e) {
-    e ? e.preventDefault() : null;
-    this.setState({showProblemModal: true})
+    //e ? e.preventDefault() : null;
+    this.setState({
+      editMode: false,
+      editIndex: -1,
+      showProblemModal: true,
+      staticTimeStamp: this.state.timestamp
+    });
+  }
+
+  editProblemHandler(index) {
+    this.setState({
+      editMode: true,
+      editIndex: index,
+      showProblemModal: true,
+      staticTimeStamp: 0
+    });
+  }
+
+  resolveProblemHandler(e, index) {
+    e.stopPropagation();
+    const problemId = this.state.video.problems[index].id;
+    console.log(`Resolving Problem ${problemId}, Video Id: ${this.state.video.id}`);
+
+    window.axios.get(`/api/video_review/resolve_problem/${this.state.video.id}/${problemId}`)
+      .then((response) => {
+        console.log('Problem Resolved');
+        this.setState(update(this.state, {
+          video: {
+            problems: {
+              [index]: { $merge: { resolved: 1, written: true } }
+            }
+          }
+        }));
+      })
+      .catch((err) => {
+        console.log('Error Resolving Problem: ' + err);
+      })
+  }
+
+  cancelHandler() {
+    console.log("Canceled Review");
+    this.props.history.push(`/${this.props.activeYear}/`)
+  }
+
+  deleteHandler(e, index) {
+    e.stopPropagation();
+    const newState = {
+      video: {
+        problems: {
+          $splice: [[index,1]]
+        }
+      }
+    };
+    this.setState(update(this.state,newState));
   }
 
   addProblemHandler(data, saveTimestamp) {
@@ -65,11 +129,33 @@ class VideoReviewApp extends Component {
     data['timestamp'] = saveTimestamp ? this.state.timestamp : -1;
     data['comment'] = data.hasOwnProperty('comment') ? data['comment'] : '';
 
-    this.setState({problems: this.state.problems.concat(data)})
+    let updateState = {};
+    if(data.hasOwnProperty('id')) {
+      const findIndex = this.state.video.problems.findIndex((item) => {
+        return item.id == data.id;
+      });
+      if(findIndex > -1) {
+        updateState = {
+          video: {
+            problems: { $splice: [[findIndex, 1, data]] }
+          }
+        };
+      } else {
+        console.log(`Error: Unable to find ID '${data.id}' of existing problem`)
+      }
+    } else {
+      updateState = {
+        video: {
+          problems: { $push: [data] }
+        }
+      }
+    }
+    const newState = update(this.state, updateState);
+    this.setState(newState);
   }
 
   changeTimeHandler(e, time, thisRef) {
-    e ? e.preventDefault() : null;
+    e ? e.stopPropagation() : null;
     if(thisRef.playerReference) {
       thisRef.playerReference.seekTo(time)
     }
@@ -96,25 +182,46 @@ class VideoReviewApp extends Component {
     }
   }
 
+  // Disqualification Modal
+  dqHide = (e) => {
+    this.setState({ reviewDqModalVisible: false })
+  };
+
+  dqShow = (e) => {
+    this.setState({ reviewDqModalVisible: true })
+  };
+
+  dqSend = (e) => {
+
+  };
+
+  setVideoState = (newState) => {
+    console.log(`Setting Video ${this.state.video.id} to ${newState}`);
+    window.axios.get(`/api/video_review/set_review_status/${this.state.video.id}/${newState}`)
+      .then((response) => {
+        console.log(`Video ${this.state.video.id} updated to ${newState}`);
+        this.props.history.push(`/${this.props.activeYear}/`)
+      })
+      .catch((err) => {
+        console.error("Video State Set Error: " , err);
+      })
+  };
+
   componentWillUnmount() {
     clearInterval(this.timePoll);
   }
 
-  cancelHandler() {
-    console.log("Canceled Review");
-    this.props.history.push(`/${this.props.activeYear}/`)
-  }
-
-  deleteHandler(index) {
-    this.setState({
-      problems: this.state.problems.filter((_,i) => i !== index)
-    })
-  }
-
   saveProblemsHandler() {
-    if(this.state.problems.length) {
-      console.log("Save Problems");
-      window.axios.post(`/api/video_review/save_problems/${this.props.match.params.id}`,{ problems: this.state.problems })
+    const unwrittenCount = this.state.video.problems.reduce((carry, problem) => {
+      carry += (problem.hasOwnProperty('written') && !problem.written) ? 1 : 0;
+      return carry;
+    }, 0);
+    if(unwrittenCount) {
+      console.log(`Save unwritten ${unwrittenCount} Problems`);
+      const data = this.state.video.problems.filter((problem) => {
+        return !problem.written;
+      });
+      window.axios.post(`/api/video_review/save_problems/${this.props.match.params.id}`,{problems: data})
         .then((result) => {
           console.log("Problems for video saved");
           this.props.history.push(`/${this.props.activeYear}/`)
@@ -130,6 +237,12 @@ class VideoReviewApp extends Component {
   }
 
   render() {
+    const priorProblemCount = this.state.video.hasOwnProperty('problems') ? this.state.video.problems.length : 0;
+    let problemData = {};
+    if(this.state.editMode) {
+      problemData = this.state.video.problems[this.state.editIndex];
+    }
+
     if(this.state.loading) {
       return <Row>
         <Col xs={12} key={"top_level_column"}>
@@ -154,7 +267,9 @@ class VideoReviewApp extends Component {
             show={this.state.showProblemModal}
             hideHandler={(e) => this.hideProblemModal(e)}
             addProblemHandler={(data, saveTimestamp) => this.addProblemHandler(data, saveTimestamp)}
-            timestamp={this.state.timestamp}
+            timestamp={this.state.staticTimeStamp}
+            problemData={problemData}
+            editMode={this.state.editMode}
           />
           <Panel key={"video_viewer"}>
             <Panel.Heading key={"video_header"}>
@@ -184,17 +299,72 @@ class VideoReviewApp extends Component {
           <FileList files={this.state.video.files}/>
         </Col>
         <Col xs={12} md={6} key={"problemlist_col"}>
-          <PriorProblemList
-            problems={this.state.video.problems}
-            changeTimeHandler={(e, time) => this.changeTimeHandler(e, time, this)}
-          />
           <ProblemList
-            problems={this.state.problems}
+            video={this.state.video}
+            problems={this.state.video.problems}
             changeTimeHandler={(e, time) => this.changeTimeHandler(e, time, this)}
             cancelHandler={() => this.cancelHandler()}
             saveHandler={() => this.saveProblemsHandler()}
-            deleteHandler={(i) => this.deleteHandler(i)}
+            showProblemModal={() => this.showProblemModal()}
+            editHandler={(i) => this.editProblemHandler(i)}
+            resolveProblemHandler={(e, i) => this.resolveProblemHandler(e, i)}
+            deleteHandler={(e, i) => this.deleteHandler(e, i)}
           />
+        </Col>
+        <Col xs={6} md={3} key={"actions"} >
+          { isAdmin ?
+            <ReviewDqModal
+              video={this.state.video}
+              visible={this.state.reviewDqModalVisible}
+              onHide={this.dqHide}
+              onSend={this.dqSend}
+            />
+            :
+              null
+          }
+          { isAdmin ?
+            <Panel>
+              <Panel.Heading>
+                <Panel.Title>Actions</Panel.Title>
+              </Panel.Heading>
+              <Panel.Body>
+                <Button
+                  bsStyle="info"
+                  disabled={this.state.video.review_status === 0}
+                  onClick={(e) => this.setVideoState(0)}
+                  block
+                >
+                  Move to Unreviewed
+                </Button><br />
+                <Button
+                  bsStyle="warning"
+                  disabled={this.state.video.review_status === 1}
+                  onClick={(e) => this.setVideoState(0)}
+                  block
+                >
+                  Move to Reviewed
+                </Button><br />
+                <Button
+                  bsStyle="danger"
+                  onClick={this.dqShow}
+                  disabled={this.state.video.review_status === 2}
+                  block
+                >
+                  Send Disqualification (review)
+                </Button><br />
+                <Button
+                  bsStyle="success"
+                  disabled={this.state.video.review_status === 3}
+                  onClick={(e) => this.setVideoState(3)}
+                  block
+                >
+                  Move to Passed
+                </Button>
+              </Panel.Body>
+            </Panel>
+            :
+              null
+          }
         </Col>
       </Row>
     }

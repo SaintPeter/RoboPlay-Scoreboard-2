@@ -44,6 +44,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_invoice_table whereTotal($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_invoice_table whereUserId($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_invoice_table newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_invoice_table newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_invoice_table query()
  */
 class Wp_invoice_table extends Model {
 	public $connection = 'mysql-wordpress';

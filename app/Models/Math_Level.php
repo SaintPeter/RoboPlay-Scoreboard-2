@@ -17,6 +17,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Math_Level whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Math_Level whereParent($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Math_Level newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Math_Level newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Math_Level query()
  */
 class Math_Level extends \Eloquent {
     protected $table = "math_level";

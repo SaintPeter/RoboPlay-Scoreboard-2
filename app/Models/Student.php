@@ -46,6 +46,11 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Student whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Student whereYear($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team[] $teams
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Video[] $videos
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Student newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Student newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Student query()
  */
 class Student extends \Eloquent {
 	protected $table = 'students';

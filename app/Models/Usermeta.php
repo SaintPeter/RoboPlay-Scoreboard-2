@@ -17,6 +17,9 @@ use Auth;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Usermeta whereUmetaId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Usermeta whereUserId($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Usermeta newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Usermeta newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Usermeta query()
  */
 class Usermeta extends Model {
 	public $connection = 'mysql-wordpress';

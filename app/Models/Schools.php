@@ -18,6 +18,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schools whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schools whereSchoolId($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schools newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schools newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schools query()
  */
 class Schools extends Model {
 	public $connection = 'mysql-wordpress';

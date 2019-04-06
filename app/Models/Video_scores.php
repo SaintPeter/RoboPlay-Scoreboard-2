@@ -56,6 +56,9 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property int $judge_id
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video_scores whereJudgeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video_scores newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video_scores newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video_scores query()
  */
 class Video_scores extends \Eloquent {
 	//protected $with = [ 'type' ]; // 'video',

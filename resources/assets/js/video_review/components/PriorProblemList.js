@@ -14,7 +14,7 @@ class PriorProblemListApp extends Component {
   formatTime(problem) {
     if(problem.hasOwnProperty('timestamp') && problem.timestamp >= 0) {
       return (
-        <a onClick={(e) => this.props.changeTimeHandler(e, problem.timestamp)}
+        <a onClick={(e) => VideoReviewApp.changeTimeHandler(e, problem.timestamp)}
            className="pull-right"
            title="Go to Timestamp"
            style={{cursor: "pointer"}}
@@ -37,7 +37,7 @@ class PriorProblemListApp extends Component {
           problems={this.props.problems}
           deleteHandler={this.props.deleteHandler}
           resolveHandler={this.props.resolveHandler}
-          changeTimeHandler={this.props.changeTimeHandler}
+          changeTimeHandler={VideoReviewApp.changeTimeHandler}
         />
       </Panel>
     } else {
@@ -53,7 +53,7 @@ const DetailList = (props) => {
         return <li className="list-group-item clearfix" key={index}>
           <Row>
             <Col xs={10}>
-              <h4 style={{marginTop: 0, marginBottom: 0}}>{lookupDetailType(problem)}{formatTime(problem, props.changeTimeHandler)}</h4>
+              <h4 style={{marginTop: 0, marginBottom: 0}}>{lookupDetailType(problem)}{formatTime(problem, VideoReviewApp.changeTimeHandler)}</h4>
               {problem.comment}
             </Col>
             <Col xs={1} className="btn" onClick={props.resolveHandler} title="Mark Issue Resolved">

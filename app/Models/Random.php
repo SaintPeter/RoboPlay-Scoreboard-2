@@ -34,6 +34,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Random whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Random whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Random newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Random newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Random query()
  */
 class Random extends \Eloquent {
 	protected $guarded = [ 'id' ];

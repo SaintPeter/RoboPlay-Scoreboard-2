@@ -32,6 +32,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Challenge whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Challenge whereYear($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Challenge newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Challenge newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Challenge query()
  */
 class Challenge extends Model {
 	protected $guarded = array();

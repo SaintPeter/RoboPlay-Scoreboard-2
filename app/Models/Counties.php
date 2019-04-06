@@ -15,6 +15,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Counties whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Counties whereState($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Counties newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Counties newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Counties query()
  */
 class Counties extends Model {
 	public $connection = 'mysql-wordpress';

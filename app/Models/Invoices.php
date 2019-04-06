@@ -40,6 +40,10 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property int $school_id
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Invoices whereSchoolId($value)
+ * @property-read \App\Models\User $teacher
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Invoices newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Invoices newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Invoices query()
  */
 class Invoices extends \Eloquent {
 	protected $fillable = ['remote_id', 'paid', 'notes', 'user_id', 'year'];

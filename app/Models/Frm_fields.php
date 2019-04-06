@@ -32,6 +32,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Frm_fields whereRequired($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Frm_fields whereType($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Frm_fields newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Frm_fields newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Frm_fields query()
  */
 class Frm_fields extends Model {
 	public $connection = 'mysql-wordpress';

@@ -20,6 +20,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_invoice_data whereInvoiceNo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_invoice_data whereRowId($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_invoice_data newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_invoice_data newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_invoice_data query()
  */
 class Wp_invoice_data extends Model {
 	public $connection = 'mysql-wordpress';

@@ -19,6 +19,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Districts whereDistrictId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Districts whereName($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Districts newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Districts newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Districts query()
  */
 class Districts extends Model {
 public $connection = 'mysql-wordpress';
