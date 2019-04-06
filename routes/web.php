@@ -179,6 +179,7 @@ Route::middleware([ 'auth' ])->group( function() {
 
         //  Manage Video Competitions
         Route::resource('vid_competitions', 'Vid_competitionsController');
+        Route::get('vid_competitions/user_list/{filter}', ['uses' => 'Vid_competitionsController@user_list']);
         Route::resource('vid_divisions', 'Vid_divisionsController');
 
         Route::resource('teams', 'TeamsController');

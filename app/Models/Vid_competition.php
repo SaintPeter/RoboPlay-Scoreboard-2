@@ -59,6 +59,10 @@ class Vid_competition extends Model {
 		return $this->hasManyThrough( 'App\Models\Video_scores','App\Models\Vid_division', 'competition_id','vid_division_id','id', 'id' );
 	}
 
+	public function user() {
+		return $this->belongsTo(User::class);
+	}
+
 	public function is_active() {
 		if(Carbon::now()->between($this->event_start, $this->event_end)) {
 			return true;

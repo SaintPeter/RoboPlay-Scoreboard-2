@@ -8,6 +8,7 @@
 	<thead>
 		<tr>
 			<th>Name</th>
+            <th>Video Coordinator</th>
 			<th>Start Date</th>
 			<th>End Date</th>
 			<th>Actions</th>
@@ -19,6 +20,13 @@
 			@foreach ($vid_competitions as $vid_competition)
 				<tr>
 					<td>{{{ $vid_competition->name }}}</td>
+                    <td>
+                        @if($vid_competition->user)
+                            <a href="mailto:{{ $vid_competition->user->email }}">{{ $vid_competition->user->name }}</a>
+                        @else
+                            None
+                        @endif
+                    </td>
 					<td>{{{ $vid_competition->event_start->toFormattedDateString() }}}</td>
 					<td>{{{ $vid_competition->event_end->toFormattedDateString() }}}</td>
 	                <td>{{ link_to_route('vid_competitions.edit', 'Edit', array($vid_competition->id), array('class' => 'btn btn-info btn-margin')) }}

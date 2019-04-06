@@ -6,8 +6,8 @@ use View;
 use Validator;
 use Illuminate\Http\Request;
 
-use App\ {
-    Models\Vid_competition
+use App\Models\ {
+    Vid_competition, User
 };
 class Vid_competitionsController extends Controller {
 
@@ -59,6 +59,8 @@ class Vid_competitionsController extends Controller {
 	public function store(Request $req)
 	{
 		$input = $req->all();
+		$input['user_id'] = $input['user_id'] ? $input['user_id'] : NULL;
+
 		$validation = Validator::make($input, Vid_competition::$rules);
 
 		if ($validation->passes())
@@ -99,12 +101,15 @@ class Vid_competitionsController extends Controller {
 	{
 		//Breadcrumbs::addCrumb('Edit Competition', 'edit');
 		View::share('title', 'Edit Competition');
-		$vid_competition = $this->vid_competition->find($id);
+		$vid_competition = $this->vid_competition->with('user')->find($id);
 
 		if (is_null($vid_competition))
 		{
 			return redirect()->route('vid_competitions.index');
 		}
+
+		$vid_competition->event_start->setToStringFormat('Y-m-d');
+		$vid_competition->event_end->setToStringFormat('Y-m-d');
 
 		return View::make('vid_competitions.edit', compact('vid_competition'));
 	}
@@ -119,6 +124,8 @@ class Vid_competitionsController extends Controller {
 	public function update(Request $req, $id)
 	{
 		$input = array_except($req->all(), '_method');
+		$input['user_id'] = $input['user_id'] ? $input['user_id'] : NULL;
+
 		$validation = Validator::make($input, Vid_competition::$rules);
 
 		if ($validation->passes())
@@ -146,6 +153,17 @@ class Vid_competitionsController extends Controller {
 		$this->vid_competition->find($id)->delete();
 
 		return redirect()->route('vid_competitions.index');
+	}
+
+	public function user_list($filter) {
+		$filter = "%$filter%";
+		$users = User::where('name','like',$filter)
+			->orWhere('email','like',$filter)
+			->get()
+			->map(function($user) {
+				return $user->only(['id', 'name', 'email']);
+			});
+		return response()->json($users);
 	}
 
 }

@@ -1,11 +1,7 @@
 @extends('layouts.scaffold')
 
 @section('script')
-<script>
-	 $(function() {
-		$( ".date" ).datepicker({ dateFormat: "yy-mm-dd" });
-	});
-</script>
+    @include('vid_competitions.js')
 @endsection
 
 @section('main')
@@ -14,6 +10,25 @@
 	    {!! Form::label('name', 'Name:')  !!}
 	    {!! Form::text('name', null, [ 'class'=>'form-control col-md-4' ])  !!}
 	</div>
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label for="filter">Video Coordinator</label>
+            <i id="spinner" class="fa fa-spinner fa-pulse fa-fw" style="display: none;"></i>
+            <input placeholder="type to filter" id="filter" class="form-control" />
+        </div>
+
+        <div class="form-group col-md-12">
+            <select id="user_list" name="user_id" class="form-control">
+                <option value="">-- None --</option>
+                @if($vid_competition->user))
+                    <option value="{{ $vid_competition->user->id }}" selected>
+                        {{ $vid_competition->user->name }} ({{ $vid_competition->user->email }})
+                    </option>
+                @endif
+            </select>
+        </div>
+    </div>
 
 	<div class="form-group">
 	    {!! Form::label('event_start', 'Start Date')  !!}
