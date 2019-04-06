@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\VideoReviewNotification;
 use DB;
 use Mail;
 use View;
@@ -129,6 +130,15 @@ class VideoReviewController extends Controller
 				    'reviewer_id'=> $req->user()->id
 			    ]
 		    );
+	    }
+
+    	// Send message to vid coordinator
+        $coordinator = Video::with('division','division.competition','division.competition.user')
+		    ->find($video_id)
+	        ->division->competition->user;
+    	if($coordinator) {
+    		Mail::to($coordinator)
+			    ->queue(new VideoReviewNotification($video_id));
 	    }
 
     	return response()->json($stats);

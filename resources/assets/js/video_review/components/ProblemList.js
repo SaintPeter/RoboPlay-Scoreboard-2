@@ -32,10 +32,14 @@ class ProblemListApp extends Component {
       if(stats.written != this.props.problems.length) {
         if(stats.resolved == this.props.problems.length) {
           if(this.props.video.review_status != 1) {
-            actions = <Button bsStyle="success" onClick={this.props.saveHandler}>Save No Problems Found</Button>
+            actions = <Button bsStyle="success" onClick={this.props.saveHandler}>Move to Passed</Button>
           }
         } else {
           actions = <Button bsStyle="warning" onClick={this.props.saveHandler}>Save Problems</Button>
+        }
+      } else {
+        if(stats.resolved === this.props.problems.length && this.props.video.review_status != 3) {
+          actions = <Button bsStyle="success" onClick={this.props.saveHandler}>Move to Passed</Button>
         }
       }
 

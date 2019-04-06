@@ -10,18 +10,19 @@ use Carbon\Carbon;
 use App\Helpers\Roles;
 use Illuminate\Http\Request;
 
+use App\Mail\VideoReport;
+
 use App\Enums\ {
 	VideoType,
 	VideoFlag
 };
 
-use App\ {
-    Models\Vid_competition,
-    Models\Video_comment,
-    Models\Video_scores,
-    Models\Video,
-    Models\Vid_score_type
-};
+use App\{
+	Models\Vid_competition,
+	Models\Video_comment,
+	Models\Video_scores,
+	Models\Video,
+	Models\Vid_score_type};
 
 class ScoreVideosController extends Controller {
 	public $group_names = [ VideoType::General => "General",
@@ -454,7 +455,9 @@ class ScoreVideosController extends Controller {
 	public function update(Request $req, $video_id)
 	{
 		$input = $req->all();
-		$video = Video::find($video_id);
+		$video = Video::with('division','division.competition','division.competition.user')
+			->find($video_id);
+
 
 		foreach($input['scores'] as $type => $score) {
 			$score = $this->calculate_score($type, $score);
@@ -477,21 +480,15 @@ class ScoreVideosController extends Controller {
 			$video->flag = VideoFlag::Review;
 			$video->save();
 
-			//try {
-                $sent = Mail::send('emails.video_report' ,
-                     [ 'video' => $video, 'comment' => $video_comment['comment'], 'year' => $video->year ],
-                     function($message) use ($video) {
-                        $message->from('rex.schrader@gmail.com', 'RoboPlay Scoreboard');
-                        $message->to('rex.schrader@gmail.com', 'RoboPlay Scoreboard');
-                        $message->subject('Video Reported - ' . $video->name);
-                        $message->sender('rex.schrader@gmail.com');
-                    return $message;
-            });
-            //}
-            //catch (\Exception $e)
-            //{
-            //    ddd($e->getMessage());
-           // }
+			$coordinator = $video->division->competition->user;
+
+			Mail::to($coordinator)
+				->queue(
+					new VideoReport([
+						'video' => $video,
+						'comment' => $video_comment['comment']
+					])
+				);
 		}
 
 		return redirect()->route('video.judge.index');
