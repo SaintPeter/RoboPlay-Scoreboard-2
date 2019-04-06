@@ -93,7 +93,6 @@
     <h2>Video Review</h2>
     <ul data-role="listview" data-inset="true">
         <li>{{ link_to_route('video_review', 'Review Videos') }}</li>
-        <li><a href="{{ asset('docs/Video_Judge_Instructions_2016.pdf') }}" target="_blank"><i class="fa fa-video-camera"></i>&nbsp;Video Review Guide</a></li>
     </ul>
 @endif
 
