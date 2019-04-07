@@ -10,11 +10,7 @@ use App\Helpers\Roles;
 use Illuminate\Http\Request;
 use Uploader;
 
-use App\ {
-    Models\Filetype,
-    Models\Files,
-    Models\Video
-};
+use App\{Enums\VideoCheckStatus, Enums\VideoFlag, Models\Filetype, Models\Files, Models\Video};
 /**
  * Based on:
  * Simple Ajax Uploader
@@ -35,9 +31,6 @@ class UploadController extends Controller {
 
 	public function index($video_id)
 	{
-		//Breadcrumbs::addCrumb('Manage Teams and Videos', 'teacher');
-		//Breadcrumbs::addCrumb('Show Video', $video_id);
-		//Breadcrumbs::addCrumb('Upload Files');
 		View::share('title', 'Upload Files');
 
 		$filetype_list = Filetype::all();
@@ -76,7 +69,7 @@ class UploadController extends Controller {
 		if (isset($_REQUEST['progresskey']))
 		  $status = apc_fetch('upload_'.$_REQUEST['progresskey']);
 		else
-		  exit(json_encode(array('success' => false)));
+		  return response()->json(['success' => false]);
 
 		$pct = 0;
 		$size = 0;
@@ -90,7 +83,7 @@ class UploadController extends Controller {
 		  }
 		}
 
-		return json_encode(array('success' => true, 'pct' => $pct, 'size' => $size));
+		return response()->json(['success' => true, 'pct' => $pct, 'size' => $size]);
 	}
 
 	public function handler($video_id)
@@ -108,7 +101,7 @@ class UploadController extends Controller {
 		if(!is_dir($file_dir)) {
 			mkdir($file_dir, 0774);
 			if (!is_dir($file_dir)) {
-				echo json_encode(array('success' => '1', 'msg' => 'Could not create upload directory'));
+				return response()->json(['success' => '1', 'msg' => 'Could not create upload directory']);
 			}
 		}
 
@@ -117,7 +110,7 @@ class UploadController extends Controller {
 
 		// if failed, return
 		if (!$result) {
-			return json_encode(array('success' => '2', 'msg' => $Upload->getErrorMsg()));
+			return response()->json(['success' => '2', 'msg' => $Upload->getErrorMsg()]);
 		}
 		// else, process uploaded file
 		else {
@@ -136,7 +129,7 @@ class UploadController extends Controller {
 //						return json_encode(array('success' => '3', 'msg' => 'Invalid Video'));
 //					}
 					if (filesize($path) <= 10000000) {
-						return json_encode(array('success' => '3', 'msg' => 'File Too Small.  Videos must be at least 15MB.'));
+						return response()->json(['success' => '3', 'msg' => 'File Too Small.  Videos must be at least 10MB.']);
 					}
 				}
 			} else {
@@ -148,20 +141,20 @@ class UploadController extends Controller {
 									'filename' => $file,
 									'desc' => '' ] );
 
+			$video = Video::find($video_id);
+			$video->status = VideoCheckStatus::Untested;
+
 			if($filetype->type == "video") {
-				$video = Video::find($video_id);
 				$video->has_vid = true;
-				$video->save();
 			}
 
 			if($filetype->type == "code") {
-				$video = Video::find($video_id);
 				$video->has_code = true;
-				$video->save();
 			}
+			$video->save();
 
 			// send response
-			return json_encode(array('success' => '0', 'msg' => 'Success', 'file' => $file));
+			return response()->json(['success' => '0', 'msg' => 'Success', 'file' => $file]);
 		}
 	}
 
@@ -170,11 +163,18 @@ class UploadController extends Controller {
 	    // Make sure they have permission to delete_file
 	    $video = Video::findorfail($video_id);
 	    if(!(Roles::isAdmin() OR $video->teacher_id == Auth::user()->id)) {
-	        return redirect()->to(URL::previous())->with('error', 'You do not have permission to delete this file.');;
+	        return redirect()->to(URL::previous())->with('error', 'You do not have permission to delete this file.');
 	    }
 
 		$file = Files::find($file_id);
 		if($file) {
+			if($file->filetype->type == 'video') {
+				$video->has_video = false;
+			}
+
+			$video->status = VideoCheckStatus::Untested;
+			$video->save();
+
 			$file->delete();
 		}
 		return redirect()->to(URL::previous());
@@ -202,9 +202,13 @@ class UploadController extends Controller {
 			                         'msg' => 'Success',
 			                         'filename' => $file->filename ] );
 			} else {
+				$video->status = VideoCheckStatus::Untested;
+				$video->save();
 			    return Response::json( ['success' => 0, 'msg' => 'Error: Renaming Error'] );
 			}
 		}
+		$video->status = VideoCheckStatus::Untested;
+		$video->save();
 		return Response::json( ['success' => 0, 'msg' => 'Error: Cannot Find File'] );
 	}
 }
