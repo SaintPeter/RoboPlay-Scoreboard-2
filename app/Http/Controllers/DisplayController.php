@@ -8,23 +8,26 @@ use Auth;
 use Cache;
 use Session;
 use Response;
+use \Carbon\Carbon;
 use App\Helpers\Roles;
-use App\Enums\VideoFlag;
 use Illuminate\Http\Request;
 
-use App\ {
-    Models\Video,
-    Models\Vid_competition,
-    Models\Competition,
-    Models\Score_run,
-    Models\CompYear,
-    Models\Team,
-    Models\Challenge,
-    Models\Schedule,
-    Models\Division
+use App\Enums\VideoFlag;
+use App\Enums\VideoReviewStatus;
+
+use App\Models\ {
+	Video,
+	Vid_competition,
+	Competition,
+	Score_run,
+	CompYear,
+	Team,
+	Challenge,
+	Schedule,
+	Division
 };
 
-use \Carbon\Carbon;
+
 
 class DisplayController extends Controller {
 
@@ -783,6 +786,7 @@ class DisplayController extends Controller {
 
 		$video_query = Video::with('school', 'vid_division', 'awards')
 		                   ->where('flag', VideoFlag::Normal)
+							->where('review_status', VideoReviewStatus::Passed)
 		                   ->whereIn('vid_division_id', $divs);
 		if($winners) {
 		    $video_query = $video_query->has('awards');
