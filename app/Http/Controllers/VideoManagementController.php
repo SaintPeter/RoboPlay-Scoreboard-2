@@ -16,9 +16,7 @@ use App\Enums\ {
 	UserTypes
 };
 
-use App\Models\{
-	Rubric, User, Video, Video_comment, Video_scores, Vid_score_type, Vid_competition
-};
+use App\Models\{CompYear, Rubric, User, Video, Video_comment, Video_scores, Vid_score_type, Vid_competition};
 
 class VideoManagementController extends Controller {
 
@@ -27,6 +25,7 @@ class VideoManagementController extends Controller {
 		//Breadcrumbs::addCrumb('Manage Scores');
 
 		$year = is_null($year) ? Session::get('year', false) : intval($year);
+		$year = CompYear::yearOrMostRecent($year);
 
 		$scores_query = Video_scores::with('division', 'division.competition', 'user', 'video')
 							->orderBy('total', 'desc');
@@ -293,6 +292,8 @@ class VideoManagementController extends Controller {
 	}
 
 	public function graph_video_scoring($year = null) {
+		app('debugbar')->disable();
+
 	    $year = is_null($year) ? Session::get('year', false) : intval($year);
 
 	    // Get the competition start/end dates
@@ -351,7 +352,7 @@ class VideoManagementController extends Controller {
         $graph->SetScale('textlin');
 
         // Setup a title for the graph
-        $graph->title->Set("Video Scoring - $delta_day");
+        $graph->title->Set("$year Video Scoring - $delta_day");
         $graph->title->SetFont(FF_ARIAL,FS_BOLD,14);
         $graph->title->SetMargin(15);
 
@@ -391,6 +392,8 @@ class VideoManagementController extends Controller {
 	}
 
 	public function graph_judge_scoring($year = 2015) {
+		app('debugbar')->disable();
+
         $year = intval($year);
 
         // Get the competition start/end dates
@@ -478,7 +481,7 @@ class VideoManagementController extends Controller {
         $graph->SetScale('textlin');
 
         // Setup a title for the graph
-        $graph->title->Set("User Performace - $delta_day");
+        $graph->title->Set("$year User Performance - $delta_day");
         $graph->title->SetFont(FF_ARIAL,FS_BOLD,14);
         $graph->title->SetMargin(15);
 
