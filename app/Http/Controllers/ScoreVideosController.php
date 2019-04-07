@@ -12,10 +12,7 @@ use Illuminate\Http\Request;
 
 use App\Mail\VideoReport;
 
-use App\Enums\ {
-	VideoType,
-	VideoFlag
-};
+use App\Enums\{VideoReviewStatus, VideoType, VideoFlag};
 
 use App\{
 	Models\Vid_competition,
@@ -113,9 +110,20 @@ class ScoreVideosController extends Controller {
 		$scored_count[VideoType::General] /= $general_divisor;
 
 		if(count($div_list) > 0) {
-			$total_count[VideoType::General] = Video::whereIn('vid_division_id', $div_list)->where('flag', VideoFlag::Normal)->count();
-			$total_count[VideoType::Custom] = Video::whereIn('vid_division_id', $div_list)->where('has_custom', true)->where('flag', VideoFlag::Normal)->count();
-			$total_count[VideoType::Compute] = Video::whereIn('vid_division_id', $div_list)->where('has_code', true)->where('flag', VideoFlag::Normal)->count();
+			$total_count[VideoType::General] = Video::whereIn('vid_division_id', $div_list)
+				->where('flag', VideoFlag::Normal)
+				->where('review_status', VideoReviewStatus::Passed)
+				->count();
+			$total_count[VideoType::Custom] = Video::whereIn('vid_division_id', $div_list)
+				->where('has_custom', true)
+				->where('flag', VideoFlag::Normal)
+				->where('review_status', VideoReviewStatus::Passed)
+				->count();
+			$total_count[VideoType::Compute] = Video::whereIn('vid_division_id', $div_list)
+				->where('has_code', true)
+				->where('flag', VideoFlag::Normal)
+				->where('review_status', VideoReviewStatus::Passed)
+				->count();
 		} else {
 			$total_count[VideoType::General] = 0;
 			$total_count[VideoType::Custom] = 0;
@@ -132,8 +140,8 @@ class ScoreVideosController extends Controller {
 		return View::make('video_scores.index', compact('videos', 'comp_list', 'types', 'total_count', 'scored_count', 'judge_compute', 'judge_custom'));
 	}
 
-	// Choose an appopriate video for judging
-	// Display video to be userd
+	// Choose an appropriate video for judging
+	// Display video to be used
 	public function do_dispatch(Request $req)
 	{
 		// Get toggle statuses
@@ -169,6 +177,7 @@ class ScoreVideosController extends Controller {
 		// Get all the videos and their scores were the video is not flagged for review or disqualified
 		$all_videos = Video::with('scores')
 			->where('flag',VideoFlag::Normal)
+			->where('review_status', VideoReviewStatus::Passed)
 			->whereIn('vid_division_id', $divs)
 			->get();
 
@@ -200,13 +209,13 @@ class ScoreVideosController extends Controller {
 //		}
 //		echo "</pre>";
 
-		// No videes left in filteres means they've scored all active videos (or there are no videos to score)
+		// No videos left in filters means they've scored all active videos (or there are no videos to score)
 		if(count($filtered) == 0) {
 			return redirect()->route('video.judge.index')->with('message', 'You cannot judge any more videos.');
 		}
 
 		// Sort videos to determine which one gets scored next
-		// In this code minus is used as a stand in for the non-existant spaceship operator <=>
+		// In this code minus is used as a stand in for the non-existent spaceship operator <=>
 		// Logic:
 		//   Top priority is custom parts.  Sort Descending.  Ignore if user doesn't score custom.
 		//   Second priority is code.  Sort Descending.  Ignore if user doesn't score code.
