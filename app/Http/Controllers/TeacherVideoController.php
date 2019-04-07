@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use Auth;
 use View;
+use Mail;
 use Session;
 use Validator;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+
+use App\Mail\VideoUpdated;
 use App\Enums\VideoCheckStatus;
+use App\Enums\VideoReviewStatus;
 
 use App\Models\ {
     Video,
@@ -232,8 +236,13 @@ class TeacherVideoController extends Controller {
 
 				if($students_pass) {
 					$video = video::find($id);
-					$video->audit = 0;
-					$video->update($input);
+					$input['audit'] = VideoCheckStatus::Untested;
+					if($video->review_status === VideoReviewStatus::Disqualified && $video->yt_code !== $input['yt_code']) {
+						$video->review_status = VideoReviewStatus::Reviewed;
+						$this->send_video_updated_message($video);
+					}
+					$video->fill($input);
+					$video->save();
 
 					foreach ($students as $index => &$student) {
 						$student['year'] = $invoice->year;
@@ -258,8 +267,14 @@ class TeacherVideoController extends Controller {
 			} else {
 				// No students, just update the video
 				$video = video::find($id);
-				$video->audit = 0;
-				$video->update($input);
+				$input['audit'] = VideoCheckStatus::Untested;
+				if($video->review_status === VideoReviewStatus::Disqualified && $video->yt_code !== $input['yt_code']) {
+					$video->review_status = VideoReviewStatus::Reviewed;
+					$this->send_video_updated_message($video);
+				}
+				$video->fill($input);
+				$video->save();
+
 				return redirect()->route('teacher.index');
 			}
 		}
@@ -268,6 +283,15 @@ class TeacherVideoController extends Controller {
 			->withInput()
 			->withErrors($videoValidation)
 			->with('message', 'There were validation errors.');
+	}
+
+	private function send_video_updated_message($video) {
+		$coordinator = $video->division->competition->user;
+
+		if($coordinator) {
+			Mail::to($coordinator)
+				->queue(new VideoUpdated($video));
+		}
 	}
 
 	/**
