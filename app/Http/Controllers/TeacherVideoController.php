@@ -341,7 +341,7 @@ class TeacherVideoController extends Controller {
 			'code' => 0,
 			'doc' => 0,
 			'cad' => 0,
-			'image' => 0,
+			'img' => 0,
 			'script' => 0,
 		];
 
@@ -430,7 +430,7 @@ class TeacherVideoController extends Controller {
 
 		// CAD file, but only if "Custom" selected
 		if($video->has_custom) {
-			if(($counts['cad'] + $counts['image']) > 0) {
+			if(($counts['cad'] + $counts['img']) > 0) {
 				$results[] = [
 					'status' => 'PASS',
 					'message' => 'CAD Files Present for Custom Part'
@@ -460,7 +460,7 @@ class TeacherVideoController extends Controller {
 				$fail = true;
 			}
 		} else {
-			if(($counts['cad'] + $counts['image']) > 0) {
+			if(($counts['cad'] + $counts['img']) > 0) {
 				$results[] = [
 					'status' => 'WARNING',
 					'message' => 'CAD Files Present but Custom Part flag not set'
