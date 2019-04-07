@@ -191,8 +191,21 @@ class VideoReviewApp extends Component {
     this.setState({ reviewDqModalVisible: true })
   };
 
-  dqSend = (e) => {
+  dqSilent = (e) => {
+    this.dqHide(e);
+    this.setVideoState(2);
+  };
 
+  dqSend = (e) => {
+    console.log(`Sending DQ for Video ${this.state.video.id}`);
+    window.axios.get(`/api/video_review/send_dq/${this.state.video.id}`)
+      .then(result => {
+        console.log(`Video ${this.state.video.id} Disqualification Sent`);
+        this.dqHide();
+      })
+      .catch(err => {
+        console.error('Video Disqualification Send Error: ', err);
+      })
   };
 
   setVideoState = (newState) => {
@@ -318,6 +331,7 @@ class VideoReviewApp extends Component {
               visible={this.state.reviewDqModalVisible}
               onHide={this.dqHide}
               onSend={this.dqSend}
+              silentDq={this.dqSilent}
             />
             :
               null
@@ -339,7 +353,7 @@ class VideoReviewApp extends Component {
                 <Button
                   bsStyle="warning"
                   disabled={this.state.video.review_status === 1}
-                  onClick={(e) => this.setVideoState(0)}
+                  onClick={(e) => this.setVideoState(1)}
                   block
                 >
                   Move to Reviewed

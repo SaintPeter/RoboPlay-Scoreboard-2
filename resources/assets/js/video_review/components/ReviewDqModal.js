@@ -49,8 +49,9 @@ export default class ReviewDqModal extends Component {
         </div>
       </Modal.Body>
       <Modal.Footer>
+        <Button bsStyle="danger" className="pull-left" onClick={this.props.silentDq}>Silent Disqualification</Button>
         <Button bsStyle="info" onClick={this.props.onHide}>Cancel</Button>
-        <Button bsStyle="primary" onClick={this.props.onSave}>Send</Button>
+        <Button bsStyle="primary" onClick={this.props.onSend}>Send</Button>
       </Modal.Footer>
     </Modal>
   }

@@ -180,6 +180,7 @@ class VideoReviewController extends Controller
     		Mail::to($invoice->teacher)
 			    ->queue(new VideoDisqualification($video_id));
     		$video = $invoice->videos->find($video_id);
+
     		if($video) {
     			$video->review_status = VideoReviewStatus::Disqualified;
     			$video->save();

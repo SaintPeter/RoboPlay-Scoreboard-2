@@ -481,14 +481,15 @@ class ScoreVideosController extends Controller {
 			$video->save();
 
 			$coordinator = $video->division->competition->user;
-
-			Mail::to($coordinator)
-				->queue(
-					new VideoReport([
-						'video' => $video,
-						'comment' => $video_comment['comment']
-					])
-				);
+			if($coordinator) {
+				Mail::to($coordinator)
+					->queue(
+						new VideoReport([
+							'video' => $video,
+							'comment' => $video_comment['comment']
+						])
+					);
+			}
 		}
 
 		return redirect()->route('video.judge.index');
