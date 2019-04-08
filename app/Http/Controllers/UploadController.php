@@ -128,8 +128,8 @@ class UploadController extends Controller {
 //					if ($mimetype[0] !== 'video' ) {
 //						return json_encode(array('success' => '3', 'msg' => 'Invalid Video'));
 //					}
-					if (filesize($path) <= 10000000) {
-						return response()->json(['success' => '3', 'msg' => 'File Too Small.  Videos must be at least 10MB.']);
+					if (filesize($path) <= 5000000) {
+						return response()->json(['success' => '3', 'msg' => 'File Too Small.  Videos must be at least 5MB.']);
 					}
 				}
 			} else {
