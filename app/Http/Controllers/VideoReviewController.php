@@ -150,7 +150,7 @@ class VideoReviewController extends Controller
 			'result' => Video::where('id','=',$id)
 				->update([
 					'review_status' => VideoReviewStatus::Passed,
-					'reviewer_id'=> $req->user()->id
+					'reviewer_id'=> $req->User()->id
 					]
 				)
 		]);
