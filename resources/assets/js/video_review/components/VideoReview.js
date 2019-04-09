@@ -339,7 +339,7 @@ class VideoReviewApp extends Component {
           { isAdmin ?
             <Panel>
               <Panel.Heading>
-                <Panel.Title>Actions</Panel.Title>
+                <Panel.Title>Video Coordinator Actions</Panel.Title>
               </Panel.Heading>
               <Panel.Body>
                 <Button

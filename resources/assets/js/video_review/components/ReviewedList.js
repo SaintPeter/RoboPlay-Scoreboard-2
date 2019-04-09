@@ -3,6 +3,19 @@ import { Panel, PanelGroup, ListGroup, Button } from 'react-bootstrap';
 
 export class ReviewedList extends Component {
 
+  catToStyle = (cat) => {
+    switch(cat) {
+      case 'Passed':
+        return 'success';
+      case 'Reviewed':
+        return 'warning';
+      case 'Disqualified':
+        return 'danger';
+      default:
+        return 'default';
+    }
+  };
+
   render() {
     if(this.props.loading) {
       return <Panel key="Reviewed_Videos">
@@ -35,7 +48,7 @@ export class ReviewedList extends Component {
 
         return <PanelGroup id={1}>
           { Object.keys(reviews).map(cat => {
-              return <Panel key={cat}>
+              return <Panel key={cat} bsStyle={this.catToStyle(cat)}>
                 <Panel.Heading>
                   <Panel.Title>
                     {cat}
