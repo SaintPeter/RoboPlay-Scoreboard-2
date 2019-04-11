@@ -98,7 +98,7 @@ class VideoNotes extends Component {
   render() {
     let writeClass = this.props.video.writing ? " writing_color" : "";
     return <tr>
-      <td colSpane="7" className="video_notes_section">
+      <td colSpan="7" className="video_notes_section">
         <label>Notes</label>
         <textarea style={{'clear':'both', 'width':'100%'}}
                   className={"animate_color" + writeClass}

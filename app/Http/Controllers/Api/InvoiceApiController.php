@@ -58,7 +58,8 @@ class InvoiceApiController extends Controller
 						'id' => $student->id,
 						'name' => $student->fullName(),
 						'math_level_name' => $student->math_level->name,
-						'math_lavel' => $student->math_level->level,
+						'math_level' => $student->math_level->level,
+						'grade' => $student->grade,
 						'tshirt' => $student->tshirt ? $student->tshirt : "N/A",
 					];
 					return $student_carry;
