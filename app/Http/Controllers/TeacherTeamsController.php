@@ -219,7 +219,7 @@ class TeacherTeamsController extends Controller {
 
 				if($students_pass) {
 					$team = Team::find($id);
-					$team->audit = 0;
+					$input['audit'] = 0;
 					$team->update($input);
 
 					foreach ($students as $index => &$student) {
@@ -245,7 +245,7 @@ class TeacherTeamsController extends Controller {
 			} else {
 				// No students, just update the team
 				$team = Team::find($id);
-				$team->audit = 0;
+				$input['audit'] = 0;
 				$team->update($input);
 				return redirect()->route('teacher.index');
 			}
