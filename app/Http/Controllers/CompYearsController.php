@@ -24,8 +24,8 @@ class CompYearsController extends Controller {
 	public function index()
 	{
 	    $invoice_types = Config::get('settings.invoice_types', []);
-		$compyears = CompYear::with('competitions', 'divisions',
-									'vid_competitions', 'vid_divisions')
+		$compyears = CompYear::with('competitions', 'competitions.divisions',
+									'vid_competitions', 'vid_competitions.divisions')
 								->orderBy('year', 'desc')
 								->get();
 

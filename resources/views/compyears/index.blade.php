@@ -29,9 +29,7 @@
 		<tr>
 			<th>Year</th>
 			<th>Competitions</th>
-			<th>Divisions</th>
 			<th>Video Competitions</th>
-			<th>Video Divisions</th>
 			<th>Invoice Type</th>
             <th>Dates</th>
 			<th>Actions</th>
@@ -42,15 +40,36 @@
 		@foreach($compyears as $compyear)
 		<tr>
 			<td>{{ $compyear->year }}</td>
-			<td>{!! join('<br />', $compyear->competitions()->pluck('name')->all()) !!}</td>
-			<td>{!! join('<br />', $compyear->divisions()->pluck('name')->all()) !!}</td>
-			<td>{!! join('<br />', $compyear->vid_competitions()->pluck('name')->all()) !!}</td>
-			<td>{!! join('<br />', $compyear->vid_divisions()->pluck('name')->all()) !!}</td>
+            <td>
+                @foreach($compyear->competitions as $comp)
+                    <strong>
+                        {!! $comp->name !!}
+                    </strong>
+                    <ul>
+                    @foreach($comp->divisions as $div)
+                        <li>{!! $div->name !!}</li>
+                    @endforeach
+                    </ul>
+
+                @endforeach
+            </td>
+            <td>
+                @foreach($compyear->vid_competitions as $vid_comp)
+                    <strong>
+                        {!! $vid_comp->name !!}
+                    </strong>
+                    <ul>
+                        @foreach($vid_comp->divisions as $div)
+                            <li>{!! $div->name !!}</li>
+                        @endforeach
+                    </ul>
+                @endforeach
+            </td>
             <td>{{ $invoice_types[$compyear->invoice_type] }} <br>Id: {{  $compyear->invoice_type_id  }}</td>
             <td>
-                Reminders:<br>
+                <strong>Reminders:</strong><br>
                 {!! $compyear->reminder_start->format('M&\n\b\s\p;j') !!}&nbsp;-&nbsp;{!! $compyear->reminder_end->format('M&\n\b\s\p;j') !!} <br>
-                Last Edit:<br>
+                <strong>Last Edit:</strong><br>
                 {!! $compyear->edit_end->format('M&\n\b\s\p;j') !!}
             </td>
 			<td>
