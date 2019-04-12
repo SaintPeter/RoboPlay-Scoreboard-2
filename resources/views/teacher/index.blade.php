@@ -173,12 +173,7 @@
         @else
             <p class="text-danger">Warning:  Changes to students and t-shirt sizes will not change ordered shirts</p>
         @endif
-        @if($edit_days >= 0)
-            <p>You have until <strong>{{ $comp_year->edit_end->format('M jS') }}</strong> (<strong>{{ $edit_days }}</strong> days) to edit Team and Video metadata</p>
-        @else
-            <p class="text-danger">Team and Video metadata may no longer be edited</p>
-        @endif
-    </div>
+   </div>
     <div class="col-sm-6 col-xs-8">
     @if($invoice->team_count > 0)
         <h3>T-Shirt Size</h3>
