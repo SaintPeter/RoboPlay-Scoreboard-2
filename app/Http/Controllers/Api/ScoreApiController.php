@@ -7,9 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
 use Auth;
-use App\Models\{
-	Challenge, CompYear, Score_run
-};
+use App\Models\{Challenge, CompYear, JudgeNominations, Score_run, Team};
 use Carbon\Carbon;
 
 class ScoreApiController extends Controller
@@ -146,5 +144,21 @@ class ScoreApiController extends Controller
 			}
 		}
 		return \Response::json($output);
+	}
+
+	public function team_nominations($team_id) {
+		$noms = Team::with(['nominations' => function($query) use ($team_id) {
+				return $query->where('user_id', Auth::user()->id)->where('team_id', $team_id);
+			}])
+			->findOrFail($team_id)->nominations->first();
+
+		return response()->json($noms);
+	}
+
+	public function save_nominations(Request $req, $team_id) {
+		$nom = JudgeNominations::updateOrCreate([
+			'team_id' => $team_id,
+			'user_id' => $req->user()->id
+		], $req->all());
 	}
 }

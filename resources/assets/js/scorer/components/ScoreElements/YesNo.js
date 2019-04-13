@@ -37,15 +37,20 @@ export default class YesNo extends  Component {
     };
 
     render() {
-        return (
-            <h4 dangerouslySetInnerHTML={{ __html: this.props.display_text }} />,
+      let value = (this.props.type === 'noyes') ? 0 : 1;
+      value = this.props.defaultValue ? this.props.defaultValue : value;
+
+        return [
+            <h4 dangerouslySetInnerHTML={{ __html: this.props.display_text }} key="fsTitle"/>,
             <select ref="flipswitch"
                     data-role="flipswitch"
                     className="ui-flipswitch-input"
                     tabIndex="-1"
+                    key="fsBody"
+                    defaultValue={value}
             >
                 { this.selectOrder(this.props.type) }
             </select>
-        )
+          ];
     }
 }

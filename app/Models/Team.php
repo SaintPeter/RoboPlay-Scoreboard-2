@@ -34,6 +34,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Team newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Team newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Team query()
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JudgeAwards[] $awards
  */
 class Team extends Model {
 	protected $guarded = array();
@@ -79,6 +80,14 @@ class Team extends Model {
 
 	public function teacher() {
 		return $this->belongsTo('App\Models\User', 'teacher_id');
+	}
+
+	public function awards() {
+		return $this->belongsToMany(JudgeAwards::class);
+	}
+
+	public function nominations() {
+		return $this->hasMany(JudgeNominations::class);
 	}
 
 	public function longname()

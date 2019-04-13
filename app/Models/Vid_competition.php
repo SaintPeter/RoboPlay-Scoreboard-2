@@ -28,6 +28,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_competition newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_competition newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_competition query()
+ * @property int|null $user_id
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_competition whereUserId($value)
  */
 class Vid_competition extends Model {
 	protected $guarded = array();

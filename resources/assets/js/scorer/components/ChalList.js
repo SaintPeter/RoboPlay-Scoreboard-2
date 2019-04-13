@@ -2,9 +2,11 @@ import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import {connect} from "react-redux";
 import {loadChallengeData} from "../actions/ChallengeData";
+import {loadNominations, saveNominations} from "../actions/Nominations";
 import {updateBackButton, updatePageTitle} from "../actions/Generic";
 import {loadRuns} from "../actions/Runs";
 import UIButton from "./UIButton";
+import NominatePopup from "./Popups/NominatePopup";
 
 class ChalListApp extends Component {
     constructor(props) {
@@ -17,6 +19,10 @@ class ChalListApp extends Component {
         this.competitionName = compData[this.compId].name;
         this.divisionName = compData[this.compId].divisions[this.divId].name;
         this.teamName = compData[this.compId].divisions[this.divId].teams[this.teamId];
+
+        this.state = {
+          nominateVisible: false
+        }
     }
 
     componentWillMount() {
@@ -24,6 +30,7 @@ class ChalListApp extends Component {
         this.props.updateBack(`/c/${this.compId}/d/${this.divId}`);
 
         this.props.doLoadChalData(this.year, this.level);
+        this.props.loadNominations(this.teamId);
     }
 
     componentDidMount() {
@@ -34,10 +41,27 @@ class ChalListApp extends Component {
         this.props.history.push(`/c/${this.compId}/d/${this.divId}/t/${this.teamId}/scores`);
     };
 
+    showNominatePopupClick = () => {
+      this.setState({nominateVisible: true});
+    };
+
+    hideNominatePopupClick = () => {
+      this.setState({nominateVisible: false});
+    };
+
+    saveNoms = (values) => {
+      this.props.saveNominations(this.teamId, values);
+      this.hideNominatePopupClick();
+    };
+
 
     render() {
         let challenges = (this.props.challengeData[this.year] && this.props.challengeData[this.year][this.level]) ?
             this.props.challengeData[this.year][this.level] : [];
+
+        let noms = this.props.nominations.hasOwnProperty(this.teamId) ? this.props.nominations[this.teamId]
+          : { spirit: 0, teamwork: 0, persevere: 0 };
+
         return (
             <div className="ui-content">
                 <div className="ui-body ui-body-a ui-corner-all">
@@ -64,9 +88,18 @@ class ChalListApp extends Component {
                     }
                 </ul>
                 <div className="ui-body ui-body-a ui-corner-all">
-                    <UIButton onClick={ this.showTeamScoreClick }>
-                        Show Team Score
-                    </UIButton>
+                  <UIButton onClick={ this.showTeamScoreClick }>
+                      Show Team Score
+                  </UIButton>
+                  <UIButton onClick={ this.showNominatePopupClick }>
+                    Nominate Team
+                  </UIButton>
+                  <NominatePopup
+                    visible={ this.state.nominateVisible }
+                    noms={noms}
+                    onCancel={ this.hideNominatePopupClick }
+                    saveNoms={ this.saveNoms }
+                  />
                 </div>
             </div>
         )
@@ -98,7 +131,8 @@ function mapStateToProps(state) {
     return {
         challengeData: state.challengeData,
         backURL: state.backURL,
-        runs: state.runs
+        runs: state.runs,
+        nominations: state.nominations
     }
 }
 
@@ -108,7 +142,9 @@ function mapDispatchToProps(dispatch) {
         loadRuns: (teamId) => dispatch(loadRuns(teamId)),
         updateBack: (newURL) => dispatch(updateBackButton(newURL)),
         updateTitle: (newTitle) => dispatch(updatePageTitle(newTitle)),
-        doLoadChalData: (year,level,data) => dispatch(loadChallengeData(year,level,data))
+        doLoadChalData: (year,level,data) => dispatch(loadChallengeData(year,level,data)),
+        loadNominations: (teamId) => dispatch(loadNominations(teamId)),
+        saveNominations: (teamId, values) => dispatch(saveNominations(teamId, values))
     }
 }
 

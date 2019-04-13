@@ -29,6 +29,10 @@ import {
     SAVE_LOADED_RUNS
 } from '../actions/Runs';
 
+import {
+  UPDATE_NOMINATION
+} from "../actions/Nominations";
+
 function generic(state = { backURL: '/', title: 'Choose Competition'}, action) {
     switch (action.type) {
         case UPDATE_BACK_BUTTON:
@@ -181,7 +185,14 @@ function runs(state = {}, action) {
     }
 }
 
-
+function nominations(state = {}, action) {
+  switch(action.type) {
+    case UPDATE_NOMINATION:
+      return Object.assign({}, state, {[action.teamId]: action.values});
+    default:
+      return state;
+  }
+}
 
 const reducer = combineReducers({
     generic,
@@ -190,6 +201,7 @@ const reducer = combineReducers({
     teamScores,
     scoreSummary,
     runs,
+    nominations,
 });
 
 export default reducer;
