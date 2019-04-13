@@ -33,7 +33,7 @@
 		</div>
 		<div class="form-group">
 			<label for="students[{{ $index }}][grade]">Grade
-			{!! Form::selectRange("students[$index][grade]", 5, 14,null, [ 'class' => 'form-control' ] )  !!}
+            {!! Form::select("students[$index][grade]", [ "-", 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ], null, [ 'class' => 'form-control' ] )  !!}
 			</label>
 		</div>
 		<div class="form-group">
