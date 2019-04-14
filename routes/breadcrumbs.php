@@ -340,6 +340,12 @@ try {
 		$bc->push('Video Review', route('video_review'));
 	});
 
+	// Video Awards
+	Breadcrumbs::register('awards.index', function (BreadcrumbsGenerator $bc, $year, $comp, $div) {
+		$bc->parent('home');
+		$bc->push('Judge Awards', route('awards.index', [ $year, $comp, $div]));
+	});
+
 } catch (\DaveJamesMiller\Breadcrumbs\Facades\DuplicateBreadcrumbException $e) {
 	echo "Duplicate Breadcrumb Route Exception " . $e->getMessage();
 }

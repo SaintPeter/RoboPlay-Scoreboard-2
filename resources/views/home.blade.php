@@ -85,6 +85,19 @@
 <ul data-role="listview" data-inset="true">
     <li>{{ link_to_route('scorer', 'Score Challenges') }}</li>
 	<li>{{ link_to_route('video.judge.index', 'Score Videos') }}</li>
+    @if(Roles::isAdmin())
+        <li data-role="collapsible" data-iconpos="right" data-inset="false">
+            <h2>Judges Awards</h2>
+            <ul data-role="listview" data-theme="c">
+            @foreach($compyears[1]->competitions as $comp)
+                <li data-role="list-divider" data-theme="c">{{ $comp->name }}</li>
+                @foreach($comp->divisions as $div)
+                    <li>{{ link_to_route('awards.index', $div->name, [$comp->event_date->year, $comp->id, $div->id]) }}</li>
+                @endforeach
+            @endforeach
+            </ul>
+        </li>
+    @endif
 	<li><a href="{{ asset('docs/Video_Judge_Instructions_2016.pdf') }}" target="_blank"><i class="fa fa-video-camera"></i>&nbsp;Video Judging Guide</a></li>
 </ul>
 @endif

@@ -324,6 +324,9 @@ Route::middleware([ 'auth' ])->group( function() {
 	    Route::get('ajax/rubric_edit/{competition_id?}',   [ 'as' => 'ajax.rubric.edit', 'uses' => 'VideoManagementController@rubric_edit']);
 	    Route::get('ajax/rubric_blank_row/{competition_id?}/{type?}/{id?}',   [ 'as' => 'ajax.rubric.blank_row', 'uses' => 'VideoManagementController@rubric_blank_row']);
 
+	    // Nomination Management
+	    Route::get('awards/{year}/{comp}/{div}', [ 'as' => 'awards.index', 'uses' => 'AwardsController@index']);
+
     });
 
     /* -----------------------------------------------------------------------------
