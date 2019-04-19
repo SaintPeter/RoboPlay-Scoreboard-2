@@ -161,15 +161,16 @@ class UploadController extends Controller {
 	public function delete_file($video_id, $file_id)
 	{
 	    // Make sure they have permission to delete_file
-	    $video = Video::findorfail($video_id);
+	    $video = Video::with('files', 'files.filetype')->findorfail($video_id);
 	    if(!(Roles::isAdmin() OR $video->teacher_id == Auth::user()->id)) {
 	        return redirect()->to(URL::previous())->with('error', 'You do not have permission to delete this file.');
 	    }
 
 		$file = Files::find($file_id);
 		if($file) {
-			if($file->filetype->type == 'video') {
-				$video->has_video = false;
+			$count = $video->files->reduce(function($carry, $file) { return $carry + ($file->filetype->type == 'video' ? 1 : 0); });
+			if($file->filetype->type == 'video' && $count == 1) {
+				$video->has_vid = false;
 			}
 
 			$video->status = VideoCheckStatus::Untested;
