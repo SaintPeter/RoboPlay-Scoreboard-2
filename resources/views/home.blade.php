@@ -38,6 +38,16 @@
     .ui-li-static.ui-collapsible > .ui-collapsible-content {
         border-bottom-width: 0;
     }
+
+    .ui-btn.indent {
+        padding-left: 2em;
+        font-size: 90%;
+    }
+
+    .ui-listview > .ui-li-divider {
+        border-color: #ddd;
+    }
+
 </style>
 @endsection
 
@@ -48,18 +58,20 @@
 	@foreach($compyears as $compyear)
 		<li data-role="collapsible" data-iconpos="right" data-inset="false">
 			<h2>{{ $compyear->year }}</h2>
-			<ul data-role="listview" data-theme="c">
+			<ul data-role="listview" data-theme="c" data-divider-theme="a">
 				@if(!$compyear->competitions->isEmpty() )
 					<li>{{ link_to_route('display.all_scores',  'Combined Scoreboard', $compyear->id) }} </li>
 					@if(Roles::isAdmin())
-					    <li>{{ link_to_route('display.compyearscore.top',  'Statewide Leading Teams', $compyear->id) }} </li>
+					    <li>{{ link_to_route('display.compyearscore.top',  'Statewide Winners', $compyear->id) }} </li>
 					@endif
 					@foreach($compyear->competitions as $comp)
+                        <li data-role="list-divider" role="heading">{{ $comp->name }}</li>
 						@if($comp->isDone())
-						    <li>{{ link_to_route('display.compscore', $comp->name . ' - Scoreboard', $comp->id) }} </li>
-						@endif
-						@if(Roles::isAdmin())
-						    <li>{{ link_to_route('display.compscore.top', $comp->name . ' - Local Leading Teams', $comp->id) }} </li>
+                        @endif
+                        @if($comp->isDone() || Roles::isAdmin())
+                            <li>{{ link_to_route('display.compscore.top', 'Site Winners', $comp->id, [ 'class' => 'indent' ]) }} </li>
+						    <li>{{ link_to_route('display.compscore', 'Final Scoreboard', $comp->id, [ 'class' => 'indent' ]) }} </li>
+                            <li>{{ link_to_route('awards.list', 'Judges Awards', $comp->id, [ 'class' => 'indent' ]) }} </li>
 						@endif
 					@endforeach
 				@else
@@ -88,11 +100,11 @@
     @if(Roles::isAdmin())
         <li data-role="collapsible" data-iconpos="right" data-inset="false">
             <h2>Judges Awards</h2>
-            <ul data-role="listview" data-theme="c">
-            @foreach($compyears[1]->competitions as $comp)
-                <li data-role="list-divider" data-theme="c">{{ $comp->name }}</li>
+            <ul data-role="listview" data-theme="c"  data-divider-theme="a">
+            @foreach($compyears->first()->competitions as $comp)
+                <li data-role="list-divider" data-theme="a">{{ $comp->name }}</li>
                 @foreach($comp->divisions as $div)
-                    <li>{{ link_to_route('awards.index', $div->name, [$comp->event_date->year, $comp->id, $div->id]) }}</li>
+                    <li>{{ link_to_route('awards.index', $div->name, [$div->id], ['class' => 'indent']) }}</li>
                 @endforeach
             @endforeach
             </ul>

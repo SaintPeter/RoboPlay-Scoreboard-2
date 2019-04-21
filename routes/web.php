@@ -84,6 +84,9 @@ Route::get('attempts/{compyear_id}', [ 'as' => 'display.attempts', 'uses' => 'Di
 Route::get('all_scores/{compyear_id}', [ 'as' => 'display.all_scores', 'uses' => 'DisplayController@all_scores' ])
     ->where('compyear_id', '\d+');
 
+// Awards
+Route::get('award_list/{comp_id}',         [ 'as' => 'awards.list', 'uses' => 'AwardsController@list']);
+
 // Paging Settings
 Route::post('comp/{competition_id}/settings', [ 'as' => 'display.compsettings', 'uses' => 'DisplayController@compsettings' ])
     ->where('competition_id', '\d+');
@@ -100,6 +103,7 @@ Route::get('export_scores/{year}', [ 'as' => 'display.export_scores', 'uses' => 
 /* ----------------------- Video Display ---------------------------- */
 Route::get('video_list/{comp_id}/{video_id}', [ 'as' => 'display.show_video', 'uses' => 'DisplayController@show_video'] )
     ->where('video_id', '\d+');
+Route::get('video_list/{comp_id}/{winners?}', [ 'as' => 'display.video_list', 'uses' => 'DisplayController@video_list'] );
 Route::get('video_list/{comp_id}/{winners?}', [ 'as' => 'display.video_list', 'uses' => 'DisplayController@video_list'] );
 
 /* ------------------------- Ajax Handlers -------------------------- */
@@ -324,9 +328,10 @@ Route::middleware([ 'auth' ])->group( function() {
 	    Route::get('ajax/rubric_edit/{competition_id?}',   [ 'as' => 'ajax.rubric.edit', 'uses' => 'VideoManagementController@rubric_edit']);
 	    Route::get('ajax/rubric_blank_row/{competition_id?}/{type?}/{id?}',   [ 'as' => 'ajax.rubric.blank_row', 'uses' => 'VideoManagementController@rubric_blank_row']);
 
-	    // Nomination Management
-	    Route::get('awards/{year}/{comp}/{div}', [ 'as' => 'awards.index', 'uses' => 'AwardsController@index']);
-
+	    // Awards Management
+	    Route::get('awards/{div}',                       [ 'as' => 'awards.index', 'uses' => 'AwardsController@index']);
+	    Route::get('awards/{div}/grant/{team}/{award}',  [ 'as' => 'awards.grant', 'uses' => 'AwardsController@grant']);
+	    Route::get('awards/{div}/revoke/{team}/{award}', [ 'as' => 'awards.revoke', 'uses' => 'AwardsController@revoke']);
     });
 
     /* -----------------------------------------------------------------------------

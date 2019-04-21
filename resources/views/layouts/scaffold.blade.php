@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>@if(isset($title)){{ $title . ' | ' }}RoboPlay Scoreboard @endif</title>
 		<link rel="icon" type="image/ico" href="https://scoreboard.c-stem.ucdavis.edu/favicon.ico"/>
 		{{ HTML::style('//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css') }}
@@ -92,6 +93,9 @@
 
 			@if(isset($title) and !isset($skip_title))
 				<h1>{{ $title }}</h1>
+                @if(isset($subtitle))
+                    <h4>{{ $subtitle }}</h4>
+                @endif
 			@endif
 			@if(!isset($skip_breadcrumbs))
                 @php

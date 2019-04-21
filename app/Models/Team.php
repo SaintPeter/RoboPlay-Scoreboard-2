@@ -49,6 +49,8 @@ class Team extends Model {
 		'invoice_id' => 'required'
 	);
 
+	private $has_awards = [];
+
 	public static function boot() {
 		parent::boot();
 
@@ -117,5 +119,13 @@ class Team extends Model {
 		}
 
 		return $student_list;
+	}
+
+	public function has_award($award_id) {
+		if(array_key_exists($award_id, $this->has_awards)) {
+			return $this->has_awards[$award_id];
+		} else {
+			return $this->has_awards[$award_id] = $this->awards && $this->awards->contains('id', $award_id);
+		}
 	}
 }

@@ -341,9 +341,14 @@ try {
 	});
 
 	// Video Awards
-	Breadcrumbs::register('awards.index', function (BreadcrumbsGenerator $bc, $year, $comp, $div) {
+	Breadcrumbs::register('awards.index', function (BreadcrumbsGenerator $bc, $div) {
 		$bc->parent('home');
-		$bc->push('Judge Awards', route('awards.index', [ $year, $comp, $div]));
+		$bc->push('Judge Awards', route('awards.index', [ $div]));
+	});
+
+	Breadcrumbs::register('awards.list', function (BreadcrumbsGenerator $bc, $comp) {
+		$bc->parent('home');
+		$bc->push('Judges Awards List', route('awards.list', $comp));
 	});
 
 } catch (\DaveJamesMiller\Breadcrumbs\Facades\DuplicateBreadcrumbException $e) {
