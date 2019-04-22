@@ -308,7 +308,7 @@
 					</tr>
 				@endforeach
 			@else
-				<tr><td colspan="7" class="text-center">No Videos Added</td></tr>
+				<tr><td colspan="8" class="text-center">No Videos Added</td></tr>
 			@endif
 		</tbody>
 	</table>
