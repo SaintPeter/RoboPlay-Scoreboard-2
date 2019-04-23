@@ -171,7 +171,7 @@ class FileListApp extends Component {
     if(file.filetype.type != 'video') {
       return <iframe
         key={file.id}
-        src={file.public_url}
+        src={file.viewer_url}
         className={"embed-responsive-item" + (show ? '' : ' hidden')}
       />
     } else {
@@ -179,7 +179,7 @@ class FileListApp extends Component {
         controls={true}
         className={"embed-responsive-item" + (show ? '' : ' hidden')}
       >
-        <source src={file.public_url} />
+        <source src={file.viewer_url} />
       </video>
     }
   }
