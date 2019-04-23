@@ -91,7 +91,12 @@ class VideoList extends Component {
         return <Button className="list-group-item clearfix" key={video.id} onClick={() => this.props.editHandler(video.id)}>
           <h4 style={headingStyle}>{video.name}</h4>
           <IssueCount problems={video.problems}/>
-          <span className="pull-right">Reviewer: {video.reviewer.name}</span>
+          {
+            video.reviewer ?
+            <span className="pull-right">Reviewer: {video.reviewer.name}</span>
+            :
+              <span className="pull-right">Unknown Reviewer</span>
+          }
         </Button>
       })
     } else {
