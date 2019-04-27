@@ -62,6 +62,10 @@
             overflow-x: visible !important;
         }
 
+        .ui-flipswitch.ui-flipswitch-active {
+            width: 5.875em !important;
+        }
+
         .bigtext {
             font-size: 60px;
         }
@@ -161,7 +165,13 @@
             background-color: white;
         }
 
+        .warning-message {
+            background-color: #fcf8e3; /* Yellow Warning */
+        }
 
+        .error-message {
+            background-color: #f2dede; /* Red Error */
+        }
     </style>
 
 </head>
