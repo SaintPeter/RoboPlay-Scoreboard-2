@@ -4,17 +4,22 @@ import {connect} from "react-redux";
 
 import RandomsPopup from "./Popups/RandomsPopup";
 import RandomListPopup from "./Popups/RandomListPopup";
-import UIButton from "./UIButton";
-import YesNo from "./ScoreElements/YesNo";
-import Slider from "./ScoreElements/Slider";
-import Timer from "./ScoreElements/Timer";
-import ScoreElement from "./ScoreElements/ScoreElement";
 import SubmitConfirmPopup from "./Popups/SubmitConfirmPopup";
 import AbortConfirmPopup from "./Popups/AbortConfirmPopup";
-import {abortChallenge, scoreChallenge, updateScoreSummary} from "../actions/ScoreChallenge";
-import {updateBackButton, updatePageTitle} from "../actions/Generic";
+
+import UIButton from "./UIButton";
+import CollapsibleBlock from "./CollapsibleBlock";
+
+import Timer from "./ScoreElements/Timer";
+import YesNo from "./ScoreElements/YesNo";
+import Slider from "./ScoreElements/Slider";
+import ScoreElement from "./ScoreElements/ScoreElement";
+
 import {addRun, addAbort} from "../actions/Runs";
 import {loadChallengeData} from "../actions/ChallengeData";
+import {showChalSet, showChalClear} from "../actions/ShowChalDetail";
+import {updateBackButton, updatePageTitle} from "../actions/Generic";
+import {abortChallenge, scoreChallenge, updateScoreSummary} from "../actions/ScoreChallenge";
 
 class ScoreChallengeApp extends Component {
   constructor(props) {
@@ -189,11 +194,16 @@ class ScoreChallengeApp extends Component {
         <strong>Judge: </strong>{judgeName}<br/>
         <strong>Division: </strong>{this.divisionName}<br/>
         <strong>Team: </strong>{this.teamName}
-        <h1>Run {this.runNumber}</h1>
-        <strong>{parseInt(this.chalNum, 10) + 1}. {chalData.display_name}</strong>
-        <hr/>
-        <div dangerouslySetInnerHTML={{__html: chalData.rules}}/>
+        <h2>Run {this.runNumber}</h2>
       </div>,
+      <CollapsibleBlock
+        show={this.props.showChalDetail}
+        header={(parseInt(this.chalNum) + 1) + "." + chalData.display_name}
+        content={chalData.rules}
+        expanded={this.props.showChalSet}
+        collapsed={this.props.showChalClear}
+        key='collapsibleBlock'
+      />,
       (chalData.randoms && chalData.randoms.length > 0) ?
         <RandomsPopup randoms={chalData.randoms} key='RandomPopUps' /> : null
       ,
@@ -244,7 +254,8 @@ function mapStateToProps(state) {
     teamScores: state.teamScores,
     challengeData: state.challengeData,
     backURL: state.generic.backURL,
-    runs: state.runs
+    runs: state.runs,
+    showChalDetail: state.showChalDetail
   }
 }
 
@@ -258,7 +269,9 @@ function mapDispatchToProps(dispatch) {
     doLoadChalData: (year, level, data) => dispatch(loadChallengeData(year, level, data)),
     submitScore: (teamId, chalId, divId, scores) => dispatch(scoreChallenge(teamId, chalId, divId, scores)),
     submitAbort: (teamId, chalId, divId, elementCount) => dispatch(abortChallenge(teamId, chalId, divId, elementCount)),
-    updateScoreSummary: (teamScores) => dispatch(updateScoreSummary(teamScores))
+    updateScoreSummary: (teamScores) => dispatch(updateScoreSummary(teamScores)),
+    showChalSet: () => dispatch(showChalSet()),
+    showChalClear: () => dispatch(showChalClear())
   }
 }
 

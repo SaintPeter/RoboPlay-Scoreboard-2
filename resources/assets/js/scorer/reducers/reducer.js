@@ -35,6 +35,7 @@ import {
 
 import {ERROR_AUTH_CLEAR, ERROR_AUTH_SET, ERROR_COMM_CLEAR, ERROR_COMM_INC} from "../actions/Errors";
 import {SAVING_SCORES_CLEAR, SAVING_SCORES_SET} from "../actions/SavingScores";
+import {SHOW_CHAL_CLEAR, SHOW_CHAL_SET} from "../actions/ShowChalDetail";
 
 function generic(state = { backURL: '/', title: 'Choose Competition'}, action) {
     switch (action.type) {
@@ -208,6 +209,17 @@ function errorAuth(state = false, action) {
   }
 }
 
+function showChalDetail(state = true, action) {
+  switch(action.type) {
+    case SHOW_CHAL_SET:
+      return true;
+    case SHOW_CHAL_CLEAR:
+      return false;
+    default:
+      return state;
+  }
+}
+
 function savingScores(state = false, action) {
   switch(action.type) {
     case SAVING_SCORES_SET:
@@ -241,6 +253,7 @@ const reducer = combineReducers({
   errorAuth,
   errorComm,
   savingScores,
+  showChalDetail,
 });
 
 export default reducer;
