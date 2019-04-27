@@ -1,3 +1,6 @@
+import errorHandler from "./errorHandler";
+import {errorsClear} from "./Errors";
+
 export const UPDATE_NOMINATION = 'UPDATE_NOMINATION';
 
 export function updateNomination(teamId, values) {
@@ -15,9 +18,10 @@ export function saveNominations(teamId, values) {
       .then((response) => {
         console.log('Noms Saved, Updating');
         dispatch(updateNomination(teamId, values));
+        dispatch(errorsClear());
       })
       .catch((err) => {
-        console.error('Error saving Noms:', err);
+        errorHandler('Nomination Save', err, dispatch);
       })
   }
 }
@@ -37,8 +41,9 @@ export function loadNominations(teamId) {
             persevere: 0,
           }));
         }
+        dispatch(errorsClear());
       }).catch((err) => {
-        console.error('Failed Loading Nominations:', err);
+        errorHandler('Nomination Load', err, dispatch);
       })
   }
 }

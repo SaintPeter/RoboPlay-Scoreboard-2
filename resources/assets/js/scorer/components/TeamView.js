@@ -70,7 +70,7 @@ class TeamViewApp extends Component {
 
   goToTeamScoresView = () => {
       window.open(`/team/${this.teamId}`,'_blank');
-  }
+  };
 
   render() {
     const scores = this.scores;

@@ -7,6 +7,7 @@ import rootReducer from './reducers/reducer';
 
 const persistConfig = {
     key: 'root',
+    blacklist: [ 'errorComm', 'errorAuth', 'savingScores' ],
     storage
 };
 
@@ -16,4 +17,4 @@ export const store = createStore(
         persistedReducer,
         applyMiddleware(thunk));
 
-export const persistor = persistStore(store);
+export const persistor = persistStore(store, );

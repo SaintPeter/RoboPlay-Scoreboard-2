@@ -1,3 +1,6 @@
+import errorHandler from "./errorHandler";
+import {errorsClear} from "./Errors";
+
 export const ADD_RUN = 'ADD_RUN';
 export const ADD_ABORT = 'ADD_ABORT';
 export const SAVE_LOADED_RUNS = 'SAVE_LOADED_RUNS';
@@ -40,9 +43,10 @@ export function loadRuns(teamId) {
                         [teamId]: Date.now()
                     })));
                     console.log("Runs Loaded for " + teamId);
+                    dispatch(errorsClear());
                 })
                 .catch((error) => {
-                    console.error("Load Runs Error: " + error);
+                    errorHandler('Load Runs', error, dispatch);
                 });
         } else {
             console.log("No Need to Load Runs " + teamId);

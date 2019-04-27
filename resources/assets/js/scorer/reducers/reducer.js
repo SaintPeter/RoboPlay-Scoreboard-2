@@ -33,6 +33,9 @@ import {
   UPDATE_NOMINATION
 } from "../actions/Nominations";
 
+import {ERROR_AUTH_CLEAR, ERROR_AUTH_SET, ERROR_COMM_CLEAR, ERROR_COMM_INC} from "../actions/Errors";
+import {SAVING_SCORES_CLEAR, SAVING_SCORES_SET} from "../actions/SavingScores";
+
 function generic(state = { backURL: '/', title: 'Choose Competition'}, action) {
     switch (action.type) {
         case UPDATE_BACK_BUTTON:
@@ -194,14 +197,50 @@ function nominations(state = {}, action) {
   }
 }
 
+function errorAuth(state = false, action) {
+  switch(action.type) {
+    case ERROR_AUTH_SET:
+      return true;
+    case ERROR_AUTH_CLEAR:
+      return false;
+    default:
+      return state;
+  }
+}
+
+function savingScores(state = false, action) {
+  switch(action.type) {
+    case SAVING_SCORES_SET:
+      return true;
+    case SAVING_SCORES_CLEAR:
+      return false;
+    default:
+      return state;
+  }
+}
+
+function errorComm(state = 0, action) {
+  switch(action.type) {
+    case ERROR_COMM_INC:
+      return state + 1;
+    case ERROR_COMM_CLEAR:
+      return 0;
+    default:
+      return state;
+  }
+}
+
 const reducer = combineReducers({
-    generic,
-    teamList,
-    challengeData,
-    teamScores,
-    scoreSummary,
-    runs,
-    nominations,
+  generic,
+  teamList,
+  challengeData,
+  teamScores,
+  scoreSummary,
+  runs,
+  nominations,
+  errorAuth,
+  errorComm,
+  savingScores,
 });
 
 export default reducer;
