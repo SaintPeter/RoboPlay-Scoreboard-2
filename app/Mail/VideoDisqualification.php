@@ -36,11 +36,10 @@ class VideoDisqualification extends Mailable
 	        }, 'problems.detail'])
 		    ->find($this->video_id);
 
-    	$resolvable = $video->problems->contains(function($detail) {
-    		return !$detail->resolvable;
-	    });
+    	$resolvable = $video->problems->where('detail.resolvable', 0)->count() == 0;
 
-	    $this->subject = "[RoboPlay Scoreboard] Video '{$video->name}' Disqualified";
+	$this->subject = "[RoboPlay Scoreboard] Video '{$video->name}' Disqualified";
+
 
         return $this->markdown('emails.teachers.video_dq')->with(compact('video','resolvable'));
     }
