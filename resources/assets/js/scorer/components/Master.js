@@ -70,8 +70,8 @@ class MasterApp extends Component {
           </div>
           <div className="ui-content">
             <AlertMessage display={this.props.errorComm > 5} type="warning">
-              Warning: {this.props.errorComm} Communication Errors Have Occured. The server may be experiencing issues.
-              No action is required, but do not refresh this page unless instructed.
+              Warning: {this.props.errorComm} Communication Errors Have Occurred. The server may be experiencing issues or
+              you may be having a connectivity issue.  No action is required, but do not refresh this page unless instructed.
             </AlertMessage>
 
             <AlertMessage display={this.props.errorAuth} type="error">
