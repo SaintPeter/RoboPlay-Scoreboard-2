@@ -77,6 +77,11 @@ class Score_element extends Model {
 
 	protected $hidden = ['created_at', 'updated_at'];
 
+	protected $casts = [
+		'multiplier' => 'float',
+		'multiplier2' => 'float'
+	];
+
 	// Accessors and Mutators
 	public function setScoreMapAttribute($value) {
 		$this->attributes['score_map'] = join(",", array_map(function($subArr) {
