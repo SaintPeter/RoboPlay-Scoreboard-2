@@ -11,12 +11,12 @@
 		<thead>
 			<tr>
 				<th>Name</th>
-				<th>Display_text</th>
-				<th>Element_number</th>
-				<th>Base_value</th>
+				<th>Display Text</th>
+				<th>Element Number</th>
+				<th>Base Value</th>
 				<th>Multiplier</th>
-				<th>Min_entry</th>
-				<th>Max_entry</th>
+				<th>Min Entry</th>
+				<th>Max Entry</th>
 				<th>Type</th>
 				<th>Challenge_id</th>
 			</tr>
