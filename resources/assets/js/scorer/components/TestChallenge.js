@@ -26,6 +26,7 @@ class TestChallengeApp extends Component {
       chalData: {},
       submitConfirmVisible: false,
       abortConfirmVisible: false,
+      reloading: false,
     };
 
     console.log("Loaded TestChallengeApp");
@@ -43,8 +44,9 @@ class TestChallengeApp extends Component {
   }
 
   loadChallengeData = () => {
+    this.setState({reloading: true});
     loadSingleChal.load(this.props.match.params.chalId, (data) => {
-      this.setState({'chalData': data});
+      this.setState({'chalData': data, reloading: false});
     });
   };
 
@@ -170,6 +172,7 @@ class TestChallengeApp extends Component {
               <div className="ui-block-b">
                 <UIButton onClick={this.loadChallengeData}>
                   Reload
+                  {this.state.reloading ? ['ing',<i className='fa fa-spinner fa-pulse fa-fw'>{null}</i>] : null }
                 </UIButton>
               </div>
               <div className="ui-block-b">
