@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import ReactDOMServer from 'react-dom/server';
 
 
 export default class UIButton extends  Component {
@@ -14,7 +15,7 @@ export default class UIButton extends  Component {
 
     componentWillReceiveProps(nextProps) {
         if(this.props.children !== nextProps.children) {
-            this.$node.html(nextProps.children);
+            this.$node.html(ReactDOMServer.renderToStaticMarkup(nextProps.children));
         }
     }
 
