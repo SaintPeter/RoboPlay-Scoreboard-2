@@ -39,6 +39,11 @@ tr.score_row:nth-child(even) td:last-child {
 	text-align: left !important;
 	padding-left: 12px;
 }
+
+.judges tbody td:nth-child(2) {
+    width: 200px !important;
+}
+
 </style>
 @endsection
 
@@ -60,6 +65,7 @@ tr.score_row:nth-child(even) td:last-child {
 <table class="judges" id="judge_table">
 	<thead>
 		<th>Judge</th>
+        <th>Last Login</th>
 		<th>General</th>
 		<th>Part</th>
 		<th>Code</th>
@@ -69,6 +75,7 @@ tr.score_row:nth-child(even) td:last-child {
 		@foreach($user_score_count as $user => $counts)
 		<tr class="score_row">
 			<td>{{ $user }}</td>
+            <td>{{ $counts['user']->last_login_formatted() }}</td>
 			<td>{{ $counts[1] }}</td>
 			<td>{{ $counts[2] }}</td>
 			<td>{{ $counts[3] }}</td>

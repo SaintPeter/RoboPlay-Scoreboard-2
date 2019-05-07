@@ -86,6 +86,12 @@ class VideoManagementController extends Controller {
 		View::share('title', 'Judge Performance');
 
 		$year = intval($year) OR Session::get('year', false);
+		$limit_date = Carbon::create(1900);
+		if($year) {
+			$comp_year = CompYear::CompYearOrMostRecent($year);
+			$comp_year->load('vid_competitions');
+			$limit_date = $comp_year->vid_competitions->first()->event_start->subDays(7);
+		}
 
 		// Users Scoring Count
 		$user_list = User::with( [ 'video_scores' => function($q) use ($year) {
@@ -94,7 +100,10 @@ class VideoManagementController extends Controller {
 				} else {
 					return $q;
 				}
-			} ] )->where('roles', '&', UserTypes::Judge)->get();
+			} ] )
+			->where('roles', '&', UserTypes::Judge)
+			->whereDate('last_login','>=', $limit_date)
+			->get();
 
 		// After 2017 there is a "theme" entry in general scores
 		$general_divisor = 3;
@@ -106,15 +115,28 @@ class VideoManagementController extends Controller {
 		foreach($user_list as $user) {
 			$user_score_count[$user->name] = [ 1 => 0, 2 => 0, 3 => 0, 'total' => 0 ];
 			if(count($user->video_scores)) {
-				$user_score_count[$user->name][1] = $user->video_scores->reduce(function($count, $score) { return ($score->score_group == 1) ? $count + 1 : $count; }, 0) / $general_divisor;
-				$user_score_count[$user->name][2] = $user->video_scores->reduce(function($count, $score) { return ($score->score_group == 2) ? $count + 1 : $count; }, 0);
-				$user_score_count[$user->name][3] = $user->video_scores->reduce(function($count, $score) { return ($score->score_group == 3) ? $count + 1 : $count; }, 0);
+				$user_score_count[$user->name][1] = $user->video_scores->where('score_group', 1)->count() / $general_divisor;
+				$user_score_count[$user->name][2] = $user->video_scores->where('score_group', 2)->count();
+				$user_score_count[$user->name][3] = $user->video_scores->where('score_group', 3)->count();
 				$user_score_count[$user->name]['total'] = array_sum($user_score_count[$user->name]);
 			}
+			$user_score_count[$user->name]['user'] = $user;
 		}
 
 		uasort($user_score_count, function($a, $b) {
+			if($b['total'] == $a['total']) {
+				if($b['user']->last_login && $a['user']->last_login) {
+					return $b['user']->last_login->diffInDays($a['user']->last_login, false);
+				} elseif($b['user']->last_login) {
+					return 1;
+				} elseif($a['user']->last_login) {
+					return -1;
+				} else {
+					return 0;
+				}
+			} else {
 				return $b['total'] - $a['total'];
+			}
 		});
 
 		return View::make('video_scores.manage.judge_performance', compact('user_score_count', 'year'));
