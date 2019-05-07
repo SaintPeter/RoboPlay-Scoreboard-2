@@ -76,6 +76,18 @@ class User extends Authenticatable
 		return $this->hasMany('App\Models\Video_scores', 'judge_id', 'id');
 	}
 
+	public function score_runs() {
+		return $this->hasMany('App\Models\Score_run', 'judge_id', 'id');
+	}
+
+	public function videos() {
+		return $this->hasMany('App\Models\Video', 'teacher_id', 'id');
+	}
+
+	public function teams() {
+		return $this->hasMany('App\Models\Team', 'teacher_id', 'id');
+	}
+
 	public function password_resets() {
 		return $this->hasOne('App\Models\PasswordResets', 'email','email');
 	}
