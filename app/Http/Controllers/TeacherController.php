@@ -48,7 +48,7 @@ class TeacherController extends Controller {
 			                             'message' => 'We do not have a record of a registration for your school. <br>' .
                                                       "You can find the registration link <a href='http://c-stem.ucdavis.edu/c-stem-day/overview/$year-c-stem-day/'>here</a>.<br><br>" .
                                                       'If you have just registered, it can take up to 3 hours for a scoreboard sync to occur.<br><br>' .
-                                                      "For Registration Support, you can e-mail us at <a href='mailto:roboplay@c-stem.ucdavis.edu?subject=C-STEM Day $year Registration Issue'>cday@c-stem.ucdavis.edu</a>"]);
+                                                      "For Registration Support, you can e-mail us at <a href='mailto:roboplay@c-stem.ucdavis.edu?subject=C-STEM Day $year Registration Issue'>roboplay@c-stem.ucdavis.edu</a>"]);
 		}
 
 		$school_id = $invoice->school_id;
@@ -57,7 +57,7 @@ class TeacherController extends Controller {
 			return View::make('error', [ 'title' => 'User Data Error',
 			                             'error_title' => 'User&apos;s School Id is not set properly',
 			                             'message' => 'Your user record&apos;s school id is either not set or not set properly.  We cannot load your school registration.<br><br>' .
-			                             "E-mail us this error message and your wordpress username at <a href='mailto:roboplay@c-stem.ucdavis.edu?subject=C-STEM Day $year - User Data Error'>cday@c-stem.ucdavis.edu</a> for support."]);
+			                             "E-mail us this error message and your wordpress username at <a href='mailto:roboplay@c-stem.ucdavis.edu?subject=C-STEM Day $year - User Data Error'>roboplay@c-stem.ucdavis.edu</a> for support."]);
 		}
 
 		$tshirt_sizes = [
