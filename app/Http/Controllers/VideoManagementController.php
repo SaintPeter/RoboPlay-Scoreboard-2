@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 
 use App\Enums\ {
 	VideoFlag,
+	VideoReviewStatus,
 	UserTypes
 };
 
@@ -330,9 +331,16 @@ class VideoManagementController extends Controller {
 
 		// Videos with score count
 		if($year) {
-			$videos = Video::where('flag', 0)->with('scores')->where(DB::raw("year(created_at)"), $year)->get();
+			$videos = Video::with('scores')
+				->where('flag', VideoFlag::Normal)
+				->where('review_status', VideoReviewStatus::Passed)
+				->whereYear('created_at', $year)
+				->get();
 		} else {
-			$videos = Video::where('flag', 0)->with('scores')->get();
+			$videos = Video::with('scores')
+				->where('flag', VideoFlag::Normal)
+				->where('review_status', VideoReviewStatus::Passed)
+				->get();
 		}
 
 
@@ -419,7 +427,7 @@ class VideoManagementController extends Controller {
         $year = intval($year);
 
         // Get the competition start/end dates
-	    $comp = Vid_competition::where(DB::raw("year(event_start)"), $year)->first();
+	    $comp = Vid_competition::whereYear('event_start', $year)->first();
 
         // Calculate day delta
 	    if(Carbon::now()->gt($comp->event_end)) {
@@ -428,12 +436,15 @@ class VideoManagementController extends Controller {
 	        $delta_day = "Day " . Carbon::now()->addDay()->diffInDays($comp->event_start);
 	    }
 
-	    $video_count = Video::where('flag', 0)->where(DB::raw("year(created_at)"), $year)->count();
+	    $video_count = Video::where('flag', VideoFlag::Normal)
+		    ->where('review_status', VideoReviewStatus::Passed)
+		    ->whereYear('created_at', $year)
+		    ->count();
 
 		// Users Scoring Count
 		$user_list = User::with( [ 'video_scores' => function($q) use ($year) {
 				if($year) {
-					return $q->where(DB::raw("year(created_at)"), $year);
+					return $q->whereYear('created_at', $year);
 				} else {
 					return $q;
 				}
