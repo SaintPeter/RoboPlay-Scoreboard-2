@@ -61,7 +61,9 @@ class Files extends \Eloquent {
 
 	public function url() {
 		if($this->filetype->type == 'code') {
-			return route('file_viewer', [ 'file_id' => $this->id ]);
+			return route('file_viewer', ['file_id' => $this->id]);
+		} elseif($this->filetype->ext == 'stl') {
+			return route('stl_viewer', ['file_id' => $this->id]);
 		} elseif($this->filetype->ext == 'doc' OR
 		   $this->filetype->ext == 'docx' OR
 		   $this->filetype->ext == 'xls' OR

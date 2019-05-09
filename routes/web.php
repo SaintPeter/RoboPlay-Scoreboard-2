@@ -51,6 +51,16 @@ Route::get('file_viewer/{file_id}', [ 'as' => 'file_viewer', function($file_id) 
     }
 }]);
 
+Route::get('stl_viewer/{file_id}', [ 'as' => 'stl_viewer', function($file_id) {
+	app('debugbar')->disable();
+	$file = Files::find($file_id);
+	if(file_exists($file->full_path())) {
+		return view('stl_viewer.index')->with(compact('file'));
+	} else {
+		return response("ERROR: File '{$file->filename}' not found.", 404);
+	}
+}]);
+
 
 /* -----------------------------------------------------------------------------
 |                             Public Routes                                     |
