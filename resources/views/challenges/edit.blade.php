@@ -24,7 +24,7 @@
 			</div>
 			<div class="col-md-4">
 				{!! Form::label('level', 'Level')  !!}
-				{!! Form::selectRange('level', 1, 3 , null, [ 'class'=>'form-control col-md-2' ])  !!}
+				{!! Form::selectRange('level', 1, 4 , null, [ 'class'=>'form-control col-md-2' ])  !!}
 			</div>
             <div class="col-md-4">
                 {!! Form::label('year', 'Year')  !!}
