@@ -144,22 +144,7 @@ class ScoreVideosController extends Controller {
 	// Display video to be used
 	public function do_dispatch(Request $req)
 	{
-		// Get toggle statuses
-		if($req->has('judge_compute')) {
-			Cookie::queue('judge_compute', 1, 5 * 365 * 24 * 60 * 60);
-			$judge_compute = true;
-		} else {
-			Cookie::queue('judge_compute', null, -1);
-			$judge_compute = false;
-		}
-
-		if($req->has('judge_custom')) {
-			Cookie::queue('judge_custom', 1, 5 * 365 * 24 * 60 * 60);
-			$judge_custom = true;
-		} else {
-			Cookie::queue('judge_custom', null, -1);
-			$judge_custom = false;
-		}
+		list ($judge_compute, $judge_custom) = $this->handle_cookies($req);
 
 		// Get the accurate date
 		$date = Carbon::now()->setTimezone('America/Los_Angeles')->toDateString();
@@ -251,6 +236,27 @@ class ScoreVideosController extends Controller {
 		//return View::make('video_scores.create', compact('video', 'types'));
 		return redirect()->route('video.judge.score', [ 'video_id' => $video->id, 'no-cache' => microtime() ] );
 
+	}
+
+	// Handle Cookies
+	public function handle_cookies(Request $req) {
+		// Get toggle statuses
+		if($req->has('judge_compute')) {
+			Cookie::queue('judge_compute', 1, 5 * 365 * 24 * 60 * 60);
+			$judge_compute = true;
+		} else {
+			Cookie::queue('judge_compute', null, -1);
+			$judge_compute = false;
+		}
+
+		if($req->has('judge_custom')) {
+			Cookie::queue('judge_custom', 1, 5 * 365 * 24 * 60 * 60);
+			$judge_custom = true;
+		} else {
+			Cookie::queue('judge_custom', null, -1);
+			$judge_custom = false;
+		}
+		return [ $judge_compute, $judge_custom ];
 	}
 
 	// Score a Specific Video combination
@@ -402,8 +408,21 @@ class ScoreVideosController extends Controller {
 	 * @param $video_id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function edit($video_id)
+	public function edit(Request $req, $video_id)
 	{
+		list ($judge_compute, $judge_custom) = $this->handle_cookies($req);
+
+		$video_types = [];
+		// User Custom Parts
+		if($req->hasCookie('judge_custom') or $judge_custom) {
+			$video_types[VideoType::Custom] = VideoType::Custom;
+		}
+
+		// User Computational Thinking
+		if($req->hasCookie('judge_compute') or $judge_compute) {
+			$video_types[VideoType::Compute] = VideoType::Compute;
+		}
+
 		//Breadcrumbs::addCrumb('Edit Score', 'edit');
 		View::share('title', 'Edit Video Score');
 		$video = Video::with('vid_division.competition', 'comments')->find($video_id);
@@ -424,7 +443,7 @@ class ScoreVideosController extends Controller {
 		//dd($scores);
 
 		$groups = [ ];
-		$groups = array_keys($scores->pluck('score_group', 'score_group')->all());
+		$groups = array_keys($scores->pluck('score_group', 'score_group')->all()+ $video_types);
 
 		//$missing_groups = array_diff([ VideoType::Compute, VideoType::General, VideoType::Custom ], $groups);
 
@@ -432,8 +451,10 @@ class ScoreVideosController extends Controller {
 		$vid_competition_id = $video->vid_division->competition->id;
 
 		$types = Vid_score_type::with( [ 'Rubric' => function($q) use ($vid_competition_id) {
-			return $q->where('vid_competition_id', $vid_competition_id);
-		}])->whereIn('group', $groups)->get();
+				return $q->where('vid_competition_id', $vid_competition_id);
+			}])
+			->whereIn('group', $groups)
+			->get();
 
 		$video_scores = [];
 		foreach($scores as $score) {
@@ -448,6 +469,24 @@ class ScoreVideosController extends Controller {
 			$video_scores[$score->vid_score_type_id]['s8'] = $score->s8;
 			$video_scores[$score->vid_score_type_id]['s9'] = $score->s9;
 			$video_scores[$score->vid_score_type_id]['s10'] = $score->s10;
+		}
+
+		// Add blanks for unscored types
+		foreach($types as $type) {
+			if(!array_key_exists($type->id, $video_scores)) {
+				$video_scores[$type->id] = [
+					's1' => 0,
+					's2' => 0,
+					's3' => 0,
+					's4' => 0,
+					's5' => 0,
+					's6' => 0,
+					's7' => 0,
+					's8' => 0,
+					's9' => 0,
+					's10' => 0
+				];
+			}
 		}
 
 		return View::make('video_scores.edit', compact('video', 'video_scores', 'types'))
@@ -473,8 +512,14 @@ class ScoreVideosController extends Controller {
 			$score['video_id'] = $video_id;
 			$score['vid_division_id'] = $video->vid_division_id;
 			$score['judge_id'] = Auth::user()->id;
-			$this_score = Video_scores::find($score['id']);
-			$this_score->update($score);
+
+			// Update existing scores, create new scores
+			if(array_key_exists('id', $score)) {
+				$this_score = Video_scores::find($score['id']);
+				$this_score->update($score);
+			} else {
+				$this->score = Video_scores::create($score);
+			}
 		}
 
 		// Deal with problem reports

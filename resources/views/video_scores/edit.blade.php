@@ -106,7 +106,9 @@
 				<td class="cb_col">{!! Form::radio('scores[' . $type->id .  '][' . $rubric->element . ']', '2', $video_scores[$type->id][$rubric->element]==2)  !!}</td>
 				<td class="cb_col">{!! Form::radio('scores[' . $type->id .  '][' . $rubric->element . ']', '3', $video_scores[$type->id][$rubric->element]==3)  !!}</td>
 				<td class="cb_col">{!! Form::radio('scores[' . $type->id .  '][' . $rubric->element . ']', '4', $video_scores[$type->id][$rubric->element]==4)  !!}
-					{!! Form::hidden('scores[' . $type->id .  '][id]', $video_scores[$type->id]['id'])  !!}
+                @if(array_key_exists('id',$video_scores))
+                    {!! Form::hidden('scores[' . $type->id .  '][id]', $video_scores[$type->id]['id'])  !!}
+                @endif
 				</td>
 			</tr>
 			<tr class="rubric_row hidden rubric_{{ $rubric->id }}">

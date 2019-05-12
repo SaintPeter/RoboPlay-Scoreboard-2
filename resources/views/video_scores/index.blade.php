@@ -99,6 +99,20 @@ $(document).uitooltip({
               return $(this).prop('title');
           }
       });
+
+$(document).on('ready', function() {
+  $('.edit_link').on('click', function(e) {
+    var judgeValues = [];
+    $('#judge_compute').is(':checked') ? judgeValues.push("judge_compute=on") : null;
+    $('#judge_custom').is(':checked') ? judgeValues.push("judge_custom=on") : null;
+    var judgeAppend = '';
+    if(judgeValues.length) {
+      judgeAppend = '?' + judgeValues.join('&');
+    }
+    e.originalEvent.currentTarget.href = e.originalEvent.currentTarget.href + judgeAppend;
+  });
+});
+
 </script>
 @endsection
 
@@ -194,7 +208,7 @@ $(document).uitooltip({
 						<tr class="score_row">
 							 @if($scores['flag'] == VideoFlag::Normal)
 							    <td class="{{ $scores['comments'] ? 'comment' : '' }}" title="{{ $scores['comments'] }}">
-									<a href="{{ route('video.judge.edit', [ $scores['video_id'] ]) }}">
+									<a href="{{ route('video.judge.edit', [ $scores['video_id'] ]) }}" class="edit_link">
 										<span class="glyphicon glyphicon-edit"></span>
 										<strong>{{ $vid_title }}</strong>
 									</a>
