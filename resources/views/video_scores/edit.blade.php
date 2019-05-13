@@ -106,7 +106,7 @@
 				<td class="cb_col">{!! Form::radio('scores[' . $type->id .  '][' . $rubric->element . ']', '2', $video_scores[$type->id][$rubric->element]==2)  !!}</td>
 				<td class="cb_col">{!! Form::radio('scores[' . $type->id .  '][' . $rubric->element . ']', '3', $video_scores[$type->id][$rubric->element]==3)  !!}</td>
 				<td class="cb_col">{!! Form::radio('scores[' . $type->id .  '][' . $rubric->element . ']', '4', $video_scores[$type->id][$rubric->element]==4)  !!}
-                @if(array_key_exists('id',$video_scores))
+                @if(array_key_exists('id',$video_scores[$type->id]))
                     {!! Form::hidden('scores[' . $type->id .  '][id]', $video_scores[$type->id]['id'])  !!}
                 @endif
 				</td>
