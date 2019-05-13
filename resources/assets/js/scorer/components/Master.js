@@ -78,7 +78,7 @@ class MasterApp extends Component {
               Warning: You are not properly authenticated.  Refresh the page to ensure you are logged in.
             </AlertMessage>
 
-            <AlertMessage display={this.props.scoreSummary.u > 1} type="warning">
+            <AlertMessage display={this.props.scoreSummary.u > 10} type="warning">
               Warning: You have {this.props.scoreSummary.u} unsaved scores.
               <UIButton onClick={this.scoreSendingTimer.bind(this)}>
                 Force Save Scores
