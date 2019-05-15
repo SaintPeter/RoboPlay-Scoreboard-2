@@ -41,7 +41,7 @@ export default class YesNo extends  Component {
       value = this.props.defaultValue ? this.props.defaultValue : value;
 
         return [
-            <h4 dangerouslySetInnerHTML={{ __html: this.props.display_text }} key="fsTitle"/>,
+            //<h4 dangerouslySetInnerHTML={{ __html: this.props.display_text }} key="fsTitle"/>,
             <select ref="flipswitch"
                     data-role="flipswitch"
                     className="ui-flipswitch-input"
