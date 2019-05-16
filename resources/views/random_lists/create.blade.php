@@ -1,3 +1,12 @@
+@if ($errors->any())
+    <div class="col-md-12">
+        <h3>Validation Errors</h3>
+        <ul>
+            {!! implode('', $errors->all('<li class="error">:message</li>'))  !!}
+        </ul>
+    </div>
+@endif
+
 {!! Form::model('RandomList', [ 'route' => 'random_list.store', 'id' => 'random_list_form' ])  !!}
 	<div class="form-group">
 		{!! Form::label('name', 'Name', [ 'class' => 'form-label' ])  !!}
@@ -67,11 +76,3 @@
 
 {!! Form::close()  !!}
 
-@if ($errors->any())
-<div class="col-md-6">
-	<h3>Validation Errors</h3>
-	<ul>
-		{{ implode('', $errors->all('<li class="error">:message</li>')) }}
-	</ul>
-</div>
-@endif
