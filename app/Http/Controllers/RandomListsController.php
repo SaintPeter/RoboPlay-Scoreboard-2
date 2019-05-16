@@ -52,7 +52,10 @@ class RandomListsController extends Controller {
 
 		if ($validator->fails())
 		{
-			return redirect()->back()->withErrors($validator)->withInput();
+			return View::make('random_lists.create')
+				->with(['challenge_id' => $req->input('challenge_id'), 'order' => $req->input('display_order') ])
+				->withErrors($validator)
+				->withInput($req->all());
 		}
 
 		RandomList::create($data);
