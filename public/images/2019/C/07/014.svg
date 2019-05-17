@@ -1,0 +1,469 @@
+<?xml version='1.0' encoding='ASCII' standalone='yes'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="3492.0000000000005 1620.0 792.0000000000001 792.0" style="enable-background:new 0 0 5184 3456;" xml:space="preserve" width="300px" height="300px">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+	.st1{fill:#414042;}
+	.st2{fill:#004B85;}
+	.st3{fill:#6D6E71;}
+	.st4{fill:none;stroke:#F1F2F2;stroke-width:18;stroke-miterlimit:10;stroke-dasharray:72;}
+	.st5{fill:#6D6E71;stroke:#414042;stroke-width:18;stroke-miterlimit:10;}
+	.st6{fill:none;stroke:#F1F2F2;stroke-width:18;stroke-miterlimit:10;}
+	.st7{fill:none;stroke:#F1F2F2;stroke-width:18;stroke-miterlimit:10;stroke-dasharray:72,72;}
+	.st8{fill:none;stroke:#6D6E71;stroke-width:36;stroke-miterlimit:10;}
+	.st9{fill:none;stroke:#414042;stroke-width:18;stroke-miterlimit:10;}
+	.st10{fill:none;stroke:#D1D3D4;stroke-width:36;stroke-miterlimit:10;}
+	.st11{fill:#D1D3D4;}
+	.st12{fill:none;stroke:#D1D3D4;stroke-width:28.8;stroke-miterlimit:10;}
+	.st13{font-family:'NunitoSans-Black';}
+	.st14{font-size:135px;}
+	.st15{font-size:108px;}
+	.st16{opacity:0.65;}
+	.st17{fill:none;stroke:#939598;stroke-width:2.25;stroke-miterlimit:10;}
+	.st18{fill:none;stroke:#000000;stroke-width:9;stroke-miterlimit:10;}
+	.st19{stroke:#000000;stroke-miterlimit:10;}
+	.st20{font-family:'NunitoSans-ExtraBold';}
+	.st21{font-size:72px;}
+	.st22{fill:none;stroke:#000000;stroke-width:18;stroke-miterlimit:10;}
+	.st23{fill:none;stroke:#FFFFFF;stroke-width:9;stroke-miterlimit:10;}
+	.st24{fill:none;stroke:#414042;stroke-width:18;stroke-linecap:round;stroke-miterlimit:10;}
+	.st25{fill-rule:evenodd;clip-rule:evenodd;fill:#414042;}
+	.st26{fill:#FFFFFF;stroke:#414042;stroke-width:18;stroke-linecap:round;stroke-miterlimit:10;}
+	.st27{font-size:90px;}
+	.st28{fill:#E7A19A;stroke:#CD163F;stroke-width:18;stroke-miterlimit:10;}
+	.st29{fill:#CD163F;}
+	.st30{fill:none;stroke:#CD163F;stroke-width:9;stroke-miterlimit:10;}
+	.st31{fill:#F1F2F2;}
+	.st32{font-size:54px;}
+	.st33{fill:#83A495;stroke:#005133;stroke-width:18;stroke-miterlimit:10;}
+	.st34{fill:#005133;}
+	.st35{fill:none;stroke:#005133;stroke-width:9;stroke-miterlimit:10;}
+	.st36{fill:#859EC4;stroke:#004B85;stroke-width:18;stroke-miterlimit:10;}
+	.st37{fill:none;stroke:#004B85;stroke-width:9;stroke-miterlimit:10;}
+	.st38{font-size:63px;}
+	.st39{fill:none;stroke:#000000;stroke-width:4.5;stroke-miterlimit:10;}
+	.st40{font-size:27px;}
+</style>
+<g id="Debris_Zone">
+	<g>
+		<rect x="1737" y="1449" class="st0" width="2718" height="1350"/>
+		<path class="st1" d="M4446,1458v1332H1746V1458H4446 M4464,1440H1728v1368h2736V1440L4464,1440z"/>
+	</g>
+	<g>
+		<g>
+			<rect x="3639.6" y="1767.6" class="st2" width="64.8" height="64.8"/>
+		</g>
+		<g>
+			<rect x="3855.6" y="1767.6" class="st2" width="64.8" height="64.8"/>
+		</g>
+		<g>
+			<rect x="4071.6" y="1767.6" class="st2" width="64.8" height="64.8"/>
+		</g>
+		<g>
+			<rect x="3639.6" y="1983.6" class="st2" width="64.8" height="64.8"/>
+		</g>
+		<g>
+			<rect x="3855.6" y="1983.6" class="st2" width="64.8" height="64.8"/>
+		</g>
+		<g>
+			<rect x="4071.6" y="1983.6" class="st2" width="64.8" height="64.8"/>
+		</g>
+		<g>
+			<rect x="3639.6" y="2199.6" class="st2" width="64.8" height="64.8"/>
+		</g>
+		<g>
+			<rect x="3855.6" y="2199.6" class="st2" width="64.8" height="64.8"/>
+		</g>
+		<g>
+			<rect x="4071.6" y="2199.6" class="st2" width="64.8" height="64.8"/>
+		</g>
+	</g>
+	<g>
+		<path class="st2" d="M4248,1656h-36v9h36V1656L4248,1656z M4176,1656h-36v9h36V1656L4176,1656z M4104,1656h-36v9h36V1656    L4104,1656z M4032,1656h-36v9h36V1656L4032,1656z M3960,1656h-36v9h36V1656L3960,1656z M3888,1656h-36v9h36V1656L3888,1656z     M3816,1656h-36v9h36V1656L3816,1656z M3744,1656h-36v9h36V1656L3744,1656z M3672,1656h-36v9h36V1656L3672,1656z M3600,1656h-36v9    h36V1656L3600,1656z M3537,1656h-9v36h9V1656L3537,1656z M3537,1728h-9v36h9V1728L3537,1728z M3537,1800h-9v36h9V1800L3537,1800z     M3537,1872h-9v36h9V1872L3537,1872z M3537,1944h-9v36h9V1944L3537,1944z M3537,2016h-9v36h9V2016L3537,2016z M3537,2088h-9v36h9    V2088L3537,2088z M3537,2160h-9v36h9V2160L3537,2160z M3537,2232h-9v36h9V2232L3537,2232z M3537,2304h-9v36h9V2304L3537,2304z     M3564,2367h-36v9h36V2367L3564,2367z M3636,2367h-36v9h36V2367L3636,2367z M3708,2367h-36v9h36V2367L3708,2367z M3780,2367h-36v9    h36V2367L3780,2367z M3852,2367h-36v9h36V2367L3852,2367z M3924,2367h-36v9h36V2367L3924,2367z M3996,2367h-36v9h36V2367    L3996,2367z M4068,2367h-36v9h36V2367L4068,2367z M4140,2367h-36v9h36V2367L4140,2367z M4212,2367h-36v9h36V2367L4212,2367z     M4248,2340h-9v36h9V2340L4248,2340z M4248,2268h-9v36h9V2268L4248,2268z M4248,2196h-9v36h9V2196L4248,2196z M4248,2124h-9v36h9    V2124L4248,2124z M4248,2052h-9v36h9V2052L4248,2052z M4248,1980h-9v36h9V1980L4248,1980z M4248,1908h-9v36h9V1908L4248,1908z     M4248,1836h-9v36h9V1836L4248,1836z M4248,1764h-9v36h9V1764L4248,1764z M4248,1692h-9v36h9V1692L4248,1692z"/>
+	</g>
+</g>
+<g id="Track">
+	<g id="BackCurved">
+		<path class="st3" d="M1152,3159c-57.39,0-114.61-5.69-170.09-16.9c-55.47-11.22-110.25-28.17-162.8-50.4    c-50.68-21.44-99.34-47.78-144.62-78.3c-45.28-30.52-88.03-65.78-127.06-104.82c-39.04-39.04-74.3-81.79-104.82-127.06    c-30.52-45.28-56.86-93.94-78.3-144.62c-22.23-52.55-39.18-107.32-50.4-162.8C302.69,2418.61,297,2361.39,297,2304    c0-38.03,3.77-75.98,11.22-112.78c7.45-36.79,18.7-73.14,33.45-108.01c14.22-33.62,31.69-65.89,51.92-95.91    c20.23-30.02,43.61-58.36,69.48-84.23L1699.45,666.75l203.62-203.68c26.89-26.89,56.39-51.05,87.68-71.81    c31.28-20.75,64.94-38.49,100.03-52.72c33.83-13.72,69-24.18,104.53-31.11c35.53-6.92,72.1-10.43,108.69-10.43h1728    c57.39,0,114.61,5.69,170.09,16.9c55.47,11.22,110.25,28.17,162.8,50.4c50.69,21.44,99.34,47.78,144.62,78.3    c45.28,30.52,88.03,65.78,127.06,104.82c39.04,39.04,74.3,81.79,104.82,127.06c30.52,45.28,56.86,93.94,78.3,144.62    c22.23,52.55,39.18,107.32,50.4,162.8c11.22,55.48,16.9,112.71,16.9,170.09v1152c0,57.39-5.69,114.61-16.9,170.09    c-11.22,55.47-28.17,110.25-50.4,162.8c-21.44,50.69-47.78,99.34-78.3,144.62c-30.52,45.28-65.78,88.03-104.82,127.06    c-39.04,39.04-81.79,74.3-127.06,104.82c-45.28,30.52-93.94,56.86-144.62,78.3c-52.55,22.23-107.32,39.18-162.8,50.4    c-55.48,11.22-112.71,16.9-170.09,16.9H1152z M855,2300.27v3.73c0,79.21,30.93,153.76,87.08,209.92S1072.79,2601,1152,2601h2880    c79.21,0,153.76-30.93,209.92-87.08S4329,2383.21,4329,2304V1152c0-79.21-30.93-153.76-87.08-209.92S4111.21,855,4032,855h-863.97    l-867.73,0.03L855,2300.27z"/>
+		<path class="st1" d="M4032,306c56.79,0,113.42,5.63,168.31,16.73c54.89,11.1,109.08,27.87,161.08,49.87    c50.15,21.21,98.3,47.28,143.1,77.47c44.8,30.2,87.1,65.09,125.73,103.72c38.63,38.63,73.52,80.93,103.72,125.73    c30.19,44.8,56.26,92.94,77.47,143.1c21.99,52,38.77,106.19,49.87,161.08c11.1,54.89,16.73,111.52,16.73,168.31v576v576    c0,56.79-5.63,113.42-16.73,168.31c-11.1,54.88-27.87,109.08-49.87,161.07c-21.21,50.15-47.28,98.3-77.47,143.1    c-30.2,44.8-65.09,87.1-103.72,125.73c-38.63,38.63-80.93,73.52-125.73,103.72c-44.8,30.2-92.94,56.26-143.1,77.47    c-52,21.99-106.19,38.77-161.07,49.87c-54.89,11.1-111.52,16.73-168.31,16.73H2592H1152c-56.79,0-113.41-5.63-168.31-16.73    c-54.89-11.1-109.08-27.87-161.08-49.87c-50.15-21.21-98.3-47.28-143.1-77.47c-44.8-30.2-87.1-65.09-125.73-103.72    c-38.63-38.63-73.52-80.93-103.72-125.73c-30.19-44.8-56.26-92.94-77.47-143.1c-21.99-52-38.77-106.19-49.87-161.07    C311.63,2417.41,306,2360.79,306,2304c0-37.44,3.71-74.78,11.04-110.99c7.32-36.2,18.4-71.96,32.92-106.29    c13.99-33.09,31.18-64.84,51.09-94.38c19.91-29.54,42.92-57.44,68.38-82.9l618.19-618.16l618.19-618.16l101.81-101.84    l101.8-101.84c26.47-26.47,55.51-50.25,86.29-70.67c30.78-20.42,63.9-37.87,98.44-51.88c33.29-13.5,67.9-23.8,102.87-30.61    C2232,309.45,2267.99,306,2304,306h864H4032 M1152,2610h1440h1440c81.61,0,158.42-31.86,216.28-89.72    c57.86-57.86,89.72-134.67,89.72-216.28v-576v-576c0-81.61-31.86-158.42-89.72-216.28C4190.42,877.86,4113.61,846,4032,846    h-863.97l-864,0.03h-7.45l-5.27,5.27L851.27,2291.27l-5.27,5.27v7.46c0,81.61,31.86,158.42,89.72,216.28    C993.58,2578.14,1070.39,2610,1152,2610 M4032,288h-864h-864c-37.34,0-74.23,3.55-110.41,10.6s-71.67,17.6-106.19,31.6    c-35.82,14.52-69.77,32.43-101.62,53.56c-31.86,21.13-61.62,45.5-89.07,72.94L1794.9,558.55l-101.81,101.84l-618.19,618.16    L456.71,1896.7c-26.4,26.4-49.98,55-70.58,85.57c-20.6,30.57-38.23,63.12-52.74,97.43c-15.06,35.6-26.4,72.26-33.99,109.73    c-7.58,37.47-11.4,75.74-11.4,114.56c0,58.26,5.72,115.68,17.08,171.88c11.36,56.2,28.37,111.17,50.93,164.52    c21.77,51.46,48.21,100.28,79.13,146.15c30.91,45.86,66.29,88.77,105.92,128.4c39.63,39.63,82.53,75.01,128.4,105.92    c45.86,30.91,94.69,57.36,146.15,79.13c53.35,22.56,108.32,39.57,164.52,50.93c56.2,11.36,113.62,17.08,171.88,17.08h1440h1440    c58.26,0,115.68-5.72,171.88-17.08c56.2-11.36,111.17-28.37,164.52-50.93c51.46-21.77,100.28-48.21,146.15-79.13    c45.86-30.91,88.77-66.29,128.4-105.92c39.63-39.63,75.01-82.53,105.92-128.4c30.91-45.86,57.36-94.69,79.13-146.15    c22.56-53.35,39.57-108.32,50.93-164.52c11.36-56.2,17.08-113.62,17.08-171.88v-576v-576c0-58.26-5.72-115.68-17.08-171.88    c-11.36-56.2-28.37-111.17-50.93-164.52c-21.77-51.46-48.21-100.28-79.13-146.15c-30.91-45.86-66.29-88.77-105.92-128.4    c-39.63-39.63-82.53-75.01-128.4-105.92c-45.86-30.91-94.69-57.36-146.15-79.13c-53.35-22.57-108.32-39.57-164.52-50.93    C4147.68,293.72,4090.26,288,4032,288L4032,288z M1152,2592c-79.4,0-151.4-32.3-203.55-84.45C896.3,2455.4,864,2383.4,864,2304    L2304.03,864.03l864-0.03H4032c79.4,0,151.4,32.3,203.55,84.45C4287.7,1000.6,4320,1072.6,4320,1152v576v576    c0,79.4-32.3,151.4-84.45,203.55C4183.4,2559.7,4111.4,2592,4032,2592H2592H1152L1152,2592z"/>
+	</g>
+	<path class="st4" d="M660.35,2100.35C608.24,2152.47,576,2224.47,576,2304c0,318.12,257.88,576,576,576c0,0,2640,0,2640,0   s240,0,240,0c318.12,0,576-257.88,576-576v-192v-960c0-318.12-257.88-576-576-576c0,0-1728,0-1728,0   c-73.71,0-147.41,28.12-203.65,84.35l0.03,0.03l-1440,1440"/>
+	<g id="Finish_Line">
+		<path d="M4067.93,2607.9v541.34c12.05-0.5,24.08-1.26,36.07-2.27v-545.53C4092.13,2604.31,4080.1,2606.47,4067.93,2607.9z"/>
+		<path class="st0" d="M4068,2628.02h36v72h-36V2628.02z M4068,2772.02h36v72h-36V2772.02z M4068,2916.02h36v72h-36L4068,2916.02z     M4068,3060.02h36v72h-36V3060.02z"/>
+		<path class="st0" d="M4031.89,2610v540h0.11c12.05,0,24.09-0.27,36.11-0.77l0-541.35c-11.92,1.4-23.96,2.13-36.11,2.13H4031.89z"/>
+		<path d="M4032,2628.02h36v72h-36V2628.02z M4032,2772.02h36v72h-36V2772.02z M4032,2916.02h36l0,72h-36L4032,2916.02z     M4032,3060.02h36v72h-36V3060.02z"/>
+	</g>
+	<g id="ShortcutandPit">
+		<polyline id="ShortcutBox_1_" class="st5" points="3456,846 3456,1723.5 3456,2601 3168,2601 2880,2601 2880,1723.5 2880,846       "/>
+		<g id="ShortcutCenter">
+			<g>
+				<line class="st6" x1="3168" y1="864" x2="3168" y2="900"/>
+				<line class="st7" x1="3168" y1="972" x2="3168" y2="2520"/>
+				<line class="st6" x1="3168" y1="2556" x2="3168" y2="2592"/>
+			</g>
+		</g>
+		<line id="LineMask" class="st8" x1="1746" y1="2610" x2="3447" y2="2610"/>
+		<line id="Center" class="st9" x1="2304" y1="2601" x2="2880" y2="2601"/>
+	</g>
+	<g id="Arrows">
+		<g>
+			<g>
+				<line class="st10" x1="3096" y1="576" x2="3312" y2="576"/>
+				<g>
+					<polygon class="st11" points="3115.96,644.21 2997.83,576 3115.96,507.79      "/>
+				</g>
+			</g>
+		</g>
+		<g>
+			<g>
+				<path class="st12" d="M3168,684c0-79.59,64.41-108,144-108"/>
+				<g>
+					<polygon class="st11" points="3222.57,668.03 3168,762.54 3113.43,668.03      "/>
+				</g>
+			</g>
+		</g>
+		<g>
+			<g>
+				<line class="st10" x1="3096" y1="2880" x2="3312" y2="2880"/>
+				<g>
+					<polygon class="st11" points="3292.04,2948.21 3410.17,2880 3292.04,2811.79      "/>
+				</g>
+			</g>
+		</g>
+		<path class="st12" d="M3168,2772c0,79.59,64.41,108,144,108"/>
+	</g>
+</g>
+<g id="Global_Labels">
+	<text transform="matrix(1 0 0 1 1100.9061 2231.9998)"><tspan x="0" y="0" class="st13 st14">Lookout</tspan><tspan x="114.07" y="162" class="st13 st14">Area</tspan></text>
+	<text transform="matrix(1 0 0 1 3584.3843 1583.9995)" class="st13 st15">Debris Grid</text>
+	<text transform="matrix(1 0 0 1 574.2158 215.9999)" class="st13 st14">Parking Lot</text>
+	<text transform="matrix(1 0 0 1 1771.7019 1655.9999)" class="st13 st14">Pit Stop</text>
+</g>
+<g id="Outer_x5F_Grid">
+	<g id="HorizGrid" class="st16">
+		<g>
+			<line class="st17" x1="0" y1="576" x2="5184" y2="576"/>
+			<line class="st17" x1="0" y1="864" x2="5184" y2="864"/>
+			<line class="st17" x1="0" y1="1152" x2="5184" y2="1152"/>
+			<line class="st17" x1="0" y1="1440" x2="5184" y2="1440"/>
+			<line class="st17" x1="0" y1="1728" x2="5184" y2="1728"/>
+			<line class="st17" x1="0" y1="2016" x2="5184" y2="2016"/>
+			<line class="st17" x1="0" y1="2304" x2="5184" y2="2304"/>
+			<line class="st17" x1="0" y1="2592" x2="5184" y2="2592"/>
+			<line class="st17" x1="0" y1="2880" x2="5184" y2="2880"/>
+			<line class="st17" x1="0" y1="288" x2="5184" y2="288"/>
+		</g>
+		<line class="st17" x1="3" y1="3168" x2="5187" y2="3168"/>
+	</g>
+	<g id="VertGrid" class="st16">
+		<g>
+			<line class="st17" x1="2016" y1="0" x2="2016" y2="3456"/>
+			<line class="st17" x1="3744" y1="0" x2="3744" y2="3456"/>
+			<line class="st17" x1="576" y1="0" x2="576" y2="3456"/>
+			<line class="st17" x1="4032" y1="0" x2="4032" y2="3456"/>
+			<line class="st17" x1="4320" y1="0" x2="4320" y2="3456"/>
+			<line class="st17" x1="4608" y1="0" x2="4608" y2="3456"/>
+			<line class="st17" x1="4896" y1="0" x2="4896" y2="3456"/>
+			<line class="st17" x1="1728" y1="0" x2="1728" y2="3456"/>
+			<line class="st17" x1="1440" y1="0" x2="1440" y2="3456"/>
+			<line class="st17" x1="1152" y1="0" x2="1152" y2="3456"/>
+			<line class="st17" x1="864" y1="0" x2="864" y2="3456"/>
+			<line class="st17" x1="2304" y1="0" x2="2304" y2="3456"/>
+			<line class="st17" x1="2592" y1="0" x2="2592" y2="3456"/>
+			<line class="st17" x1="2880" y1="0" x2="2880" y2="3456"/>
+			<line class="st17" x1="3168" y1="0" x2="3168" y2="3456"/>
+			<line class="st17" x1="3456" y1="0" x2="3456" y2="3456"/>
+			<line class="st17" x1="288" y1="0" x2="288" y2="3456"/>
+		</g>
+	</g>
+	<g id="YAxis">
+		<g id="TickY">
+			<g id="_x34_th_4_">
+				<line class="st18" x1="72" y1="3168" x2="0" y2="3168"/>
+				<line class="st18" x1="144" y1="2880" x2="0" y2="2880"/>
+				<line class="st18" x1="72" y1="2592" x2="0" y2="2592"/>
+				<line class="st18" x1="144" y1="2304" x2="0" y2="2304"/>
+				<line class="st18" x1="72" y1="2016" x2="0" y2="2016"/>
+				<line class="st18" x1="144" y1="1728" x2="0" y2="1728"/>
+				<line class="st18" x1="72" y1="1440" x2="0" y2="1440"/>
+				<line class="st18" x1="144" y1="1152" x2="0" y2="1152"/>
+				<line class="st18" x1="72" y1="864" x2="0" y2="864"/>
+				<line class="st18" x1="144" y1="576" x2="0" y2="576"/>
+				<line class="st18" x1="72" y1="288" x2="0" y2="288"/>
+			</g>
+		</g>
+		<g id="Numbers_1_">
+			<g id="_x34_th_3_">
+				<text transform="matrix(1 0 0 1 152.7136 3189.0239)" class="st19 st20 st21">4 </text>
+				<text transform="matrix(1 0 0 1 109.4417 2613.0225)" class="st19 st20 st21">12 </text>
+				<text transform="matrix(1 0 0 1 109.4417 2037.0208)" class="st19 st20 st21">20 </text>
+				<text transform="matrix(1 0 0 1 109.4417 1461.0188)" class="st19 st20 st21">28 </text>
+				<text transform="matrix(1 0 0 1 109.5139 885.0172)" class="st19 st20 st21">36 </text>
+				<text transform="matrix(1 0 0 1 118.529 309.0229)" class="st19 st20 st21">44</text>
+			</g>
+		</g>
+		<line class="st22" x1="9" y1="0" x2="9" y2="3456"/>
+	</g>
+	<g id="XAxis">
+		<g id="TicksX">
+			<g id="_x34_th_2_">
+				<g>
+					<line class="st23" x1="288" y1="3384" x2="288" y2="3456"/>
+					<line class="st23" x1="576" y1="3312" x2="576" y2="3456"/>
+					<line class="st23" x1="864" y1="3384" x2="864" y2="3456"/>
+					<line class="st23" x1="1152" y1="3312" x2="1152" y2="3456"/>
+					<line class="st23" x1="1440" y1="3384" x2="1440" y2="3456"/>
+					<line class="st23" x1="1728" y1="3312" x2="1728" y2="3456"/>
+					<line class="st23" x1="2016" y1="3384" x2="2016" y2="3456"/>
+					<line class="st23" x1="2304" y1="3312" x2="2304" y2="3456"/>
+					<line class="st23" x1="2592" y1="3384" x2="2592" y2="3456"/>
+					<line class="st23" x1="2880" y1="3312" x2="2880" y2="3456"/>
+					<line class="st23" x1="3168" y1="3384" x2="3168" y2="3456"/>
+					<line class="st23" x1="3456" y1="3312" x2="3456" y2="3456"/>
+					<line class="st23" x1="3744" y1="3384" x2="3744" y2="3456"/>
+					<line class="st23" x1="4032" y1="3312" x2="4032" y2="3456"/>
+					<line class="st23" x1="4320" y1="3384" x2="4320" y2="3456"/>
+					<line class="st23" x1="4608" y1="3312" x2="4608" y2="3456"/>
+					<line class="st23" x1="4896" y1="3384" x2="4896" y2="3456"/>
+				</g>
+				<g>
+					<line class="st18" x1="288" y1="3384" x2="288" y2="3456"/>
+					<line class="st18" x1="576" y1="3312" x2="576" y2="3456"/>
+					<line class="st18" x1="864" y1="3384" x2="864" y2="3456"/>
+					<line class="st18" x1="1152" y1="3312" x2="1152" y2="3456"/>
+					<line class="st18" x1="1440" y1="3384" x2="1440" y2="3456"/>
+					<line class="st18" x1="1728" y1="3312" x2="1728" y2="3456"/>
+					<line class="st18" x1="2016" y1="3384" x2="2016" y2="3456"/>
+					<line class="st18" x1="2304" y1="3312" x2="2304" y2="3456"/>
+					<line class="st18" x1="2592" y1="3384" x2="2592" y2="3456"/>
+					<line class="st18" x1="2880" y1="3312" x2="2880" y2="3456"/>
+					<line class="st18" x1="3168" y1="3384" x2="3168" y2="3456"/>
+					<line class="st18" x1="3456" y1="3312" x2="3456" y2="3456"/>
+					<line class="st18" x1="3744" y1="3384" x2="3744" y2="3456"/>
+					<line class="st18" x1="4032" y1="3312" x2="4032" y2="3456"/>
+					<line class="st18" x1="4320" y1="3384" x2="4320" y2="3456"/>
+					<line class="st18" x1="4608" y1="3312" x2="4608" y2="3456"/>
+					<line class="st18" x1="4896" y1="3384" x2="4896" y2="3456"/>
+				</g>
+			</g>
+		</g>
+		<g id="Numbers">
+			<g id="_x34_th_1_">
+				<text transform="matrix(1 0 0 1 265.8158 3312.0005)" class="st19 st20 st21">4</text>
+				<text transform="matrix(1 0 0 1 819.6317 3312.0005)" class="st19 st20 st21">12</text>
+				<text transform="matrix(1 0 0 1 1395.6324 3312.0005)" class="st19 st20 st21">20</text>
+				<text transform="matrix(1 0 0 1 3123.6343 3312.0005)" class="st19 st20 st21">44</text>
+				<text transform="matrix(1 0 0 1 3699.6326 3312.0005)" class="st19 st20 st21">52</text>
+				<text transform="matrix(1 0 0 1 4275.6313 3312.0005)" class="st19 st20 st21">60</text>
+				<text transform="matrix(1 0 0 1 2547.6323 3312.0005)" class="st19 st20 st21">36</text>
+				<text transform="matrix(1 0 0 1 1971.6322 3312.0005)" class="st19 st20 st21">28</text>
+				<text transform="matrix(1 0 0 1 4851.6323 3311.9998)" class="st19 st20 st21">68</text>
+			</g>
+		</g>
+		<line class="st22" x1="5184" y1="3447" x2="0" y2="3447"/>
+	</g>
+</g>
+<g id="Parking_Lot">
+	<g>
+		<line class="st24" x1="576" y1="288" x2="576" y2="1728"/>
+		<line class="st25" x1="576" y1="288" x2="576" y2="1728"/>
+	</g>
+	<line class="st26" x1="864" y1="288" x2="864" y2="1440"/>
+	<line class="st26" x1="1152" y1="288" x2="1152" y2="1152"/>
+	<line class="st26" x1="288" y1="576" x2="1728" y2="576"/>
+	<line class="st26" x1="288" y1="864" x2="1440" y2="864"/>
+	<line class="st26" x1="288" y1="1152" x2="1152" y2="1152"/>
+	<line class="st26" x1="288" y1="1440" x2="864" y2="1440"/>
+	<line class="st26" x1="288" y1="1728" x2="576" y2="1728"/>
+	<line class="st26" x1="1440" y1="288" x2="1440" y2="864"/>
+	<line class="st26" x1="1728" y1="288" x2="1728" y2="576"/>
+	<line class="st26" x1="288" y1="288" x2="288" y2="1728"/>
+	<line class="st26" x1="288" y1="288" x2="1728" y2="288"/>
+	<g id="Labels">
+		<text transform="matrix(1 0 0 1 364.4203 465.0907)" class="st13 st15">V0</text>
+		<text transform="matrix(1 0 0 1 652.4203 465.0907)" class="st13 st15">V1</text>
+		<text transform="matrix(1 0 0 1 940.4203 465.0907)" class="st13 st15">V2</text>
+		<text transform="matrix(1 0 0 1 345.1986 753.0908)" class="st13 st15">W0</text>
+		<text transform="matrix(1 0 0 1 633.1986 753.0908)" class="st13 st15">W1</text>
+		<text transform="matrix(1 0 0 1 921.1987 753.0908)" class="st13 st15">W2</text>
+		<text transform="matrix(1 0 0 1 1209.1987 753.0908)" class="st13 st15">W3</text>
+		<text transform="matrix(1 0 0 1 362.5219 1041.0908)" class="st13 st15">X0</text>
+		<text transform="matrix(1 0 0 1 650.5219 1041.0908)" class="st13 st15">X1</text>
+		<text transform="matrix(1 0 0 1 938.5219 1041.0908)" class="st13 st15">X2</text>
+		<text transform="matrix(1 0 0 1 367.1774 1329.0908)" class="st13 st15">Y0</text>
+		<text transform="matrix(1 0 0 1 655.1774 1329.0908)" class="st13 st15">Y1</text>
+		<text transform="matrix(1 0 0 1 366.5297 1617.0908)" class="st13 st15">Z0</text>
+		<text transform="matrix(1 0 0 1 1475.2346 459.5752)" class="st13 st27">Enter</text>
+		<text transform="matrix(1 0 0 1 1228.4204 465.0907)" class="st13 st15">V3</text>
+	</g>
+</g>
+<g id="Circles_1_">
+	<g id="Circles">
+		<g id="Left_1_">
+			<circle class="st28" cx="2184.77" cy="2207.23" r="288"/>
+			<circle class="st29" cx="2184.77" cy="2207.23" r="18"/>
+			<line class="st30" x1="2388.41" y1="2410.88" x2="1981.12" y2="2003.59"/>
+			<line class="st30" x1="1981.12" y1="2410.88" x2="2388.41" y2="2003.59"/>
+			<line class="st30" x1="2184.77" y1="1919.23" x2="2184.77" y2="2495.23"/>
+			<line class="st30" x1="1896.77" y1="2207.23" x2="2472.77" y2="2207.23"/>
+			<text transform="matrix(1 0 0 1 2160 1991.2319)" class="st31 st13 st32">N</text>
+			<text transform="matrix(1 0 0 1 2167.1223 2439.7773)" class="st31 st13 st32">S</text>
+			<text transform="matrix(1 0 0 1 2411.5552 2223.7773)" class="st31 st13 st32">E</text>
+			<text transform="matrix(1 0 0 1 1928.249 2223.7773)" class="st31 st13 st32">W</text>
+		</g>
+		<g id="Right_1_">
+			<circle class="st33" cx="2999.23" cy="2207.23" r="288"/>
+			<circle class="st34" cx="2999.23" cy="2207.23" r="18"/>
+			<line class="st35" x1="3202.88" y1="2410.88" x2="2795.59" y2="2003.59"/>
+			<line class="st35" x1="2795.59" y1="2410.88" x2="3202.88" y2="2003.59"/>
+			<line class="st35" x1="2999.23" y1="1919.23" x2="2999.23" y2="2495.23"/>
+			<line class="st35" x1="2711.23" y1="2207.23" x2="3287.23" y2="2207.23"/>
+			<text transform="matrix(1 0 0 1 2973.5769 1991.2324)" class="st31 st13 st32">N</text>
+			<text transform="matrix(1 0 0 1 2980.7222 2463.5374)" class="st31 st13 st32">S</text>
+			<text transform="matrix(1 0 0 1 2744.0093 2223.7773)" class="st31 st13 st32">W</text>
+			<text transform="matrix(1 0 0 1 3225.155 2223.7773)" class="st31 st13 st32">E</text>
+		</g>
+		<g id="Center_1_">
+			<circle class="st36" cx="2592" cy="1800" r="288"/>
+			<circle class="st2" cx="2592" cy="1800" r="18"/>
+			<line class="st37" x1="2795.65" y1="2003.65" x2="2388.35" y2="1596.35"/>
+			<line class="st37" x1="2388.35" y1="2003.65" x2="2795.65" y2="1596.35"/>
+			<line class="st37" x1="2592" y1="1512" x2="2592" y2="2088"/>
+			<line class="st37" x1="2304" y1="1800" x2="2880" y2="1800"/>
+			<text transform="matrix(1 0 0 1 2568.2168 1575.7773)" class="st31 st13 st32">N</text>
+			<text transform="matrix(1 0 0 1 2575.3623 2043.7775)" class="st31 st13 st32">S</text>
+			<text transform="matrix(1 0 0 1 2338.6492 1815.5374)" class="st31 st13 st32">W</text>
+			<text transform="matrix(1 0 0 1 2816.9153 1815.5374)" class="st31 st13 st32">E</text>
+		</g>
+	</g>
+	<g id="Chars">
+		<text transform="matrix(1 0 0 1 2220.6477 2063.2319)" class="st29 st13 st27">A</text>
+		<text transform="matrix(1 0 0 1 2338.3462 2170.0076)" class="st29 st13 st27">B</text>
+		<text transform="matrix(1 0 0 1 2339.0928 2306.8079)" class="st29 st13 st27">C</text>
+		<text transform="matrix(1 0 0 1 2232.0002 2423.2317)" class="st29 st13 st27">D</text>
+		<text transform="matrix(1 0 0 1 2088.0002 2423.2317)" class="st29 st13 st27">E</text>
+		<text transform="matrix(1 0 0 1 1977.2103 2306.8074)" class="st29 st13 st27">F</text>
+		<text transform="matrix(1 0 0 1 1963.7192 2170.0081)" class="st29 st13 st27">G</text>
+		<text transform="matrix(1 0 0 1 2073.4551 2063.2317)" class="st29 st13 st27">H</text>
+		<text transform="matrix(1.17 0 0 1 2649.4099 1658.8076)" class="st2 st13 st27">I</text>
+		<text transform="matrix(1 0 0 1 2750.627 1759.6074)" class="st2 st13 st27">J</text>
+		<text transform="matrix(1 0 0 1 2740.9832 1909.3677)" class="st2 st13 st27">K</text>
+		<text transform="matrix(1 0 0 1 2644.2808 2018.8075)" class="st2 st13 st27">L</text>
+		<text transform="matrix(1 0 0 1 2475.769 2018.8075)" class="st2 st13 st27">M</text>
+		<text transform="matrix(1 0 0 1 2379.5613 1902.3832)" class="st2 st13 st27">N</text>
+		<text transform="matrix(1 0 0 1 2376 1759.6078)" class="st2 st13 st27">O</text>
+		<text transform="matrix(1 0 0 1 2490.249 1658.8073)" class="st2 st13 st27">P</text>
+		<text transform="matrix(1 0 0 1 3043.3115 2063.2324)" class="st34 st13 st27">R</text>
+		<text transform="matrix(1 0 0 1 3147.4705 2164.0322)" class="st34 st13 st27">S</text>
+		<text transform="matrix(1 0 0 1 3151.2056 2313.7925)" class="st34 st13 st27">T</text>
+		<text transform="matrix(1 0 0 1 3046.5979 2423.2322)" class="st34 st13 st27">U</text>
+		<text transform="matrix(1 0 0 1 2893.1421 2423.2322)" class="st34 st13 st27">V</text>
+		<text transform="matrix(1 0 0 1 2772.1487 2306.8079)" class="st34 st13 st27">W</text>
+		<text transform="matrix(1 0 0 1 2783.0701 2164.0325)" class="st34 st13 st27">Y</text>
+		<text transform="matrix(0.3827 0.9239 -0.9239 0.3827 2883.9314 1976.9523)" class="st34 st13 st38">space</text>
+	</g>
+</g>
+<g id="Ruler">
+	<line class="st39" x1="2591.5" y1="3132" x2="2591.5" y2="2988"/>
+	<line class="st39" x1="3959.5" y1="3132" x2="3959.5" y2="2988"/>
+	<line class="st39" x1="3887.5" y1="3132" x2="3887.5" y2="2988"/>
+	<line class="st39" x1="3815.5" y1="3132" x2="3815.5" y2="2988"/>
+	<line class="st39" x1="3743.5" y1="3132" x2="3743.5" y2="2988"/>
+	<line class="st39" x1="3671.5" y1="3132" x2="3671.5" y2="2988"/>
+	<line class="st39" x1="3599.5" y1="3132" x2="3599.5" y2="2988"/>
+	<line class="st39" x1="3527.5" y1="3132" x2="3527.5" y2="2988"/>
+	<line class="st39" x1="3455.5" y1="3132" x2="3455.5" y2="2988"/>
+	<line class="st39" x1="3383.5" y1="3132" x2="3383.5" y2="2988"/>
+	<line class="st39" x1="3311.5" y1="3132" x2="3311.5" y2="2988"/>
+	<line class="st39" x1="3239.5" y1="3132" x2="3239.5" y2="2988"/>
+	<line class="st39" x1="3167.5" y1="3132" x2="3167.5" y2="2988"/>
+	<line class="st39" x1="3095.5" y1="3132" x2="3095.5" y2="2988"/>
+	<line class="st39" x1="3023.5" y1="3132" x2="3023.5" y2="2988"/>
+	<line class="st39" x1="2951.5" y1="3132" x2="2951.5" y2="2988"/>
+	<line class="st39" x1="2879.5" y1="3132" x2="2879.5" y2="2988"/>
+	<line class="st39" x1="2807.5" y1="3132" x2="2807.5" y2="2988"/>
+	<line class="st39" x1="2735.5" y1="3132" x2="2735.5" y2="2988"/>
+	<line class="st39" x1="2519.5" y1="3132" x2="2519.5" y2="2988"/>
+	<line class="st39" x1="3995.5" y1="3132" x2="3995.5" y2="3060"/>
+	<line class="st39" x1="3923.5" y1="3132" x2="3923.5" y2="3060"/>
+	<line class="st39" x1="3851.5" y1="3132" x2="3851.5" y2="3060"/>
+	<line class="st39" x1="3779.5" y1="3132" x2="3779.5" y2="3060"/>
+	<line class="st39" x1="3707.5" y1="3132" x2="3707.5" y2="3060"/>
+	<line class="st39" x1="3635.5" y1="3132" x2="3635.5" y2="3060"/>
+	<line class="st39" x1="3563.5" y1="3132" x2="3563.5" y2="3060"/>
+	<line class="st39" x1="3491.5" y1="3132" x2="3491.5" y2="3060"/>
+	<line class="st39" x1="3419.5" y1="3132" x2="3419.5" y2="3060"/>
+	<line class="st39" x1="3347.5" y1="3132" x2="3347.5" y2="3060"/>
+	<line class="st39" x1="3275.5" y1="3132" x2="3275.5" y2="3060"/>
+	<line class="st39" x1="3203.5" y1="3132" x2="3203.5" y2="3060"/>
+	<line class="st39" x1="3131.5" y1="3132" x2="3131.5" y2="3060"/>
+	<line class="st39" x1="3059.5" y1="3132" x2="3059.5" y2="3060"/>
+	<line class="st39" x1="2987.5" y1="3132" x2="2987.5" y2="3060"/>
+	<line class="st39" x1="2915.5" y1="3132" x2="2915.5" y2="3060"/>
+	<line class="st39" x1="2843.5" y1="3132" x2="2843.5" y2="3060"/>
+	<line class="st39" x1="2771.5" y1="3132" x2="2771.5" y2="3060"/>
+	<line class="st39" x1="2699.5" y1="3132" x2="2699.5" y2="3060"/>
+	<line class="st39" x1="2627.5" y1="3132" x2="2627.5" y2="3060"/>
+	<line class="st39" x1="2555.5" y1="3132" x2="2555.5" y2="3060"/>
+	<line class="st39" x1="2663.5" y1="3132" x2="2663.5" y2="2988"/>
+	<text transform="matrix(0 1 -1 0 3951.2988 2930.2573)"><tspan x="0" y="0" class="st13 st40">1.0</tspan><tspan x="-0.03" y="72" class="st13 st40">2.0</tspan><tspan x="0" y="144" class="st13 st40">3.0</tspan><tspan x="0" y="216" class="st13 st40">4.0</tspan><tspan x="0" y="288" class="st13 st40">5.0</tspan><tspan x="0" y="360" class="st13 st40">6.0</tspan><tspan x="0" y="432" class="st13 st40">7.0</tspan><tspan x="0" y="504" class="st13 st40">8.0</tspan><tspan x="0" y="576" class="st13 st40">9.0</tspan><tspan x="-16.2" y="648" class="st13 st40">10.0</tspan><tspan x="-16.2" y="720" class="st13 st40">11.0</tspan><tspan x="-16.23" y="792" class="st13 st40">12.0</tspan><tspan x="-16.2" y="864" class="st13 st40">13.0</tspan><tspan x="-16.2" y="936" class="st13 st40">14.0</tspan><tspan x="-16.2" y="1008" class="st13 st40">15.0</tspan><tspan x="-16.2" y="1080" class="st13 st40">16.0</tspan><tspan x="-16.2" y="1152" class="st13 st40">17.0</tspan><tspan x="-16.2" y="1224" class="st13 st40">18.0</tspan><tspan x="-16.2" y="1296" class="st13 st40">19.0</tspan><tspan x="-16.23" y="1368" class="st13 st40">20.0</tspan><tspan x="-16.23" y="1440" class="st13 st40">21.0</tspan><tspan x="-16.25" y="1512" class="st13 st40">22.0</tspan><tspan x="-16.23" y="1584" class="st13 st40">23.0</tspan><tspan x="-16.23" y="1656" class="st13 st40">24.0</tspan><tspan x="-16.23" y="1728" class="st13 st40">25.0</tspan><tspan x="-16.23" y="1800" class="st13 st40">26.0</tspan><tspan x="-16.23" y="1872" class="st13 st40">27.0</tspan><tspan x="-16.23" y="1944" class="st13 st40">28.0</tspan><tspan x="-16.23" y="2016" class="st13 st40">29.0</tspan><tspan x="-16.2" y="2088" class="st13 st40">30.0</tspan><tspan x="-16.2" y="2160" class="st13 st40">31.0</tspan><tspan x="-16.23" y="2232" class="st13 st40">32.0</tspan><tspan x="-16.2" y="2304" class="st13 st40">33.0</tspan><tspan x="-16.2" y="2376" class="st13 st40">34.0</tspan><tspan x="-16.2" y="2448" class="st13 st40">35.0</tspan><tspan x="-16.2" y="2520" class="st13 st40">36.0</tspan></text>
+	<line class="st39" x1="2376.5" y1="3132" x2="2376.5" y2="2988"/>
+	<line class="st39" x1="2304.5" y1="3132" x2="2304.5" y2="2988"/>
+	<line class="st39" x1="2484.5" y1="3132" x2="2484.5" y2="3060"/>
+	<line class="st39" x1="2412.5" y1="3132" x2="2412.5" y2="3060"/>
+	<line class="st39" x1="2340.5" y1="3132" x2="2340.5" y2="3060"/>
+	<line class="st39" x1="2448.5" y1="3132" x2="2448.5" y2="2988"/>
+	<line class="st39" x1="2231" y1="3132" x2="2231" y2="2988"/>
+	<line class="st39" x1="2267" y1="3132" x2="2267" y2="3060"/>
+	<line class="st39" x1="2088" y1="3132" x2="2088" y2="2988"/>
+	<line class="st39" x1="2016" y1="3132" x2="2016" y2="2988"/>
+	<line class="st39" x1="2196" y1="3132" x2="2196" y2="3060"/>
+	<line class="st39" x1="2124" y1="3132" x2="2124" y2="3060"/>
+	<line class="st39" x1="2052" y1="3132" x2="2052" y2="3060"/>
+	<line class="st39" x1="2160" y1="3132" x2="2160" y2="2988"/>
+	<line class="st39" x1="1943" y1="3132" x2="1943" y2="2988"/>
+	<line class="st39" x1="1979" y1="3132" x2="1979" y2="3060"/>
+	<line class="st39" x1="1800" y1="3132" x2="1800" y2="2988"/>
+	<line class="st39" x1="1728" y1="3132" x2="1728" y2="2988"/>
+	<line class="st39" x1="1908" y1="3132" x2="1908" y2="3060"/>
+	<line class="st39" x1="1836" y1="3132" x2="1836" y2="3060"/>
+	<line class="st39" x1="1764" y1="3132" x2="1764" y2="3060"/>
+	<line class="st39" x1="1872" y1="3132" x2="1872" y2="2988"/>
+	<line class="st39" x1="1655" y1="3132" x2="1655" y2="2988"/>
+	<line class="st39" x1="1691" y1="3132" x2="1691" y2="3060"/>
+	<line class="st39" x1="1512" y1="3132" x2="1512" y2="2988"/>
+	<line class="st39" x1="1440" y1="3132" x2="1440" y2="2988"/>
+	<line class="st39" x1="1620" y1="3132" x2="1620" y2="3060"/>
+	<line class="st39" x1="1548" y1="3132" x2="1548" y2="3060"/>
+	<line class="st39" x1="1476" y1="3132" x2="1476" y2="3060"/>
+	<line class="st39" x1="1584" y1="3132" x2="1584" y2="2988"/>
+</g>
+<g id="Points">
+	<circle cx="4608" cy="2304" r="18"/>
+	<circle cx="4608" cy="1728" r="18"/>
+	<circle cx="4608" cy="1152" r="18"/>
+	<circle cx="4032" cy="576" r="18"/>
+	<circle cx="3456" cy="576" r="18"/>
+	<circle cx="2880" cy="576" r="18"/>
+	<circle cx="2304" cy="576" r="18"/>
+	<circle cx="576" cy="2304" r="18"/>
+	<circle cx="1152" cy="2880" r="18"/>
+	<circle cx="1728" cy="2880" r="18"/>
+	<circle cx="2880" cy="2880" r="18"/>
+	<circle cx="2304" cy="2880" r="18"/>
+	<circle cx="3456" cy="2880" r="18"/>
+	<text transform="matrix(1 0 0 1 1685.8652 2808)" class="st0 st13 st15">A</text>
+	<text transform="matrix(1 0 0 1 2267.4551 2808)" class="st0 st13 st15">B</text>
+	<text transform="matrix(1 0 0 1 2844.3516 2808)" class="st0 st13 st15">C</text>
+	<text transform="matrix(1 0 0 1 3415.3945 2808)" class="st0 st13 st15">D</text>
+	<text transform="matrix(1 0 0 1 4491.9102 2337.0908)" class="st0 st13 st15">E</text>
+	<text transform="matrix(1 0 0 1 4492.3325 1761.0907)" class="st0 st13 st15">F</text>
+	<text transform="matrix(1 0 0 1 4476.1431 1185.0907)" class="st0 st13 st15">G</text>
+	<text transform="matrix(1 0 0 1 3988.626 503.9998)" class="st0 st13 st15">H</text>
+	<text transform="matrix(1.17 0 0 1 3435.978 503.9999)" class="st0 st13 st15">I</text>
+	<text transform="matrix(1 0 0 1 2854.4189 503.9998)" class="st0 st13 st15">J</text>
+	<text transform="matrix(1 0 0 1 2262.4592 503.9998)" class="st0 st13 st15">K</text>
+	<text transform="matrix(1 0 0 1 462.8513 2337.0908)" class="st0 st13 st15">L</text>
+	<text transform="matrix(1 0 0 1 1098.9229 2808)" class="st0 st13 st15">M</text>
+</g>
+<g transform="translate(3597.0, 2157.0) scale(1)  rotate(0.000000 133.000000 104.000000)"><rect width="150" height="150" style="fill:rgb(255,0,0)"/></g><g transform="translate(4029.0, 2157.0) scale(1)  rotate(0.000000 133.000000 104.000000)"><rect width="150" height="150" style="fill:rgb(255,0,0)"/></g><g transform="translate(3813.0, 2157.0) scale(1)  rotate(0.000000 133.000000 104.000000)"><rect width="150" height="150" style="fill:rgb(255,0,0)"/></g><g transform="translate(3597.0, 1725.0000000000002) scale(1)  rotate(0.000000 133.000000 104.000000)"><rect width="150" height="150" style="fill:rgb(255, 255, 0)"/></g><g transform="translate(3813.0, 1725.0000000000002) scale(1)  rotate(0.000000 133.000000 104.000000)"><rect width="150" height="150" style="fill:rgb(255, 255, 0)"/></g><g transform="translate(4029.0, 1725.0000000000002) scale(1)  rotate(0.000000 133.000000 104.000000)"><rect width="150" height="150" style="fill:rgb(255, 255, 0)"/></g><g transform="translate(4029.0, 1941.0000000000002) scale(1)  rotate(0.000000 133.000000 104.000000)"><rect width="150" height="150" style="fill:rgb(0,255,0)"/></g><g transform="translate(3597.0, 1941.0000000000002) scale(1)  rotate(0.000000 133.000000 104.000000)"><rect width="150" height="150" style="fill:rgb(0,255,0)"/></g><g transform="translate(3813.0, 1941.0000000000002) scale(1)  rotate(0.000000 133.000000 104.000000)"><rect width="150" height="150" style="fill:rgb(0,255,0)"/></g></svg>
