@@ -67,18 +67,21 @@ export default class NominatePopup extends Component {
                     These nominations will be discussed at the end of the competition period.
                     You may wish to make notes about team performance.
                   </div>
+                  <h4>Spirit Award</h4>
                   <YesNo
                     type="noyes"
                     onChange={(val) => this.updateState('spirit',val)}
                     display_text="Spirit Award"
                     defaultValue={this.props.noms.spirit}
                   />
+                  <h4>Teamwork Award</h4>
                   <YesNo
                     type="noyes"
                     onChange={(val) => this.updateState('teamwork',val)}
                     display_text="Teamwork Award"
                     defaultValue={this.props.noms.teamwork}
                   />
+                  <h4>Perseverance Award</h4>
                   <YesNo
                     type="noyes"
                     onChange={(val) => this.updateState('persevere',val)}
