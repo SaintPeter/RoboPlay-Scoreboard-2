@@ -1,4 +1,4 @@
-<div id="dialog-settings" title="Adjust Settings">
+<div id="dialog-settings" style="display:none;" title="Adjust Settings">
 	{!! Form::open( [ 'route' => [ $route, $id ], 'class' => 'form-horizontal', 'id' => 'settings_form', 'style' => 'margin: 5px;' ] )  !!}
 		<div class="form-group">
 			{!! Form::label('columns', 'Columns:', [ 'class' => 'col-sm-4 control-label' ])  !!}
