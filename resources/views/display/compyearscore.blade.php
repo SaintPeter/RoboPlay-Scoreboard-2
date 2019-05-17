@@ -109,9 +109,9 @@
 	<div class="col-md-12 col-lg-12">
 		<table class="table table-striped table-bordered table-condensed">
 			<?php $rowcount = 0; ?>
-			@foreach($score_list as $level => $scores)
+			@foreach($score_list as $division => $scores)
 				<tr class="info">
-					<td colspan="{{ ($top) ? 5 : 4 }}">Division {{ $level }}</td>
+					<td colspan="{{ ($top) ? 5 : 4 }}">{{ $division }}</td>
 				</tr>
 				<tr class="bold_row">
 					<td>#</td>
@@ -147,7 +147,7 @@
 					<table class="table table-striped table-bordered table-condensed">
 
 						<tr class="info">
-							<td colspan="{{ ($top) ? 5 : 4 }}">Division {{ $level }}</td>
+							<td colspan="{{ ($top) ? 5 : 4 }}">{{ $division }}</td>
 						</tr>
 						<tr class="bold_row">
 							<td>#</td>

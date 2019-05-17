@@ -135,6 +135,14 @@ class DisplayController extends Controller {
 		}
 	}
 
+
+	public static  function name_sort($a, $b) {
+		if($a['school'] == $b['school']) {
+			return strcasecmp($a['name'], $b['name']);
+		}
+		return strcasecmp($a['school'], $b['school']);
+	}
+
     public function compscore_top(Request $req, $competition_id, $csv = null)
     {
         return $this->compscore_actual($req, $competition_id, $csv, true);
@@ -332,8 +340,8 @@ class DisplayController extends Controller {
 
 			//echo '<pre>' . print_r($teams->pluck('name')->all(),true) . '</pre>';
 
-			if(!array_key_exists($division->level, $score_list)) {
-				$score_list[$division->level] = [];
+			if(!array_key_exists($division->name, $score_list)) {
+				$score_list[$division->name] = [];
 			}
 			$challenge_list = $division->challenges->pluck('id')->all();
 
@@ -360,39 +368,37 @@ class DisplayController extends Controller {
 			foreach($scores as $score)
 			{
 				// Initialize the storage location for each team
-				if(!array_key_exists($score->team_id, $score_list[$division->level])) {
-					$score_list[$division->level][$score->team_id] = [
+				if(!array_key_exists($score->team_id, $score_list[$division->name])) {
+					$score_list[$division->name][$score->team_id] = [
 						'total'=> 0,
 						'runs' => 0,
 						'aborts' => 0
 					];
 				}
-				$score_list[$division->level][$score->team_id]['total'] += $score->chal_score;
-				$score_list[$division->level][$score->team_id]['runs'] += $score->chal_runs;
-				$score_list[$division->level][$score->team_id]['aborts'] += $score->aborts;
+				$score_list[$division->name][$score->team_id]['total'] += $score->chal_score;
+				$score_list[$division->name][$score->team_id]['runs'] += $score->chal_runs;
+				$score_list[$division->name][$score->team_id]['aborts'] += $score->aborts;
 			}
 
 
 			// Find all of the teams with no scores yet and add them to the end of the list
 			$team_list = $division->teams->pluck('id')->all();
-			$missing_list = array_diff($team_list, array_keys($score_list[$division->level]));
-			$score_list[$division->level] =
-				$score_list[$division->level] +
+			$missing_list = array_diff($team_list, array_keys($score_list[$division->name]));
+			$score_list[$division->name] =
+				$score_list[$division->name] +
 				array_fill_keys($missing_list, [ 'total' => 0, 'runs' => 0, 'aborts' => 0 ] );
 
-			// Sort descening by Score, runs
-			//    minus is a standin for the <=> operator
-			//    a - b roughly equals a <=> b
-			uasort($score_list[$division->level], 'self::score_sort');
+			// Sort division teams by score
+			uasort($score_list[$division->name], 'self::score_sort');
 
 			// Populate Places
 			$place = 1;
-			foreach($score_list[$division->level] as $team_id => $scores) {
-				if($score_list[$division->level][$team_id]['runs'] > 0) {
-					$score_list[$division->level][$team_id]['place'] = $place++;
+			foreach($score_list[$division->name] as $team_id => $scores) {
+				if($score_list[$division->name][$team_id]['runs'] > 0) {
+					$score_list[$division->name][$team_id]['place'] = $place++;
 				} else {
 					// Teams with no runs have no place
-					$score_list[$division->level][$team_id]['place'] = '-';
+					$score_list[$division->name][$team_id]['place'] = '-';
 				}
 			}
 		}
@@ -411,7 +417,7 @@ class DisplayController extends Controller {
 			foreach($score_list as $level => $scores) {
 				foreach($scores as $team_id => $score) {
 					$output .= '"' . join('","', [
-						'Division ' . $level,
+						$level,
 						$score['place'],
 						$teams->find($team_id)->name,
 						$teams->find($team_id)->school->name,
@@ -552,7 +558,7 @@ class DisplayController extends Controller {
 			}
 
 			// Sort by school name, then by team name
-			uasort($score_list, 'self::score_sort');
+			uasort($score_list, 'self::name_sort');
 			return $score_list;
 		});
 

@@ -111,7 +111,7 @@
 			<?php $rowcount = 0; ?>
 			@foreach($divisions as $division)
 				<tr class="info">
-					<td colspan="4">{{ $division->name }} Division</td>
+					<td colspan="4">{{ $division->name }}</td>
 				</tr>
 				<tr class="bold_row">
 					<td>#</td>
@@ -141,7 +141,7 @@
 					<table class="table table-striped table-bordered table-condensed">
 
 						<tr class="info">
-							<td colspan="4">{{ $division->name }} Division</td>
+							<td colspan="4">{{ $division->name }}</td>
 						</tr>
 						<tr class="bold_row">
 							<td>#</td>
