@@ -339,7 +339,6 @@ Route::middleware([ 'auth' ])->group( function() {
 	    Route::get('ajax/rubric_blank_row/{competition_id?}/{type?}/{id?}',   [ 'as' => 'ajax.rubric.blank_row', 'uses' => 'VideoManagementController@rubric_blank_row']);
 
 	    // Awards Management
-	    Route::get('awards/{div}',                       [ 'as' => 'awards.index', 'uses' => 'AwardsController@index']);
 	    Route::get('awards/{div}/grant/{team}/{award}',  [ 'as' => 'awards.grant', 'uses' => 'AwardsController@grant']);
 	    Route::get('awards/{div}/revoke/{team}/{award}', [ 'as' => 'awards.revoke', 'uses' => 'AwardsController@revoke']);
     });
@@ -406,6 +405,9 @@ Route::middleware([ 'auth' ])->group( function() {
         Route::get('video/judge/clear/{video_id}/{judge_id}', [
             'as' => 'video.judge.clear_scores',
             'uses' => 'ScoreVideosController@clear_scores' ]);
+
+        // View award nominations
+	    Route::get('awards/{div}',                       [ 'as' => 'awards.index', 'uses' => 'AwardsController@index']);
 
 	    /** @noinspection PhpParamsInspection */
         Route::prefix('/api/')->namespace('Api')->name('api.')->group(function() {

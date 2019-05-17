@@ -65,10 +65,8 @@
 					    <li>{{ link_to_route('display.compyearscore.top',  'Statewide Winners', $compyear->id) }} </li>
 					@endif
 					@foreach($compyear->competitions as $comp)
-                        <li data-role="list-divider" role="heading">{{ $comp->name }}</li>
-						@if($comp->isDone())
-                        @endif
                         @if($comp->isDone() || Roles::isAdmin())
+                            <li data-role="list-divider" role="heading">{{ $comp->name }}</li>
                             <li>{{ link_to_route('display.compscore.top', 'Site Winners', $comp->id, [ 'class' => 'indent' ]) }} </li>
 						    <li>{{ link_to_route('display.compscore', 'Final Scoreboard', $comp->id, [ 'class' => 'indent' ]) }} </li>
                             <li>{{ link_to_route('awards.list', 'Judges Awards', $comp->id, [ 'class' => 'indent' ]) }} </li>
@@ -97,9 +95,9 @@
 <ul data-role="listview" data-inset="true">
     <li>{{ link_to_route('scorer', 'Score Challenges') }}</li>
 	<li>{{ link_to_route('video.judge.index', 'Score Videos') }}</li>
-    @if(Roles::isAdmin())
-        <li data-role="collapsible" data-iconpos="right" data-inset="false">
-            <h2>Judges Awards</h2>
+    @if(Roles::isJudge())
+        <li data-role="collapsible" data-iconpos="right" data-inset="false" data-theme="a">
+            <h2><i class="fa fa-trophy"></i> Judge Award Nominations</h2>
             <ul data-role="listview" data-theme="c"  data-divider-theme="a">
             @foreach($compyears->first()->competitions as $comp)
                 <li data-role="list-divider" data-theme="a">{{ $comp->name }}</li>

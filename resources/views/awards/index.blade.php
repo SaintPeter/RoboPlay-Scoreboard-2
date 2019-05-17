@@ -20,14 +20,16 @@
                     @if($team->has_award($award['award_id']))
                         <img src="{{ asset('images/star.png') }}" alt="Has Award Star" />
                     @endif
-                    {{ $team->name }}
-                    @if($team->has_award($award['award_id']))
-                        <a class="btn btn-danger btn-xs pull-right"
-                           href="{{ route('awards.revoke', [$div_id, $team->id, $award['award_id']]) }}">Remove Award</a>
-                    @else
-                        @if(!$award['awarded'])
-                            <a class="btn btn-success btn-xs pull-right"
-                               href="{{ route('awards.grant', [$div_id, $team->id, $award['award_id']]) }}">Grant Award</a>
+                    <strong>{{ $team->name }}</strong>
+                    @if($is_admin)
+                        @if($team->has_award($award['award_id']))
+                            <a class="btn btn-danger btn-xs pull-right"
+                               href="{{ route('awards.revoke', [$div_id, $team->id, $award['award_id']]) }}">Remove Award</a>
+                        @else
+                            @if(!$award['awarded'])
+                                <a class="btn btn-success btn-xs pull-right"
+                                   href="{{ route('awards.grant', [$div_id, $team->id, $award['award_id']]) }}">Grant Award</a>
+                            @endif
                         @endif
                     @endif
                 </h5>

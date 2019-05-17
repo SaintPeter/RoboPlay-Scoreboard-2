@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\{Competition, Team, JudgeAwards, JudgeNominations, CompYear, Division};
 use View;
+use App\Helpers\Roles;
+use App\Models\{Competition, Team, JudgeAwards, JudgeNominations, CompYear, Division};
 
 class AwardsController extends Controller
 {
@@ -40,9 +41,11 @@ class AwardsController extends Controller
 			}
 		}
 
+		$is_admin = Roles::isAdmin();
+
 	    View::share('title', 'Judge Award Nominations');
 		View::share('subtitle', $div->competition->name . " - " . $div->name);
-		return view('awards.index')->with(compact('div_id', 'nom_list'));
+		return view('awards.index')->with(compact('div_id', 'nom_list', 'is_admin'));
 
     }
 
