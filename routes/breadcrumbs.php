@@ -351,6 +351,11 @@ try {
 		$bc->push('Judges Awards List', route('awards.list', $comp));
 	});
 
+	Breadcrumbs::register('schedule.index', function (BreadcrumbsGenerator $bc) {
+		$bc->parent('home');
+		$bc->push('Schedule Editor', route('schedule.index'));
+	});
+
 } catch (\DaveJamesMiller\Breadcrumbs\Facades\DuplicateBreadcrumbException $e) {
 	echo "Duplicate Breadcrumb Route Exception " . $e->getMessage();
 }

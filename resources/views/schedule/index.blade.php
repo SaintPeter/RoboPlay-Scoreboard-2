@@ -81,8 +81,8 @@
             </div>
         </td>
         <td>
-            {!! Form::text("schedule[{$row->id !!][display]", $row->display, [ 'class' => 'form-control input-sm' ]) }}
-            @if(isset($errors))
+            {!! Form::text("schedule[{$row->id}][display]", $row->display, [ 'class' => 'form-control input-sm' ]) !!}
+            @if($errors->any())
             <br>
             <ul>
                 @foreach($errors as $error)
