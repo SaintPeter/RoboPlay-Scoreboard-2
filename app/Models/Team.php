@@ -110,6 +110,12 @@ class Team extends Model {
 		}
 	}
 
+	public function clear_nominations() {
+		if(isset($this->nominations)) {
+			$this->nominations()->delete();
+		}
+	}
+
 	public function student_count()
 	{
 		return $this->students()->count();

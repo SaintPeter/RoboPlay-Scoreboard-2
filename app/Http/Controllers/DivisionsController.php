@@ -9,12 +9,7 @@ use Validator;
 use App\Helpers\Roles;
 use Illuminate\Http\Request;
 
-use App\ {
-    Models\Challenge,
-    Models\Score_run,
-    Models\Competition,
-    Models\Division
-};
+use App\Models\{Challenge, JudgeNominations, Score_run, Competition, Division, CompYear};
 class DivisionsController extends Controller {
 
 	/**
@@ -312,13 +307,28 @@ class DivisionsController extends Controller {
 	}
 
 	public function clear_compyear_scores($compyear_id) {
-		$count = 0;
-		// Clear the cache
 		Cache::flush("all_scores_score_list_$compyear_id");
-		$compYear = \App\Models\CompYear::with('divisions')->find($compyear_id);
+		$compYear = CompYear::with('divisions')->find($compyear_id);
 		$divisionList = $compYear->divisions->pluck('id', 'id')->all();
+
 		$count = Score_run::whereIn('division_id', $divisionList)->delete();
+
 		return redirect()->route('compyears.index')->with('message', "$count score runs deleted");
+	}
+
+	public function clear_compyear_nominations($compyear_id) {
+		$compYear = CompYear::with([ 'divisions',  'divisions.teams' => function($q) {
+				return $q->whereHas('nominations');
+			}, 'divisions.teams.nominations'])
+			->find($compyear_id);
+
+		$nominations = $compYear->divisions->pluck('teams')->collapse()
+			->pluck('nominations')->collapse()
+			->pluck('id');
+
+		$count = JudgeNominations::whereIn('id', $nominations)->delete();
+
+		return redirect()->route('compyears.index')->with('message', "$count nominations deleted");
 	}
 
 	public function clear_all_scores() {

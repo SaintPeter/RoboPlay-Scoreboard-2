@@ -8,7 +8,7 @@
     $(document).ready(function() {
         $('.delete_scores').confirm({
             title: "Clear Scores?",
-            content: "This will premanently clear these scores.",
+            content: "This will permanently clear these scores.",
             buttons: {
                 delete: function() {
                     location.href = this.$target.attr('href');
@@ -18,6 +18,18 @@
                 }
             }
         });
+      $('.delete_noms').confirm({
+        title: "Clear Nominations?",
+        content: "This will permanently clear these nominations.",
+        buttons: {
+          delete: function() {
+            location.href = this.$target.attr('href');
+          },
+          cancel: function() {
+
+          }
+        }
+      });
     });
 </script>
 @endsection
@@ -74,10 +86,15 @@
             </td>
 			<td>
 				{{ link_to_route('compyears.edit', 'Edit', array($compyear->id), array('class' => 'btn btn-info btn-margin')) }}
+                {{--
 				{!! Form::open(array('method' => 'DELETE', 'route' => array('compyears.destroy', $compyear->id), 'style' => 'display: inline-block'))  !!}
-				{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-margin'))  !!}
-				{!! Form::close()  !!}
+				{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-margin confirm_delete'))  !!}
+				{!! Form::close()  !!} <br>
+				--}}
+                <br>
                 {{ link_to_route('compyears.clear_div_scores', 'Clear Division Scores', [$compyear->id], [ 'class' => 'btn btn-warning btn-margin delete_scores']) }}
+                <br>
+                {{ link_to_route('compyears.clear_div_noms', 'Clear Division Nominations', [$compyear->id], [ 'class' => 'btn btn-warning btn-margin delete_noms']) }}
 			</td>
 		</tr>
 		@endforeach
