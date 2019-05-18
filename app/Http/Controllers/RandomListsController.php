@@ -145,7 +145,7 @@ class RandomListsController extends Controller {
         foreach($element_lines as $elements_raw) {
             $elements = preg_split('/\s*(;|\t)\s*/', $elements_raw);
             for($i = 0; $i < count($elements) AND $i < 5; $i++) {
-                if(!empty($elements[$i])) {
+                if(strlen($elements[$i]) > 0) {
                     $save[$names[$i]] = $elements[$i];
                 } else {
 			break;
