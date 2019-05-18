@@ -101,6 +101,15 @@ class Team extends Model {
 		}
 	}
 
+	public function nominators($award_type) {
+		if(isset($this->nominations) AND isset($this->nominations->first()->judge)) {
+			$thing = $this->nominations->where($award_type,1)->pluck('judge.name')->all();
+			return $thing;
+		} else {
+			return [];
+		}
+	}
+
 	public function student_count()
 	{
 		return $this->students()->count();

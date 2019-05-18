@@ -9,7 +9,7 @@
 @endsection
 
 @section('main')
-<div class="col-sm-4 list-group">
+<div class="col-sm-6 list-group">
     @foreach($nom_list as $cat => $award)
         <div class="list-group-item heading">
             <h4 class="list-group-item-heading">{{ $cat }}</h4>
@@ -20,7 +20,7 @@
                     @if($team->has_award($award['award_id']))
                         <img src="{{ asset('images/star.png') }}" alt="Has Award Star" />
                     @endif
-                    <strong>{{ $team->name }}</strong>
+                    <strong>{{ $team->name }}</strong>&nbsp;({{ $team->school->name }})
                     @if($is_admin)
                         @if($team->has_award($award['award_id']))
                             <a class="btn btn-danger btn-xs pull-right"
@@ -33,7 +33,7 @@
                         @endif
                     @endif
                 </h5>
-                <div class="list-group-item-text">{{ $team->school->name }}</div>
+                <div class="list-group-item-text">Nominated by: {{ join(", ", $team->nominators($award['col'])) }}</div>
             </div>
         @endforeach
     @endforeach

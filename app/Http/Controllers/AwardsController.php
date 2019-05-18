@@ -24,6 +24,7 @@ class AwardsController extends Controller
 			$nom_list[$award['name']] = [
 				'teams' => [],
 				'award_id' => $award['id'],
+				'col' => $award['col'],
 				'awarded' => false
 			];
 		}
@@ -33,6 +34,7 @@ class AwardsController extends Controller
 				foreach($awards as $col => $award) {
 					if($nom[$col]) {
 						$nom_list[$award['name']]['teams'][$team->id] = $team;
+						$nom_list[$award['name']]['col'] = $award['col'];
 						if($team->has_award($award['id'])) {
 							$nom_list[$award['name']]['awarded'] = true;
 						}
