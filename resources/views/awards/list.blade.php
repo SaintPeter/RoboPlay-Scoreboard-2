@@ -42,13 +42,19 @@
                     <th>Team</th>
                     <th>School</th>
                 </tr>
-                @foreach($div as $award => $team)
+                @if(count($div))
+                    @foreach($div as $award => $team)
+                        <tr>
+                            <td>{{ $award }}</td>
+                            <td>{{ $team->name }}</td>
+                            <td>{{ $team->school->name }}</td>
+                        </tr>
+                    @endforeach
+                @else
                     <tr>
-                        <td>{{ $award }}</td>
-                        <td>{{ $team->name }}</td>
-                        <td>{{ $team->school->name }}</td>
+                        <td colspan="3" class="text-center">No Nominations</td>
                     </tr>
-                @endforeach
+                @endif
             @endforeach
             </tbody>
         </table>
