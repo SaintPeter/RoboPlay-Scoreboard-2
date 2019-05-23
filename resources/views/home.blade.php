@@ -61,7 +61,7 @@
 			<ul data-role="listview" data-theme="c" data-divider-theme="a">
 				@if(!$compyear->competitions->isEmpty() )
 					<li>{{ link_to_route('display.all_scores',  'Combined Scoreboard', $compyear->id) }} </li>
-					@if(Roles::isAdmin())
+					@if(Roles::isAdmin() || ($compyear->competitions->first()->isDone()))
 					    <li>{{ link_to_route('display.compyearscore.top',  'Statewide Winners', $compyear->id) }} </li>
 					@endif
 					@foreach($compyear->competitions as $comp)
