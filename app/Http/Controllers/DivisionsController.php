@@ -7,6 +7,7 @@ use View;
 use Session;
 use Validator;
 use App\Helpers\Roles;
+use Cache;
 use Illuminate\Http\Request;
 
 use App\Models\{Challenge, JudgeNominations, Score_run, Competition, Division, CompYear};
