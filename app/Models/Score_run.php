@@ -116,4 +116,9 @@ class Score_run extends Model {
 	{
 		return $this->belongsTo('App\Models\User', 'judge_id');
 	}
+
+	public function judge()
+	{
+		return $this->belongsTo('App\Models\User', 'judge_id');
+	}
 }

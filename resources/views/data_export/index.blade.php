@@ -12,6 +12,7 @@
         <ul>
         	<li>{{ link_to_route('data_export.teacher_teams', 'Teacher/Team Data (' . $year . ')', [ 'year' => $year ]) }}</li>
             <li>{{ link_to_route('data_export.challenge_runs', 'Challenge Run Scores (' . $year . ')', [ 'year' => $year ]) }}</li>
+            <li>{{ link_to_route('data_export.challenge_judge_detail', 'Challenge Judge Detail (' . $year . ')', [ 'year' => $year ]) }}</li>
         </ul>
         <h1>Demographics</h1>
         <ul>

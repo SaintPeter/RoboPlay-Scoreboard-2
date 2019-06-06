@@ -686,6 +686,44 @@ class InvoiceReview extends Controller {
 		));
 	}
 
+	public function challenge_judge_detail_csv($year = '')
+	{
+		if(!$year) {
+			return redirect()->route('data_export')->with('message', 'Year must be set to export data');
+		}
+
+		$divisions = CompYear::where('year',$year)->first()->divisions->pluck('id')->all();
+
+		$scores = Score_run::whereIn('division_id', $divisions)
+			->with('judge')
+			->orderBy('judge_id')
+			->whereNull('deleted_at')
+			->get();
+
+		$scores_by_judge = $scores->groupBy('judge_id');
+
+		$judges = $scores->pluck('judge', 'judge_id');
+
+		// Header
+		$content = "Judge,Judge Email,Year,Scored Runs\n";
+
+		foreach($scores_by_judge as $judge_id => $scores) {
+			$judge = $judges->get($judge_id);
+			$content .= join(",",[
+				$judge->name,
+				$judge->email,
+				$year,
+				count($scores)
+			]) . "\n";
+		}
+
+		// return an string as a file to the user
+		return Response::make($content, '200', array(
+			'Content-Type' => 'application/octet-stream',
+			'Content-Disposition' => 'attachment; filename="challenge_runs_' . $year . '.csv"'
+		));
+	}
+
 	// Gets an array element or returns a default value
 	function arr_get(&$var, $default=null) {
 		return isset($var) ? $var : $default;
