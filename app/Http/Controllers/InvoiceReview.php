@@ -720,7 +720,7 @@ class InvoiceReview extends Controller {
 		// return an string as a file to the user
 		return Response::make($content, '200', array(
 			'Content-Type' => 'application/octet-stream',
-			'Content-Disposition' => 'attachment; filename="challenge_runs_' . $year . '.csv"'
+			'Content-Disposition' => 'attachment; filename="challenge_judge_detail_' . $year . '.csv"'
 		));
 	}
 
