@@ -11,7 +11,7 @@
         "deploy": "git pull && npm install && npm run prod && composer dumpautoload"
     },
     "devDependencies": {
-        "axios": "^0.17",
+        "axios": "^0.18",
         "babel-plugin-transform-class-properties": "^6.24.1",
         "babel-preset-react": "^6.23.0",
         "bootstrap-sass": "^3.3.7",
