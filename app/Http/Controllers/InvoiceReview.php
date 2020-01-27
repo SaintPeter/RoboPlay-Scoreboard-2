@@ -227,12 +227,19 @@ class InvoiceReview extends Controller {
             N/A        Challenge Competition - Basic Package - Not included this year
 			1711       wp_school_id entry from usermeta
 
-            _ 2019 Field Information__
+            __ 2019 Field Information__
             field_id   Description
             2320       Video Competition
 			2318       Challenge Competition - Complete Package ($320 per team)
             N/A        Challenge Competition - Basic Package - Not included this year
 			2329       wp_school_id entry from usermeta
+
+            __ 2020 Field Information__
+            field_id   Description
+            3892       Video Competition
+			3889       Challenge Competition - Complete Package ($320 per team)
+            N/A        Challenge Competition - Basic Package - Not included this year
+			3901       wp_school_id entry from usermeta
             */
 
 	        $field_ids = [
@@ -251,6 +258,11 @@ class InvoiceReview extends Controller {
 			        'video' => 2320,
 			        'challenge_complete' => 2318,
 			        'school_id' => 2329
+		        ],
+		        '2020' => [
+			        'video' => 3892,
+			        'challenge_complete' => 3889,
+			        'school_id' => 3901
 		        ]
 	        ];
 
