@@ -46,9 +46,9 @@
 		<div class="form-group">
 			{!! Form::select("students[$index][tshirt]",
 			    [ 0 => '- Pick T-shirt Size -',
-			      'YM' => 'YM -  - Youth Medium',
-			      'YL' => 'YL -  - Youth Large',
-			      'YXL' => 'YXL -  - Youth Extra Large',
+			      'YM' => 'YM - Youth Medium',
+			      'YL' => 'YL - Youth Large',
+			      'YXL' => 'YXL - Youth Extra Large',
 			      'S' => 'S - Small',
 			      'M' => 'M - Medium',
 			      'L' => 'L - Large',
