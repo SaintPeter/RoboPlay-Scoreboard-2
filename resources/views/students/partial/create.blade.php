@@ -40,16 +40,23 @@
 			</label>
 		</div>
 		<div class="form-group">
-			<label class="sr-only" for="students[{{$index}}][email]">E-mail</label>
-			<input type="text" class="form-control" id="students[{{$index}}][email]" name="students[{{$index}}][email]" placeholder="E-mail" value="{{ $student['email'] }}">
-		</div>
-		<div class="form-group">
 		    <label class="sr-only" for="students[{{ $index }}][math_level_id]">Math Level</label>
 		    {!! Form::select("students[$index][math_level_id]", $math_level::getList(), $student['math_level_id'], [ 'class' => 'form-control' ] )  !!}
 		</div>
 		<div class="form-group">
 			{!! Form::select("students[$index][tshirt]",
-			    [ 0 => '- Pick T-shirt Size -', 'XS' => 'XS - Extra Small', 'S' => 'S - Small', 'M' => 'M - Medium', 'L' => 'L - Large', 'XL' => 'XL - Extra Large', 'XXL' => 'XXL - Extra, Extra Large', '3XL' => '3XL - Triple Extra Large' ], $student['tshirt'], [ 'class' => 'form-control' ] )  !!}
+			    [ 0 => '- Pick T-shirt Size -',
+			      'YM' => 'YM -  - Youth Medium',
+			      'YL' => 'YL -  - Youth Large',
+			      'YXL' => 'YXL -  - Youth Extra Large',
+			      'S' => 'S - Small',
+			      'M' => 'M - Medium',
+			      'L' => 'L - Large',
+			      'XL' => 'XL - Extra Large',
+			      'XXL' => 'XXL - Extra, Extra Large',
+			      '3XL' => '3XL - Triple Extra Large'
+			      ],
+			      $student['tshirt'], [ 'class' => 'form-control' ] )  !!}
 		</div>
 	</div>
 	<div class="col-md-1 text-center">
