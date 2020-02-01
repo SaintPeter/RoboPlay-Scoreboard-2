@@ -14,6 +14,10 @@
 	background-color: pink !important;
 }
 
+.Canceled {
+    background-color: darkgrey !important;
+}
+
 .ui-widget-overlay {
     background: url('images/ui-bg_flat_0_aaaaaa_40x100.png') repeat-x scroll 100% 100% #AAA;
     opacity: 0.3;
@@ -189,15 +193,17 @@
 
 <h3>Manage Challenge Teams</h3>
 @if($reg_days >= 0)
-    @if( $teams->count() < $invoice->team_count AND $invoice->team_count > 0)
-        @if($invoice->paid != 0)
-            <p>{{ link_to_route('teacher.teams.create', 'Add Challenge Team',array(), array('class' => 'btn btn-primary')) }}</p>
+        @if($invoice->paid == 1 || $invoice->paid == 2)
+            @if( $teams->count() < $invoice->team_count AND $invoice->team_count > 0)
+                <p>{{ link_to_route('teacher.teams.create', 'Add Challenge Team',array(), array('class' => 'btn btn-primary')) }}</p>
+            @else
+                <p>Team Limit Reached</p>
+            @endif
+        @elseif($invoice->paid == 3)
+            <p>Invoice Canceled</p>
         @else
-            <p>Payment Not Recieved</p>
+            <p>Payment Not Received</p>
         @endif
-    @else
-        <p>Team Limit Reached</p>
-    @endif
 @else
     <p>No new teams may be added after {{ $comp_year->reminder_end->format('M d') }}</p>
 @endif
@@ -240,15 +246,17 @@
 
 	<h3>Manage Videos</h3>
 @if($reg_days >= 0)
-	@if( $videos->count() < $invoice->video_count AND $invoice->video_count > 0 )
-        @if($invoice->paid != 0)
-			<p>{{ link_to_route('teacher.videos.create', 'Add Video', [], [ 'class' => 'btn btn-primary' ]) }}</p>
+        @if($invoice->paid == 1 || $invoice->paid == 2)
+	        @if( $videos->count() < $invoice->video_count AND $invoice->video_count > 0 )
+			    <p>{{ link_to_route('teacher.videos.create', 'Add Video', [], [ 'class' => 'btn btn-primary' ]) }}</p>
+            @else
+                <p>Video Limit Reached</p>
+            @endif
+        @elseif($invoice->paid == 3)
+            <p>Invoice Canceled</p>
 		@else
-			<p>Payment Not Recieved</p>
+			<p>Payment Not Received</p>
 		@endif
-	@else
-		<p>Video Limit Reached</p>
-	@endif
 @else
     <p>No new videos may be added after {{ $comp_year->reminder_end->format('M d') }}</p>
 @endif

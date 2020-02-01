@@ -77,7 +77,9 @@ class TeacherController extends Controller {
 			case 1:
 				$paid = 'Paid'; break;
 			case 2:
-				$paid ='Pending'; break;
+				$paid = 'Pending'; break;
+			case 3:
+				$paid = 'Canceled'; break;
 		}
 
 		$school = $invoice->school;

@@ -96,6 +96,7 @@ class InvoiceRowApp extends Component {
                 <ToggleButton value={0}>Unpaid</ToggleButton>
                 <ToggleButton value={2}>Pending</ToggleButton>
                 <ToggleButton value={1}>Paid</ToggleButton>
+                <ToggleButton value={3}>Canceled</ToggleButton>
               </ToggleButtonGroup>
             </FormGroup>
             <FormGroup>

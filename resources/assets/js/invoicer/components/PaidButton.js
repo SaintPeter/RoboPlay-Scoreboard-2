@@ -23,6 +23,12 @@ class PaidButtonApp extends Component {
           className={'btn btn-xs btn-warning'}>
           Pending
         </button>
+      case 3: // Canceled
+        return <button
+          onClick={this.props.onClick}
+          className={'btn btn-xs btn-info'}>
+          Canceled
+        </button>
     }
 
   }
