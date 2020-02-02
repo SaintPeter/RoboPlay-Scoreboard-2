@@ -177,11 +177,14 @@
         @else
             <p class="text-danger">Warning:  Changes to students and t-shirt sizes will not change ordered shirts</p>
         @endif
+        @if($competition_error)
+            <p class="text-danger">Warning:  Selected Team Divisions are at different sites</p>
+        @endif
    </div>
     <div class="col-sm-6 col-xs-8">
     @if($invoice->team_count > 0)
         <h3>T-Shirt Size</h3>
-        <p>All Challenge Team Teachers recieve a t-shirt</p>
+        <p>All Challenge Team Teachers receive a t-shirt</p>
         <div class="row">
             <div class="form-group col-sm-6">
                 {!! Form::select('tshirt', $tshirt_sizes, $invoice->user->tshirt, [ 'id' => "tshirt", 'class' => 'form-control' ])  !!}
@@ -225,7 +228,9 @@
 				<tr>
 					<td>{{{ $team->name }}}</td>
 					<td>{!! join('<br />', $team->student_list()) !!}</td>
-					<td>{{ $team->division->longname() }}</td>
+					<td {{ $competition_error ? 'class=danger' : '' }}>
+                        {{ $team->division->longname() }}
+                    </td>
 	                <td>
                         @if($edit_days >= 0)
                         {{ link_to_route('teacher.teams.edit', 'Edit', array($team->id), array('class' => 'btn btn-info')) }}

@@ -4,6 +4,40 @@
 	{{ HTML::script('js/jquery.form.min.js') }}
 @endsection
 
+@section('script')
+    <script>
+      var divisions = {!! $divisions_json !!} ;
+
+      $(document).ready(function() {
+        var comps = $('#comp_id');
+        var divs = $('#division_select');
+        var initial_div_id = {!! $team->division->id !!};
+        comps.change(handle_comp_change);
+
+        // Initial Setting
+        handle_comp_change();
+        inital_div_id = -1;
+
+        function handle_comp_change() {
+          var comp_id = comps.val();
+          divs.children().remove();
+          if(divisions.hasOwnProperty(comp_id)) {
+            divs.removeProp('disabled');
+            divs.append('<option value="0">- Select Division -</option>');
+            for(var id in divisions[comp_id]) {
+              var selected = (id == initial_div_id) ? 'selected' : '';
+              var item = '<option value="' + id + '"' + selected + '>' + divisions[comp_id][id] + '</option>';
+              divs.append(item);
+            }
+          } else {
+            divs.prop('disabled', true);
+            divs.append('<option value="0">Must Select Challenge First</option>')
+          }
+        }
+      })
+    </script>
+@endsection
+
 @section('style')
 <style>
 /* Fix margins for nested inline forms */
@@ -36,11 +70,17 @@
 			{!! Form::text('name',$team->name, array('class'=>'form-control col-md-4'))  !!}
 		</div>
 
+        <div class="form-group">
+            {!! Form::label('comp_id', 'Competition:')  !!}
+            {!! Form::select('comp_id', $comps, $comp_id, [ 'class'=>'form-control col-md-4' ])  !!}
+        </div>
 
-		<div class="form-group">
-			{!! Form::label('division_id', 'Division:')  !!}
-			{!! Form::select('division_id', $division_list, null, [ 'class'=>'form-control col-md-4' ])  !!}
-		</div>
+        <div class="form-group">
+            {!! Form::label('division_id', 'Division:')  !!}
+            <select name="division_id" id="division_select" disabled="disabled" class="form-control col-md-4">
+                <option value="0">Select Competition First</option>
+            </select>
+        </div>
 
 		<div class="form-group">
 			{!! Form::label('student_form', 'Students:')  !!}

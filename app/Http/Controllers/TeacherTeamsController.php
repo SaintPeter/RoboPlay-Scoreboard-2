@@ -28,7 +28,7 @@ class TeacherTeamsController extends Controller {
 	/**
 	 * Show the form for creating a new resource.
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function create()
 	{
@@ -40,6 +40,7 @@ class TeacherTeamsController extends Controller {
 	                         ->with([ 'divisions' => function($q) {
 										return $q->orderby('display_order');
 									}])
+		                     ->with('competitions')
 							->first();
 
 		$invoice = Invoices::where('year', $comp_year->year)
@@ -49,16 +50,21 @@ class TeacherTeamsController extends Controller {
 
 	    $school = $invoice->school;
 
-        $division_list[0] = "- Select Division -";
+        //$division_list[0] = "- Select Division -";
         foreach($comp_year->divisions as $division) {
-            $division_list[$division->competition->name][$division->id] = $division->name;
+            $division_list[$division->competition->id][$division->id] = $division->name;
         }
+        $divisions_json = json_encode($division_list);
+
+        $comps = [ '0' => '- Select Challenge -'] + $comp_year->competitions->pluck('name', 'id')->all();
+
 
 		// Ethnicity List Setup
 		$ethnicity_list = [ 0 => "- Select Ethnicity -" ] + Ethnicity::all()->pluck('name','id')->all();
 
 		View::share('title', 'Add Team - ' . $school->name);
-        return View::make('teacher.teams.create', compact('school','ethnicity_list', 'division_list', 'invoice'));
+        return View::make('teacher.teams.create',
+	        compact('school','ethnicity_list', 'divisions_json', 'comps', 'invoice'));
 	}
 
 	/**
@@ -69,7 +75,7 @@ class TeacherTeamsController extends Controller {
 	 */
 	public function store(Request $req)
 	{
-		$input = $req->except([ 'students' ]);
+		$input = $req->except([ 'students', 'comp_id' ]);
 		$invoice = Invoices::find($req->input('invoice_id'));
 		$input['school_id'] = $invoice->school_id;
 		$input['year'] = $invoice->year;
@@ -141,7 +147,7 @@ class TeacherTeamsController extends Controller {
 		//Breadcrumbs::addCrumb('Manage Teams and Videos', 'teacher');
 		//Breadcrumbs::addCrumb('Edit Team', $id);
 		View::share('title', 'Edit Team');
-		$team = Team::with('students')->find($id);
+		$team = Team::with('students', 'division')->find($id);
 
 		// Get the most recent competition year with comptition divisisons
 	    $comp_year = CompYear::orderBy('year', 'desc')
@@ -155,10 +161,13 @@ class TeacherTeamsController extends Controller {
 			->with('school')
 			->first();
 
-        $division_list[0] = "- Select Division -";
-        foreach($comp_year->divisions as $division) {
-            $division_list[$division->competition->name][$division->id] = $division->name;
-        }
+		foreach($comp_year->divisions as $division) {
+			$division_list[$division->competition->id][$division->id] = $division->name;
+		}
+		$divisions_json = json_encode($division_list);
+		$comp_id = $team->division->competition_id;
+
+		$comps = [ '0' => '- Select Challenge -'] + $comp_year->competitions->pluck('name', 'id')->all();
 
 		// Student Setup
 		$ethnicity_list = [ 0 => "- Select Ethnicity -" ] + Ethnicity::all()->pluck('name','id')->all();
@@ -180,7 +189,10 @@ class TeacherTeamsController extends Controller {
 		$divisions = Division::longname_array();
 
 		return View::make('teacher.teams.edit')
-					->with(compact('team','students', 'division_list', 'ethnicity_list', 'index', 'invoice'))
+					->with(
+						compact('team','students', 'divisions_json',
+							'ethnicity_list', 'index', 'invoice',
+							'comp_id', 'comps'))
 				    ->with('divisions', $divisions);
 	}
 
@@ -193,7 +205,7 @@ class TeacherTeamsController extends Controller {
 	 */
 	public function update(Request $req, $id)
 	{
-		$input = $req->except([ '_method', 'students' ]);
+		$input = $req->except([ '_method', 'students', 'comp_id' ]);
 		$invoice = Invoices::find($req->input('invoice_id'));
 
 		$input['school_id'] = $invoice->school_id;

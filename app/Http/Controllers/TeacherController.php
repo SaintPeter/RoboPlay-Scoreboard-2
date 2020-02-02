@@ -25,7 +25,7 @@ class TeacherController extends Controller {
 	 * Display a listing of the resource.
 	 * GET /teacher
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function index()
 	{
@@ -38,7 +38,7 @@ class TeacherController extends Controller {
 	                       }, 'videos.students'])
 	                       ->with( [ 'teams' => function($q) use ($year) {
 	                            return $q->where('year', $year);
-	                       }, 'teams.students'])
+	                       }, 'teams.students', 'teams.division', 'teams.division.competition'])
                            ->with('user', 'school')
 	                       ->first();
 
@@ -86,14 +86,26 @@ class TeacherController extends Controller {
 		$teams = $invoice->teams;
 		$videos = $invoice->videos;
 
+		// Check to make sure that all teams are at the same competition
+		$competition_error = false;
+		$first_team = $teams->first()->division->competition_id;
+		foreach($teams as $team) {
+			if($first_team != $team->division->competition_id) {
+				$competition_error = true;
+			}
+		};
+
 		$reg_days = Carbon::now()->diffInDays($comp_year->reminder_end,false);
 		$edit_days = Carbon::now()->diffInDays($comp_year->edit_end, false);
 
 //dd(DB::getQueryLog());
 
 		View::share('title', 'Manage Teams');
-        return View::make('teacher.index', compact('invoice', 'teams', 'videos',
-	        'math_teams', 'school', 'paid', 'tshirt_sizes', 'reg_days', 'edit_days', 'comp_year'));
+        return View::make('teacher.index',
+	        compact('invoice', 'teams', 'videos',
+	            'math_teams', 'school', 'paid', 'tshirt_sizes',
+		        'reg_days', 'edit_days', 'comp_year', 'competition_error')
+        );
 
 	}
 
