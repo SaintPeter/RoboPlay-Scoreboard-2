@@ -21,7 +21,8 @@
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4.0",
         "parsecsv/php-parsecsv": "0.4.5",
-        "predis/predis": "^1.1"
+        "predis/predis": "^1.1",
+      "ext-json": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.1",
