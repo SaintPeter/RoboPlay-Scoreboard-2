@@ -22,7 +22,8 @@
         "laravelcollective/html": "^5.4.0",
         "parsecsv/php-parsecsv": "0.4.5",
         "predis/predis": "^1.1",
-      "ext-json": "*"
+        "ext-json": "*",
+        "ext-curl": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.1",
