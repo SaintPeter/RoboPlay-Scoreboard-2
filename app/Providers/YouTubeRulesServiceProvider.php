@@ -44,7 +44,7 @@ class YouTubeRulesServiceProvider extends ServiceProvider
 
 		if(!isset($data)) {
 			try {
-				$url = "https://www.googleapis.com/youtube/v3/videos?part=status&id=" . $code . "&alt=json&key=" . env('YOUTUBE_API_KEY');
+				$url = "https://www.googleapis.com/youtube/v3/videos?part=status&id=" . $code . "&alt=json&key=" . config('services.youtube.key');
 				$result = $this->curlhelper($url);
 			} catch (\Exception $e) {
 				return false;
