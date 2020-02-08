@@ -15,6 +15,8 @@ Updated to Laravel Framework 5.5
 * Apache2 or Nginx
    * mod_rewrite
 * Redis 
+* docx2txt
+* pdftotext
 
 ## Client Side Dependencies
 * Node/npm/Babel
