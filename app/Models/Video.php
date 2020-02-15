@@ -78,7 +78,7 @@ class Video extends Model {
 
 	public static $rules = array(
 		'name' => 'required',
-		'yt_code' => array('required','yt_valid', 'yt_embeddable', 'yt_public'),
+		'yt_code' => ['required','yt_valid', 'yt_embeddable', 'yt_public', 'yt_length:60,300'],
 		'school_id' => 'required',
 		'vid_division_id' => 'required|not_in:0'
 	);

@@ -90,6 +90,7 @@ return [
 	"yt_valid"             => "The :attribute is not a valid YouTube Code.",
 	"yt_embeddable"        => "The :attribute is not set to be embeddable.",
 	"yt_public"            => "The :attribute is not set to be public.",
+	"yt_length"            => "Video must be between :min and :max in length",
 	/*
 	|--------------------------------------------------------------------------
 	| Custom Validation Language Lines

@@ -37,14 +37,35 @@ class YouTubeRulesServiceProvider extends ServiceProvider
 		    }
 		    return false;
 	    });
+
+	    Validator::extend('yt_length', function($attribute, $value, $parameters)
+	    {
+		    $value = str_ireplace('https', 'http', $value);
+		    if(preg_match("#(\.be/|/embed/|/v/|/watch\?v=)([A-Za-z0-9_-]{5,11})|(^[A-Za-z0-9_-]{5,11})#", $value, $matches)) {
+			    $duration = $this->yt_check(empty($matches[2]) ? $matches[3] : $matches[2], '', 'duration');
+			    $interval = new \DateInterval($duration);
+			    $ref = new \DateTimeImmutable;
+			    $endtime = $ref->add($interval);
+			    $length = $endtime->getTimestamp() - $ref->getTimestamp();
+			    return $length >= $parameters[0] && $length <= $parameters[1];
+		    }
+		    return false;
+	    });
+
+	    // Replace :min and :max parameters in the yt_length error message
+	    Validator::replacer('yt_length', function($message, $attribute, $rule, $parameters) {
+	    	$min = ltrim(gmdate("i:s", $parameters[0]),0);
+		    $max = ltrim(gmdate("i:s", $parameters[1]),0);
+	    	return str_replace(':min',$min,str_replace(':max', $max, $message));
+	    });
     }
 
-	function yt_check($code, $option) {
+	function yt_check($code, $option, $contentDetail = "") {
 		static $data;
 
 		if(!isset($data)) {
 			try {
-				$url = "https://www.googleapis.com/youtube/v3/videos?part=status&id=" . $code . "&alt=json&key=" . config('services.youtube.key');
+				$url = "https://www.googleapis.com/youtube/v3/videos?part=status,contentDetails&id=" . $code . "&alt=json&key=" . config('services.youtube.key');
 				$result = $this->curlhelper($url);
 			} catch (\Exception $e) {
 				return false;
@@ -56,6 +77,9 @@ class YouTubeRulesServiceProvider extends ServiceProvider
 			return false;
 		}
 		if(count($data->items) > 0) {
+			if($contentDetail) {
+				return $data->items[0]->contentDetails->$contentDetail;
+			}
 			return $data->items[0]->status->$option;
 		}
 		return false;
