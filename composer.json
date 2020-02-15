@@ -14,10 +14,10 @@
     "require": {
         "php": ">=7.0.0",
         "bensampo/laravel-enum": "^1.4",
-        "davejamesmiller/laravel-breadcrumbs": "^4.2",
-        "fideloper/proxy": "~3.3",
+        "davejamesmiller/laravel-breadcrumbs": "^5.3.2",
+        "fideloper/proxy": "^4.0",
         "jpgraph/jpgraph": "4.2.0",
-        "laravel/framework": "5.5.*",
+        "laravel/framework": "5.6.*",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4.0",
         "parsecsv/php-parsecsv": "0.4.5",
