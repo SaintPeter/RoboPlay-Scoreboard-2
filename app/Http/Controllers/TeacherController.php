@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\VideoCheckStatus;
 use Auth;
 use View;
 use Illuminate\ {
@@ -97,16 +98,25 @@ class TeacherController extends Controller {
 			};
 		}
 
+		// Make sure there are no failing videos
+		$validation_error = false;
+		if(count($videos)) {
+			foreach($videos as $video) {
+				if($video->status != VideoCheckStatus::Pass) {
+					$validation_error = true;
+				}
+			}
+		}
+
 		$reg_days = Carbon::now()->diffInDays($comp_year->reminder_end,false);
 		$edit_days = Carbon::now()->diffInDays($comp_year->edit_end, false);
-
-//dd(DB::getQueryLog());
 
 		View::share('title', 'Manage Teams');
         return View::make('teacher.index',
 	        compact('invoice', 'teams', 'videos',
 	            'math_teams', 'school', 'paid', 'tshirt_sizes',
-		        'reg_days', 'edit_days', 'comp_year', 'competition_error')
+		        'reg_days', 'edit_days', 'comp_year',
+		        'competition_error', 'validation_error')
         );
 
 	}

@@ -188,6 +188,10 @@
         @if($competition_error)
             <p class="text-danger">Warning:  Selected Team Divisions are at different sites</p>
         @endif
+        @if($validation_error)
+            <p class="text-danger">Warning:  One or more videos have not passed validation.
+                Please click the "Validate" button by each video and check the output.</p>
+        @endif
    </div>
     <div class="col-sm-6 col-xs-8">
     @if($invoice->team_count > 0)
@@ -318,7 +322,7 @@
 		                        {{ link_to_route('uploader.index', 'Upload', [$video->id], ['class' => 'btn btn-sm btn-success']) }}
                             @endif
 		                    &nbsp;<br>
-                            <button data-id="{{ $video->id }}" class="validate_video btn btn-sm btn-warning {{ $video->status==VideoStatus::Untested ? 'validate_pulse' : '' }}" title="Validate">
+                            <button data-id="{{ $video->id }}" class="validate_video btn btn-sm btn-warning {{ $video->status!=VideoStatus::Pass ? 'validate_pulse' : '' }}" title="Validate">
                                 Validate
                                 <i id="spinner_{{ $video->id }}" class="fa fa-spinner fa-pulse fa-fw" style="display: none"></i>
                             </button>
