@@ -52,6 +52,22 @@
 .validation_table th {
     border-bottom: 2px solid darkgray;
 }
+
+.validate_pulse {
+    animation: VALIDATE_ANIMATION 2s infinite;
+}
+
+@keyframes VALIDATE_ANIMATION {
+  0% {
+      background-color: #f0ad4e;
+      border-color: #f0ad4e
+  }
+  50% {
+      background-color: #f04e4e;
+      border-color: #f04e4e;
+  }
+}
+
 </style>
 @endsection
 
@@ -117,17 +133,9 @@
 				}
 			}
 		});
-
-        $('.validate_video').click(function(e) {
-            e.preventDefault();
-            var video_id = $(this).data('id');
-            $.get('/validate_video/' + video_id, function(data) {
-                $('#validation_results_' + video_id).remove();
-                $('#video_row_' + video_id).after('<tr id="validation_results_' + video_id + '"><td colspan="8">' + data + "</td></tr>");
-            });
-        });
 	});
 </script>
+@include("partials.validate_video")
 @endsection
 
 <?php View::share('skip_title', 1) ?>
@@ -310,8 +318,9 @@
 		                        {{ link_to_route('uploader.index', 'Upload', [$video->id], ['class' => 'btn btn-sm btn-success']) }}
                             @endif
 		                    &nbsp;<br>
-                            <button data-id="{{ $video->id }}" class="validate_video btn btn-sm btn-warning" title="Validate">
+                            <button data-id="{{ $video->id }}" class="validate_video btn btn-sm btn-warning {{ $video->status==VideoStatus::Untested ? 'validate_pulse' : '' }}" title="Validate">
                                 Validate
+                                <i id="spinner_{{ $video->id }}" class="fa fa-spinner fa-pulse fa-fw" style="display: none"></i>
                             </button>
                             &nbsp;
 		                    {!! Form::open(['method' => 'DELETE', 'route' => ['teacher.videos.destroy', $video->id], 'id' => 'video_delete_form_' . $video->id, 'style' => 'display: inline-block;'])  !!}

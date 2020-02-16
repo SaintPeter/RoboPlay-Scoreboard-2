@@ -14,8 +14,14 @@ use App\Mail\VideoUpdated;
 use App\Enums\VideoCheckStatus;
 use App\Enums\VideoReviewStatus;
 
+use Symfony\Component\Process\ {
+	Process,
+	Exception\ProcessFailedException
+};
+
 use App\Models\ {
-    Video,
+    Files,
+	Video,
     Student,
     Division,
     CompYear,
@@ -346,10 +352,13 @@ class TeacherVideoController extends Controller {
 		];
 
 		$code_results = [];
+//		$script_results = [];
+//		$code_filenames = [];
 		$fail = false;
 		$warning = false;
 
 		// Scan files for metadata etc
+		/** @var Files $file */
 		foreach($files as $file) {
 			$counts[$file->filetype->type]++;
 
@@ -359,12 +368,42 @@ class TeacherVideoController extends Controller {
 					if (preg_match_all("/script/i", $file->filename)) {
 						$counts['script']++;
 					}
+
+					// check for code inside files
+//					try {
+//						if($file->filetype->ext == "docx") {
+//							if(TeacherVideoController::check_docx_for_code($file->full_path())) {
+//								$script_results[] = [
+//									'filename' => $file->filename,
+//									'message' => 'Docx File contains Ch Code'
+//								];
+//							}
+//						}
+//
+//						if($file->filetype->ext == "pdf") {
+//							if(TeacherVideoController::check_pdf_for_code($file->full_path())) {
+//								$script_results[] = [
+//									'filename' => $file->filename,
+//									'message' => 'PDF File contains Ch Code'
+//								];
+//							}
+//						}
+//					} catch (\Exception $e) {
+//						$script_results[] = [
+//							'filename' => $file->filename,
+//							'message' => "Unable to read/parse file"
+//						];
+//					}
+
 					break;
 				case 'code':
+					// Track filenames for order
+//					$code_filenames[] = $file->filename;
+
 					// Scan the code files
 					try {
 						$codeFile = file_get_contents($file->full_path());
-						if (preg_match_all("/File|" .
+						preg_match_all("/File|" .
 							"Video Title|" .
 							"Scene #|" .
 							"Teacher Advisors|" .
@@ -373,14 +412,22 @@ class TeacherVideoController extends Controller {
 							"Code Written by|" .
 							"Student Names|" .
 							"Purpose/i",
-							$codeFile, $matches)) {
-							if (count($matches[0]) < 5) {
-								$code_results[] = [
-									'filename' => $file->filename,
-									'message' => 'Required header missing or incomplete'
-								];
-							}
+							$codeFile, $matches);
+						if (count($matches[0]) < 5) {
+							$code_results[] = [
+								'filename' => $file->filename,
+								'message' => 'Required header missing or incomplete'
+							];
 						}
+
+						preg_match_all("/<linkbot\.h>/", $codeFile, $matches);
+						if(count($matches[0]) > 1) {
+							$code_results[] = [
+								'filename' => $file->filename,
+								'message' => 'Duplicate <linkbot.h> declarations Found. Files must be stand-alone.'
+							];
+						}
+
 					} catch (\Exception $e) {
 						$code_results[] = [
 							'filename' => $file->filename,
@@ -399,11 +446,27 @@ class TeacherVideoController extends Controller {
 		$results = [];
 
 		// Check Content Tags
-		if($video->has_story or $video->has_task or $video->has_choreo or $video->has_custom) {
+		$flag_count = count(array_filter([
+			$video->has_story ,
+			 $video->has_task ,
+			 $video->has_choreo ,
+			 $video->has_custom
+		]));
+
+		if($flag_count > 0 and $flag_count < 4) {
 			$results[] = [
 				'status' => 'PASS',
 				'message' => 'Content Tags Present'
 			];
+		} elseif($flag_count == 4) {
+			$results[] = [
+				'status' => 'WARNING',
+				'message' => 'All Content Tags Selected',
+				'note' => 'It is the rare video which truly contains all types of content.  Are you sure that ' .
+					'your video contains all of these elements? Remember that these tags help the judges ' .
+					'to understand the video\'s intent.'
+			];
+			$warning = true;
 		} else {
 			$results[] = [
 				'status' => 'WARNING',
@@ -415,11 +478,18 @@ class TeacherVideoController extends Controller {
 		}
 
 		// Video File Present
-		if($counts['video'] > 0) {
+		if($counts['video'] == 1) {
 			$results[] = [
 				'status' => 'PASS',
 				'message' => 'Video File Uploaded'
 			];
+		} elseif($counts['video'] > 1) {
+			$results[] = [
+				'status' => 'FAIL',
+				'message' => "Too Many Video Files (${counts['video']} found)",
+				'note' => 'You may only upload a single video file per submission. Please delete additional video files.'
+			];
+			$fail = true;
 		} else {
 			$results[] = [
 				'status' => 'FAIL',
@@ -475,13 +545,22 @@ class TeacherVideoController extends Controller {
 				'status' => 'PASS',
 				'message' => 'Script File Present'
 			];
+
+//			if(count($script_results) > 0) {
+//				$results[] = [
+//					'status' => 'FAIL',
+//					'message' => count($script_results) . ' of ' . $counts['script'] . ' script files have issues',
+//					'note' => 'Code is not allowed in DOCX or PDF file formats.',
+//					'files' => $script_results
+//				];
+//				$fail = true;
+//			}
 		} else {
 			$results[] = [
 				'status' => 'WARNING',
 				'message' => 'Script File Missing',
 				'note' => 'No document file was found with string "script" in the filename. ' .
-					'If your video contains no dialog and/or stage direction (such as a music video), a script is not required. ' .
-					'If dialog or stage direction are present, the video will be disqualified.'
+					'All Videos must include a script, including choreography videos, much must contain stage direction.'
 			];
 			$warning = true;
 		}
@@ -496,8 +575,8 @@ class TeacherVideoController extends Controller {
 				$results[] = [
 					'status' => 'FAIL',
 					'message' => count($code_results) . ' of ' . $counts['code'] . ' code files have issues',
-					'note' => 'This is a new feature.  If you believe your code is formatted properly, please ' .
-						      'contact the Video Coordinator',
+					'note' => 'Be sure you are using the header template found in the Call for Participation. ' .
+						'Files may only have a single "file" worth of code in them.',
 					'files' => $code_results
 				];
 				$fail = true;
@@ -514,6 +593,28 @@ class TeacherVideoController extends Controller {
 			];
 			$fail = true;
 		}
+
+		// Video File Order Check
+//		if(count($code_filenames) > 0) {
+//			sort($code_filenames);
+//			$current_number = -99999;
+//			foreach($code_filenames as $filename) {
+//				$num = intval(preg_replace('/\D/','',$filename));
+//				if($num < $current_number) {
+//					$results[] = [
+//						'status' => 'WARNING',
+//						'message' => 'Code files may display out of order',
+//						'note' => 'Files should have a common text prefix and pad numbers with leading zeroes to ' .
+//							' ensure they sort properly. ' .
+//							'IE: Little_Red_Riding_Bot_scene_01.ch, Little_Red_Riding_Bot_scene_02.ch, etc.'
+//					];
+//					$warning = true;
+//					break;
+//				} else {
+//					$current_number = $num;
+//				}
+//			}
+//		}
 
 		if($fail) {
 			$status = VideoCheckStatus::Fail;
@@ -537,5 +638,38 @@ class TeacherVideoController extends Controller {
 		return [$status, $results];
 	}
 
+	public static function check_docx_for_code($filename) {
+		$process = new Process([ config("services.docx2txt.exe"), $filename, '-']);
+		$process->setTimeout(10);
+		$process->run();
 
+		if (!$process->isSuccessful()) {
+			$exception = new ProcessFailedException($process);
+			throw $exception;
+		}
+
+		$output = $process->getOutput();
+		if(preg_match('/<linkbot\.h>/',$output)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static function check_pdf_for_code($filename) {
+		$process = new Process([ config("services.pdftotext.exe"), $filename, '-']);
+		$process->setTimeout(10);
+		$process->run();
+
+		if (!$process->isSuccessful()) {
+			$exception = new ProcessFailedException($process);
+			throw $exception;
+		}
+
+		$output = $process->getOutput();
+		if(preg_match('/<linkbot\.h>/',$output)) {
+			return true;
+		}
+		return false;
+	}
 }

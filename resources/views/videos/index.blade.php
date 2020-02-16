@@ -59,17 +59,9 @@
 		});
 
 		$("#video_table").filterTable();
-
-        $('.validate_video').click(function(e) {
-            e.preventDefault();
-            var video_id = $(this).data('id');
-            $.get('/validate_video/' + video_id, function(data) {
-                $('#validation_results_' + video_id).remove();
-                $('#video_row_' + video_id).after('<tr id="validation_results_' + video_id + '"><td colspan="8">' + data + "</td></tr>");
-            });
-        });
 	});
 </script>
+@include("partials.validate_video")
 @endsection
 
 @section('main')
@@ -134,6 +126,7 @@
 					{{ link_to_route('videos.uploader', 'Upload', array($video->id), array('class' => 'btn btn-success btn-margin')) }}
                     <button data-id="{{ $video->id }}" class="validate_video btn btn-warning btn-margin" title="Validate">
                         Validate
+                        <i id="spinner_{{ $video->id }}" class="fa fa-spinner fa-pulse fa-fw" style="display: none"></i>
                     </button>
                     {!! Form::open(array('method' => 'DELETE', 'route' => array('videos.destroy', $video->id), 'id' => 'delete_form_' . $video->id, 'style' => 'display: inline-block;'))  !!}
                         {!! Form::submit('Delete', array('class' => 'btn btn-danger delete_button btn-margin', 'delete_id' => $video->id))  !!}

@@ -60,18 +60,9 @@
 				}
 			}
 		});
-
-        $('.validate_video').click(function(e) {
-            e.preventDefault();
-            var video_id = $(this).data('id');
-            $('#validation_results_' + video_id).remove();
-            $.get('/validate_video/' + video_id, function(data) {
-                $('#validation_results_' + video_id).remove();
-                $('#video_row_' + video_id).after('<tr id="validation_results_' + video_id + '"><td colspan="8">' + data + "</td></tr>");
-            });
-        });
 	});
 </script>
+@include("partials.validate_video")
 @endsection
 
 @section('main')
@@ -120,6 +111,7 @@
 
                 <button data-id="{{ $video->id }}" class="validate_video btn btn-warning btn-margin" title="Validate">
                     Validate
+                    <i id="spinner_{{ $video->id }}" class="fa fa-spinner fa-pulse fa-fw" style="display: none"></i>
                 </button>
 				&nbsp;
                 {!! Form::open(array('method' => 'DELETE', 'route' => array('teacher.videos.destroy', $video->id), 'id' => 'delete_form_' . $video->id, 'style' => 'display: inline-block;'))  !!}
