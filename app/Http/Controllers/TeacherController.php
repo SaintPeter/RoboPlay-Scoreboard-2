@@ -88,12 +88,14 @@ class TeacherController extends Controller {
 
 		// Check to make sure that all teams are at the same competition
 		$competition_error = false;
-		$first_team = $teams->first()->division->competition_id;
-		foreach($teams as $team) {
-			if($first_team != $team->division->competition_id) {
-				$competition_error = true;
-			}
-		};
+		if(count($teams)) {
+			$first_team = $teams->first()->division->competition_id;
+			foreach($teams as $team) {
+				if($first_team != $team->division->competition_id) {
+					$competition_error = true;
+				}
+			};
+		}
 
 		$reg_days = Carbon::now()->diffInDays($comp_year->reminder_end,false);
 		$edit_days = Carbon::now()->diffInDays($comp_year->edit_end, false);
