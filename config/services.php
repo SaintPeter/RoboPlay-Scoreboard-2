@@ -39,4 +39,12 @@ return [
 		'key' => env('YOUTUBE_API_KEY')
 	],
 
+	'docx2txt' => [
+		'exe' => env('DOCX2TXT')
+	],
+
+	'pdftotext' => [
+		'exe' => env('PDFTOTEXT')
+	]
+
 ];
