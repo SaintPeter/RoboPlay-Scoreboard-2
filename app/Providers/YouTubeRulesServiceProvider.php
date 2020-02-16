@@ -14,40 +14,35 @@ class YouTubeRulesServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-	    Validator::extend('yt_valid', function($attribute, $value, $parameters)
-	    {
+	    Validator::extend('yt_valid', function($attribute, $value, $parameters) {
 		    $value = str_ireplace('https', 'http', $value);
 		    return preg_match("#(\.be/|/embed/|/v/|/watch\?v=)([A-Za-z0-9_-]{5,11})|(^[A-Za-z0-9_-]{5,11})#", $value);
 	    });
 
-	    Validator::extend('yt_embeddable', function($attribute, $value, $parameters)
-	    {
-		    $value = str_ireplace('https', 'http', $value);
-		    if(preg_match("#(\.be/|/embed/|/v/|/watch\?v=)([A-Za-z0-9_-]{5,11})|(^[A-Za-z0-9_-]{5,11})#", $value, $matches)) {
-			    return $this->yt_check(empty($matches[2]) ? $matches[3] : $matches[2], 'embeddable');
-		    }
-		    return false;
+	    Validator::extend('yt_embeddable', function($attribute, $value, $parameters) {
+	        return $this->yt_check($value, 'status.embeddable');
 	    });
 
-	    Validator::extend('yt_public', function($attribute, $value, $parameters)
-	    {
-		    $value = str_ireplace('https', 'http', $value);
-		    if(preg_match("#(\.be/|/embed/|/v/|/watch\?v=)([A-Za-z0-9_-]{5,11})|(^[A-Za-z0-9_-]{5,11})#", $value, $matches)) {
-			    return $this->yt_check(empty($matches[2]) ? $matches[3] : $matches[2], 'privacyStatus');
-		    }
-		    return false;
+	    Validator::extend('yt_public', function($attribute, $value, $parameters) {
+		    return $this->yt_check($value, 'status.privacyStatus') == 'public';
 	    });
 
-	    Validator::extend('yt_length', function($attribute, $value, $parameters)
-	    {
-		    $value = str_ireplace('https', 'http', $value);
-		    if(preg_match("#(\.be/|/embed/|/v/|/watch\?v=)([A-Za-z0-9_-]{5,11})|(^[A-Za-z0-9_-]{5,11})#", $value, $matches)) {
-			    $duration = $this->yt_check(empty($matches[2]) ? $matches[3] : $matches[2], '', 'duration');
+	    Validator::extend('yt_length', function($attribute, $value, $parameters) {
+		    $duration = $this->yt_check($value, 'contentDetails.duration');
+		    if($duration) {
 			    $interval = new \DateInterval($duration);
 			    $ref = new \DateTimeImmutable;
-			    $endtime = $ref->add($interval);
-			    $length = $endtime->getTimestamp() - $ref->getTimestamp();
+			    $end_time = $ref->add($interval);
+			    $length = $end_time->getTimestamp() - $ref->getTimestamp();
 			    return $length >= $parameters[0] && $length <= $parameters[1];
+		    }
+		    return false;
+	    });
+
+	    Validator::extend('yt_title_regex', function($attribute, $value, $parameters) {
+		    $title = $this->yt_check($value, 'snippet.title');
+		    if($title) {
+			    return preg_match($parameters[0], $title);
 		    }
 		    return false;
 	    });
@@ -60,27 +55,40 @@ class YouTubeRulesServiceProvider extends ServiceProvider
 	    });
     }
 
-	function yt_check($code, $option, $contentDetail = "") {
+	function yt_check($video_url, $option) {
 		static $data;
 
+		// Extract the YouTube Code
+		$video_url = str_ireplace('https', 'http', $video_url);
+		if(preg_match("#(\.be/|/embed/|/v/|/watch\?v=)([A-Za-z0-9_-]{5,11})|(^[A-Za-z0-9_-]{5,11})#", $video_url, $matches)) {
+			$code = empty($matches[2]) ? $matches[3] : $matches[2];
+		} else {
+			return false;
+		}
+
+		// Cache the API result
 		if(!isset($data)) {
 			try {
-				$url = "https://www.googleapis.com/youtube/v3/videos?part=status,contentDetails&id=" . $code . "&alt=json&key=" . config('services.youtube.key');
+				$url = "https://www.googleapis.com/youtube/v3/videos?part=status,contentDetails,snippet&id=" . $code . "&alt=json&key=" . config('services.youtube.key');
 				$result = $this->curlhelper($url);
 			} catch (\Exception $e) {
 				return false;
 			}
 			$data = json_decode($result);
-			//dd($code, $data);
 		}
+		// If error is set, everything is wrong and bad
 		if(property_exists($data, 'error')) {
 			return false;
 		}
+
+		// Ensure that the items and elements exist before returning
 		if(count($data->items) > 0) {
-			if($contentDetail) {
-				return $data->items[0]->contentDetails->$contentDetail;
+			list($region, $element) = explode(".", $option);
+			if(property_exists($data->items[0], $region)) {
+				if(property_exists($data->items[0]->$region, $element)) {
+					return $data->items[0]->$region->$element;
+				}
 			}
-			return $data->items[0]->status->$option;
 		}
 		return false;
 	}
