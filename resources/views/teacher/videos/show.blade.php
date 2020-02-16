@@ -64,6 +64,7 @@
         $('.validate_video').click(function(e) {
             e.preventDefault();
             var video_id = $(this).data('id');
+            $('#validation_results_' + video_id).remove();
             $.get('/validate_video/' + video_id, function(data) {
                 $('#validation_results_' + video_id).remove();
                 $('#video_row_' + video_id).after('<tr id="validation_results_' + video_id + '"><td colspan="8">' + data + "</td></tr>");
