@@ -77,11 +77,15 @@ class Video extends Model {
 	];
 
 	public static $rules = array(
-		'name' => 'required',
+		'name' => ['required', 'not_regex:/roboplay|robo play/i'],
 		'yt_code' => ['required','yt_valid', 'yt_embeddable', 'yt_public', 'yt_length:60,300'],
 		'school_id' => 'required',
 		'vid_division_id' => 'required|not_in:0'
 	);
+
+	public static $customMessages = [
+		'name.not_regex' => "Video Name on Scoreboard may not contain \"RoboPlay\" (Video Name must contain RoboPlay in YouTube title)",
+	];
 
 	protected $attributes = array(
   		'has_custom' => false,

@@ -81,7 +81,7 @@ class TeacherVideoController extends Controller {
 
 		$students = $req->input('students');
 
-		$videoErrors = Validator::make($input, Video::$rules);
+		$videoErrors = Validator::make($input, Video::$rules, Video::$customMessages);
 
 		if ($videoErrors->passes())
 		{
@@ -219,7 +219,7 @@ class TeacherVideoController extends Controller {
 
 		$students = $req->input('students');
 
-		$videoValidation = Validator::make($input, Video::$rules);
+		$videoValidation = Validator::make($input, Video::$rules, Video::$customMessages);
 
 		if ($videoValidation->passes())
 		{

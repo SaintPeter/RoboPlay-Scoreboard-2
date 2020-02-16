@@ -100,9 +100,8 @@ class VideosController extends Controller {
 	public function store(Request $req)
 	{
 		$input = $req->except(['students', 'awards' ]);
-		$rules = Video::$rules;
 		// Skip check on video for admins
-		unset($rules['yt_code']);
+		$rules = array_except(Video::$rules, 'yt_code');
 
 		$invoice = Invoices::find($req->input('invoice_id'));
 		if(!$invoice) {
@@ -118,7 +117,7 @@ class VideosController extends Controller {
 
 		$students = $req->input('students');
 
-		$videoErrors = Validator::make($input, $rules);
+		$videoErrors = Validator::make($input, $rules, Video::$customMessages);
 
 		if ($videoErrors->passes())
 		{
@@ -270,11 +269,10 @@ class VideosController extends Controller {
 		$input['school_id'] = $invoice->school_id;
 		$input['teacher_id'] = $invoice->user_id;
 
-		$rules = Video::$rules;
 		// Skip check on video code for admins
-		unset($rules['yt_code']);
+		$rules = array_except(Video::$rules, 'yt_code');
 
-		$videoErrors = Validator::make($input, $rules);
+		$videoErrors = Validator::make($input, $rules, Video::$customMessages);
 
 		if ($videoErrors->passes())
 		{
