@@ -108,7 +108,7 @@ class TeamsController extends Controller {
 
 		$students = $req->input('students');
 
-		$teamErrors = Validator::make($input, Team::$rules);
+		$teamErrors = Validator::make($input, Team::$rules, Team::$customMessages);
 
 		if ($teamErrors->passes())
 		{
@@ -248,7 +248,7 @@ class TeamsController extends Controller {
 
 		$students = $req->input('students');
 
-		$teamValidation = Validator::make($input, Team::$rules);
+		$teamValidation = Validator::make($input, Team::$rules, Team::$customMessages);
 
 		if ($teamValidation->passes())
 		{

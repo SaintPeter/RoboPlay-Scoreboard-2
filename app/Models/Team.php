@@ -44,10 +44,16 @@ class Team extends Model {
 	];
 
 	public static $rules = array(
-		'name' => 'required',
+		'name' => ['required', 'not_regex:/[^a-zA-Z0-9 \-]/','min:4','max:30'],
 		'division_id' => 'required|not_in:0',
 		'invoice_id' => 'required'
 	);
+
+	public static $customMessages = [
+		'name.not_regex' => 'Team Names may only contain alphanumerics, spaces, and hyphens',
+		'name.min' => 'Team Names must be at least 4 characters long',
+		'name.max' => 'Team Names may not be more than at 30 characters long'
+	];
 
 	private $has_awards = [];
 

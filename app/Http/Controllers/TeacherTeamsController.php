@@ -8,6 +8,7 @@ use Session;
 use Validator;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 use App\ {
     Models\Team,
@@ -83,7 +84,12 @@ class TeacherTeamsController extends Controller {
 
 		$students = $req->input('students');
 
-		$teamErrors = Validator::make($input, Team::$rules);
+		$rules = Team::$rules;
+		$rules['name'][] = Rule::unique('teams')->where(function ($query) use ($req, $invoice) {
+			return $query->where('year', $invoice->year);
+		});
+
+		$teamErrors = Validator::make($input, $rules, Team::$customMessages);
 
 		if ($teamErrors->passes())
 		{
@@ -214,7 +220,12 @@ class TeacherTeamsController extends Controller {
 
 		$students = $req->input('students');
 
-		$teamValidation = Validator::make($input, Team::$rules);
+		$rules = Team::$rules;
+		$rules['name'][] = Rule::unique('teams')->ignore($id)->where(function ($query) use ($invoice, $id) {
+			return $query->where('year', $invoice->year)->where('id', '<>', $id);
+		});
+
+		$teamValidation = Validator::make($input, $rules, Team::$customMessages);
 
 		if ($teamValidation->passes())
 		{

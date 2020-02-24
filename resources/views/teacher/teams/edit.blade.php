@@ -68,6 +68,7 @@
         <div class="form-group">
 			{!! Form::label('name', 'Team Name:')  !!}
 			{!! Form::text('name',$team->name, array('class'=>'form-control col-md-4'))  !!}
+            <p style="margin-left: 5px">Please do not use school names in team names. School names are already displayed on the scoreboard.</p>
 		</div>
 
         <div class="form-group">
@@ -124,12 +125,12 @@
 @include('students.partial.dialogs')
 
 @if ($errors->any())
-<div class="col-md-6">
-	<h3>Validation Errors</h3>
-	<ul>
-		{{ implode('', $errors->all('<li class="error">:message</li>')) }}
-	</ul>
-</div>
+    <div class="col-md-4">
+        <h3>Validation Errors</h3>
+        <ul>
+            {!! implode($errors->all('<li class="error">:message</li>')) !!}
+        </ul>
+    </div>
 @endif
 
 @endsection
