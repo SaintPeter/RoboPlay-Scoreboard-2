@@ -48,7 +48,7 @@
 	<div class="form-group">
 	    {!! Form::label('yt_code', 'YouTube URL or Code:')  !!}
 	    {!! Form::text('yt_code', $video->yt_code, [ 'class'=>'form-control col-md-4' ])  !!}
-	    <p>Accepted Formats:</p>
+	    <label>Accepted Formats:</label>
 	    <ul>
 	    	<li>http://www.youtube.com/watch?v=-wtIMTCHWuI</li>
 			<li>http://www.youtube.com/v/-wtIMTCHWuI</li>
@@ -80,18 +80,38 @@
 			</label>
 		</div>
 
-		<div class="checkbox">
-			<label>
-				{!! Form::hidden('has_custom', 0)  !!}
-				{!! Form::checkbox('has_custom',1, $video->has_custom)  !!} Custom Designed Part
-			</label>
-		</div>
-	</div>
-		<p><strong>Note:</strong><br/>These tags act as hints to judges about the content of your videos.  <br />
-			Each video will be scored on all areas regardless of tags, except for "Custom part", <br />
-			which must be flagged to be judged for that category.<br/>
-			Computational Thinking will automatically be tagged when the video's code is uploaded.</p>
+        <div class="checkbox">
+            <label>
+                {!! Form::hidden('has_theme', 0)  !!}
+                {!! Form::checkbox('has_theme',1, $video->has_theme)  !!} Yearly Theme
+            </label>
+        </div>
 
+        <div class="checkbox">
+            <label>
+                {!! Form::hidden('has_custom', 0)  !!}
+                {!! Form::checkbox('has_custom',1, $video->has_custom)  !!} Custom Designed Part
+                <sup><a href="#custom">[1]</a></sup>
+            </label>
+        </div>
+
+        <div class="checkbox">
+            <label>
+                {!! Form::hidden('has_advanced', 0)  !!}
+                {!! Form::checkbox('has_advanced', 1, $video->has_advanced)  !!} Advanced Electronics
+                <sup><a href="#advanced">[2]</a></sup>
+            </label>
+        </div>
+	</div>
+    <label>Notes</label>
+    <div style="margin-left: 10px;">
+        <p>These tags act as hints to judges about the content of your videos.  <br />
+            Each video will be scored on all areas regardless of tags, except for "Custom part" and "Advanced Electronics", <br />
+            which must be flagged to be judged for those categories.<br/>
+            Computational Thinking will automatically be tagged when the video's code is uploaded.</p>
+        <p id="custom">[1] Videos with Custom Parts have additional file requriements.  Please review the CFP before tagging.</p>
+        <p id="advanced">[2] Advanced Electronics videos must feature Rasberry Pi or Ardunio parts and code in .ch format.</p>
+    </div>
 	@include('students.partial.fields', [ 'students' => $students ])
 
 	<div class="form-group">

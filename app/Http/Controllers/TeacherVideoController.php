@@ -447,18 +447,20 @@ class TeacherVideoController extends Controller {
 
 		// Check Content Tags
 		$flag_count = count(array_filter([
-			$video->has_story ,
-			 $video->has_task ,
-			 $video->has_choreo ,
-			 $video->has_custom
+			$video->has_story,
+			$video->has_task,
+			$video->has_choreo,
+			$video->has_custom,
+			$video->has_theme,
+			$video->has_advanced
 		]));
 
-		if($flag_count > 0 and $flag_count < 4) {
+		if($flag_count > 0 and $flag_count < 6) {
 			$results[] = [
 				'status' => 'PASS',
 				'message' => 'Content Tags Present'
 			];
-		} elseif($flag_count == 4) {
+		} elseif($flag_count == 6) {
 			$results[] = [
 				'status' => 'WARNING',
 				'message' => 'All Content Tags Selected',

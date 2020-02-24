@@ -145,12 +145,28 @@
 			</label>
 		</div>
 
-		<div class="checkbox">
-			<label>
-				{!! Form::hidden('has_custom', 0)  !!}
-				{!! Form::checkbox('has_custom',1)  !!} Custom Designed Part
-			</label>
-		</div>
+        <div class="checkbox">
+            <label>
+                {!! Form::hidden('has_theme', 0)  !!}
+                {!! Form::checkbox('has_theme',1)  !!} Yearly Theme
+            </label>
+        </div>
+
+        <div class="checkbox">
+            <label>
+                {!! Form::hidden('has_custom', 0)  !!}
+                {!! Form::checkbox('has_custom',1)  !!} Custom Designed Part
+                <sup><a href="#custom">[1]</a></sup>
+            </label>
+        </div>
+
+        <div class="checkbox">
+            <label>
+                {!! Form::hidden('has_advanced', 0)  !!}
+                {!! Form::checkbox('has_advanced',1)  !!} Advanced Electronics
+                <sup><a href="#advanced">[2]</a></sup>
+            </label>
+        </div>
 	</div>
 	<label>Attributes</label>
 	<div class="indent">
