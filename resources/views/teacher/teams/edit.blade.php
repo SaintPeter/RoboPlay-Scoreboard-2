@@ -11,7 +11,7 @@
       $(document).ready(function() {
         var comps = $('#comp_id');
         var divs = $('#division_select');
-        var initial_div_id = {!! $team->division->id !!};
+        var initial_div_id = {!! $last_div_id !!};
         comps.change(handle_comp_change);
 
         // Initial Setting

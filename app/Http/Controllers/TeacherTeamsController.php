@@ -145,13 +145,12 @@ class TeacherTeamsController extends Controller {
 	/**
 	 * Show the form for editing the specified resource.
 	 *
+	 * @param  Request $req
 	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\Contracts\View\View
 	 */
-	public function edit($id)
+	public function edit(Request $req, $id)
 	{
-		//Breadcrumbs::addCrumb('Manage Teams and Videos', 'teacher');
-		//Breadcrumbs::addCrumb('Edit Team', $id);
 		View::share('title', 'Edit Team');
 		$team = Team::with('students', 'division')->find($id);
 
@@ -186,6 +185,8 @@ class TeacherTeamsController extends Controller {
 		}
 		$index = -1;
 
+		$last_div_id = $req->old('division_id', 0);
+
 
 		if (is_null($team))
 		{
@@ -195,10 +196,9 @@ class TeacherTeamsController extends Controller {
 		$divisions = Division::longname_array();
 
 		return View::make('teacher.teams.edit')
-					->with(
-						compact('team','students', 'divisions_json',
+					->with(compact('team','students', 'divisions_json',
 							'ethnicity_list', 'index', 'invoice',
-							'comp_id', 'comps'))
+							'comp_id', 'comps', 'last_div_id'))
 				    ->with('divisions', $divisions);
 	}
 
