@@ -34,7 +34,8 @@
         "laracasts/generators": "^1.1",
         "mockery/mockery": "~1.0",
         "phpunit/phpunit": "~6.0",
-        "symfony/thanks": "^1.0"
+        "symfony/thanks": "^1.0",
+        "symfony/translation": "4.3.8"
     },
     "autoload": {
         "classmap": [
