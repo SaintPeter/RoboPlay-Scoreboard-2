@@ -55,6 +55,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Score_run newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Score_run query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Score_run whereAbort($value)
+ * @property-read \App\Models\User $judge
  */
 class Score_run extends Model {
 	use SoftDeletes;

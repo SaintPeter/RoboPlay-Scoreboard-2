@@ -32,6 +32,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_user newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_user newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_user query()
+ * @property-read int|null $usermeta_count
  */
 class Wp_user extends Model {
 	public $connection = 'mysql-wordpress';

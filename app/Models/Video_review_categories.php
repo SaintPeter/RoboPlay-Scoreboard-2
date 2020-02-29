@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video_review_categories whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video_review_categories whereOrder($value)
  * @mixin \Eloquent
+ * @property-read int|null $details_count
  */
 class Video_review_categories extends Model
 {

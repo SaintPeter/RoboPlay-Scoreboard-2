@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Districts newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Districts newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Districts query()
+ * @property-read int|null $schools_count
  */
 class Districts extends Model {
 public $connection = 'mysql-wordpress';

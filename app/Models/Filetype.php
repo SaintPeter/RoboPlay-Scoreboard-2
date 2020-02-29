@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filetype newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filetype newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filetype query()
+ * @property-read int|null $files_count
  */
 class Filetype extends \Eloquent {
 	protected $guarded = ['id'];

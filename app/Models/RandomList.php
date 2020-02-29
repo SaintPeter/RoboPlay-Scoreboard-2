@@ -38,6 +38,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RandomList newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RandomList newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RandomList query()
+ * @property-read int|null $elements_count
  */
 class RandomList extends \Eloquent {
 	protected $fillable = [

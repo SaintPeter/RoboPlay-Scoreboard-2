@@ -35,6 +35,12 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Challenge newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Challenge newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Challenge query()
+ * @property-read int|null $divisions_count
+ * @property-read int|null $random_lists_count
+ * @property-read int|null $randoms_count
+ * @property-read int|null $score_elements_count
+ * @property-read int|null $scores_count
+ * @property-read int|null $scores_with_trash_count
  */
 class Challenge extends Model {
 	protected $guarded = array();

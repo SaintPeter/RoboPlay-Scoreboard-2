@@ -31,6 +31,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Division newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Division newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Division query()
+ * @property-read int|null $challenges_count
+ * @property-read int|null $comp_year_count
+ * @property-read int|null $teams_count
  */
 class Division extends Model {
 	protected $guarded = array();

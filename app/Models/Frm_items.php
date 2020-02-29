@@ -40,6 +40,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Frm_items newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Frm_items newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Frm_items query()
+ * @property-read int|null $fields_count
+ * @property-read int|null $values_count
  */
 class Frm_items extends Model {
 	public $connection = 'mysql-wordpress';

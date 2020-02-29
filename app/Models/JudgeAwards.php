@@ -11,6 +11,12 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JudgeAwards newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JudgeAwards query()
  * @mixin \Eloquent
+ * @property int $id
+ * @property string $name
+ * @property string $col
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JudgeAwards whereCol($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JudgeAwards whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JudgeAwards whereName($value)
  */
 class JudgeAwards extends Model
 {

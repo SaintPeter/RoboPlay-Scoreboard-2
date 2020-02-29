@@ -47,6 +47,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_invoice_table newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_invoice_table newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wp_invoice_table query()
+ * @property-read int|null $invoice_data_count
+ * @property-read int|null $teams_count
+ * @property-read int|null $videos_count
  */
 class Wp_invoice_table extends Model {
 	public $connection = 'mysql-wordpress';

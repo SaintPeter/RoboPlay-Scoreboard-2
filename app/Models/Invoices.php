@@ -44,6 +44,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Invoices newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Invoices newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Invoices query()
+ * @property-read int|null $teams_count
+ * @property-read int|null $videos_count
  */
 class Invoices extends \Eloquent {
 	protected $fillable = ['remote_id', 'paid', 'notes', 'user_id', 'year'];

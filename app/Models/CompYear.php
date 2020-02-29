@@ -33,6 +33,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\CompYear whereEditEnd($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\CompYear whereReminderEnd($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\CompYear whereReminderStart($value)
+ * @property-read int|null $competitions_count
+ * @property-read int|null $divisions_count
+ * @property-read int|null $vid_competitions_count
+ * @property-read int|null $vid_divisions_count
  */
 class CompYear extends \Eloquent {
 	// Add your validation rules here

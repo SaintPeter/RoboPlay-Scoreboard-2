@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\VideoAward newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\VideoAward newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\VideoAward query()
+ * @property-read int|null $videos_count
  */
 class VideoAward extends \Eloquent {
 	protected $fillable = ['name'];

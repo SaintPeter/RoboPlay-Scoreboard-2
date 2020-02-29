@@ -31,6 +31,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $user_id
  * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_competition whereUserId($value)
+ * @property-read int|null $comp_year_count
+ * @property-read int|null $divisions_count
+ * @property-read int|null $rubric_count
+ * @property-read int|null $scores_count
  */
 class Vid_competition extends Model {
 	protected $guarded = array();

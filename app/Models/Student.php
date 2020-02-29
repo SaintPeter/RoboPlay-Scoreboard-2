@@ -51,6 +51,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Student newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Student newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Student query()
+ * @property-read int|null $teams_count
+ * @property-read int|null $videos_count
  */
 class Student extends \Eloquent {
 	protected $table = 'students';

@@ -29,6 +29,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_division newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_division newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_division query()
+ * @property-read int|null $comp_year_count
+ * @property-read int|null $scores_count
+ * @property-read int|null $videos_count
  */
 class Vid_division extends Model {
 	protected $guarded = array();

@@ -22,6 +22,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_score_type newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_score_type newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vid_score_type query()
+ * @property-read int|null $rubric_count
+ * @property-read int|null $video_scores_count
  */
 class Vid_score_type extends \Eloquent {
 	protected $guarded = [ 'id' ];

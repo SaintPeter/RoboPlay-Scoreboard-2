@@ -35,6 +35,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Team newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Team query()
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JudgeAwards[] $awards
+ * @property-read int|null $awards_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JudgeNominations[] $nominations
+ * @property-read int|null $nominations_count
+ * @property-read int|null $students_count
  */
 class Team extends Model {
 	protected $guarded = array();

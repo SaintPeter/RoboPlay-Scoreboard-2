@@ -114,7 +114,7 @@ class TeacherController extends Controller {
 		View::share('title', 'Manage Teams');
         return View::make('teacher.index',
 	        compact('invoice', 'teams', 'videos',
-	            'math_teams', 'school', 'paid', 'tshirt_sizes',
+	            'school', 'paid', 'tshirt_sizes',
 		        'reg_days', 'edit_days', 'comp_year',
 		        'competition_error', 'validation_error')
         );

@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Math_Level newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Math_Level newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Math_Level query()
+ * @property-read int|null $students_count
  */
 class Math_Level extends \Eloquent {
     protected $table = "math_level";

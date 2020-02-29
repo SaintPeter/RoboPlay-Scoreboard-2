@@ -66,6 +66,16 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video whereReviewStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video whereReviewerId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video whereStatus($value)
+ * @property int $has_theme
+ * @property int $has_advanced
+ * @property-read int|null $awards_count
+ * @property-read int|null $comments_count
+ * @property-read int|null $files_count
+ * @property-read int|null $problems_count
+ * @property-read int|null $scores_count
+ * @property-read int|null $students_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video whereHasAdvanced($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video whereHasTheme($value)
  */
 class Video extends Model {
 	protected $guarded = [ 'id', 'flag' ];

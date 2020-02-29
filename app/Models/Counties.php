@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Counties newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Counties newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Counties query()
+ * @property-read int|null $districts_count
  */
 class Counties extends Model {
 	public $connection = 'mysql-wordpress';

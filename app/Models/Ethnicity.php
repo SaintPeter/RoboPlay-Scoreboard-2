@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Ethnicity newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Ethnicity newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Ethnicity query()
+ * @property-read int|null $students_count
  */
 class Ethnicity extends \Eloquent {
 	protected $table = 'ethnicities';

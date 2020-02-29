@@ -17,3 +17,4 @@ _ide*
 /public/js/invoicer.js
 /public/js/video_review.js
 /db_sync/
+/public/uploads/*

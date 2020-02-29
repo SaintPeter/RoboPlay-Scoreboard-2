@@ -39,6 +39,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereLastLogin($value)
+ * @property-read int|null $notifications_count
+ * @property-read int|null $reviewed_videos_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Score_run[] $score_runs
+ * @property-read int|null $score_runs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team[] $teams
+ * @property-read int|null $teams_count
+ * @property-read int|null $video_scores_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Video[] $videos
+ * @property-read int|null $videos_count
  */
 class User extends Authenticatable
 {

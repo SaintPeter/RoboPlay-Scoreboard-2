@@ -38,6 +38,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Competition newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Competition newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Competition query()
+ * @property-read int|null $comp_year_count
+ * @property-read int|null $divisions_count
  */
 class Competition extends Model {
 	protected $guarded = array();
